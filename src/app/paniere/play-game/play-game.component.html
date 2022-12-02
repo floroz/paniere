@@ -1,5 +1,14 @@
 <div class="play">
-  <p class="number">{{ (number$ | async) || 'Starting..' }}</p>
+  <ng-container *ngIf="number$ | async as num; else noNumber">
+    <p class="number">
+     {{ num }}
+    </p>
+  </ng-container>
+  <ng-template  #noNumber>
+      <p class="number">
+        {{ isPlaying() ? 'Resume Game' : 'Game is over'}}
+      </p>
+  </ng-template>
   <div class="btn-group">
     <button mat-raised-button color="primary" (click)="onNext()" [disabled]="!isPlaying()">Next Number</button>
     <button role="link" mat-raised-button color="secondary" routerLink="/board">Show Extracted</button>
