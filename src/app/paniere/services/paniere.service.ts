@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import {
   generateRandomNumberInRange,
   getNewBoard,
@@ -81,6 +81,11 @@ export class PaniereService {
   }
 
   nextNumber() {
+    console.log({
+      over: this.isGameOver,
+      remaining: this._remaining,
+      extracted: this._extracted,
+    });
     if (this.isGameOver) {
       //
       return;

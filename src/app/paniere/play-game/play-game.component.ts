@@ -22,7 +22,7 @@ export class PlayGameComponent {
   }
 
   isPlaying() {
-    return this.panSer.getExtracted().length < 9;
+    return this.panSer.getExtracted().length < 90;
   }
 
   onRestart() {
