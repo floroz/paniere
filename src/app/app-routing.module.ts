@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PaniereComponent } from './paniere/paniere.component';
 import { PlayGameComponent } from './paniere/play-game/play-game.component';
-import { ShowBoardComponent } from './paniere/show-board/show-board.component';
+import { ShowExtractedComponent } from './paniere/show-extracted/show-extracted.component';
+
 import { StartGameComponent } from './paniere/start-game/start-game.component';
 
 const routes: Routes = [
@@ -23,7 +24,7 @@ const routes: Routes = [
       {
         path: 'board',
         pathMatch: 'full',
-        component: ShowBoardComponent,
+        component: ShowExtractedComponent,
       },
     ],
   },

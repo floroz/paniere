@@ -7,7 +7,8 @@ import { AppComponent } from './app.component';
 import { StartGameComponent } from './paniere/start-game/start-game.component';
 import { PaniereComponent } from './paniere/paniere.component';
 import { PlayGameComponent } from './paniere/play-game/play-game.component';
-import { ShowBoardComponent } from './paniere/show-board/show-board.component';
+import { ShowExtractedComponent } from './paniere/show-extracted/show-extracted.component';
+import { ResetGameDialogComponent } from './paniere/play-game/reset-game-dialog.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ShowBoardComponent } from './paniere/show-board/show-board.component';
     StartGameComponent,
     PaniereComponent,
     PlayGameComponent,
-    ShowBoardComponent,
+    ShowExtractedComponent,
+    ResetGameDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, AppMaterialModule],
   providers: [],

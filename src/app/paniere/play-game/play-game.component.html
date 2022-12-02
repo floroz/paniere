@@ -1,9 +1,8 @@
 <div class="play">
-  <p class="number">{{ (number$ | async) || '' }}</p>
-
-
+  <p class="number">{{ (number$ | async) || 'Starting..' }}</p>
   <div class="btn-group">
-    <button mat-raised-button color="primary">Next Number</button>
-    <button role="link" mat-raised-button color="secondary" routerLink="/board">Show Board</button>
+    <button mat-raised-button color="primary" (click)="onNext()" [disabled]="!isPlaying()">Next Number</button>
+    <button role="link" mat-raised-button color="secondary" routerLink="/board">Show Extracted</button>
+      <button *ngIf="!isPlaying()" mat-raised-button color="warn" (click)="onRestart()" >Restart Game</button><button *ngIf="isPlaying()" mat-raised-button color="warn" (click)="onReset()" >Reset Game</button>
   </div>
 </div>
