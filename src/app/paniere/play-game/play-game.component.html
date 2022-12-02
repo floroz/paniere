@@ -1,0 +1,9 @@
+<div class="play">
+  <p class="number">{{ (number$ | async) || '' }}</p>
+
+
+  <div class="btn-group">
+    <button mat-raised-button color="primary">Next Number</button>
+    <button role="link" mat-raised-button color="secondary" routerLink="/board">Show Board</button>
+  </div>
+</div>
