@@ -1,5 +1,5 @@
 export const getNewBoard = () => {
-  return Array.from(Array(10).keys()).slice(1);
+  return Array.from(Array(91).keys()).slice(1);
 };
 
 export const generateRandomNumberInRange = (
