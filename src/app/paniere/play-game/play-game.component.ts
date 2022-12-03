@@ -34,8 +34,12 @@ export class PlayGameComponent {
   }
 
   onReset() {
-    const ref = this.dialog.open(ResetGameDialogComponent);
+    const dialogRef = this.dialog.open(ResetGameDialogComponent);
 
-    ref.afterClosed().subscribe((res) => res && this.onRestart());
+    dialogRef.afterClosed().subscribe((hasAccepted) => {
+      if (hasAccepted) {
+        this.onRestart();
+      }
+    });
   }
 }

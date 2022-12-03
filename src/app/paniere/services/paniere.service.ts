@@ -6,6 +6,7 @@ import {
   mergeMap,
   of,
   Subject,
+  switchMap,
   tap,
 } from 'rxjs';
 import { GameStatus } from '../types/paniere.types';
@@ -14,16 +15,19 @@ import {
   getNewBoard,
 } from '../utils/paniere.utils';
 
-const MAX_SIZE = 90;
+const MAX_SIZE = 91;
 const LOCAL_STORAGE_KEY = 'paniere';
+
 @Injectable({
   providedIn: 'root',
 })
 export class PaniereService {
+  private _extractedArr: number[] = [];
+  private _remainingArr = getNewBoard(MAX_SIZE);
   private _game = new Subject<undefined>();
-  private _number = new Subject<number>();
-  private _remaining = new BehaviorSubject<number[]>(getNewBoard(MAX_SIZE));
-  private _extracted = new BehaviorSubject<number[]>([]);
+  private _number = new BehaviorSubject<number>(0);
+  private _remaining = new BehaviorSubject<number[]>(this._remainingArr);
+  private _extracted = new BehaviorSubject<number[]>(this._extractedArr);
   private _gameStatus = new BehaviorSubject(GameStatus.STARTING);
 
   number$ = this._number.asObservable();
@@ -35,40 +39,35 @@ export class PaniereService {
 
   start() {
     return this._game.pipe(
-      mergeMap(() =>
-        combineLatest([this.remaining$, this.extracted$]).pipe(
-          map(([remaining, extracted]) => {
-            const idx = generateRandomNumberInRange(0, remaining.length);
-            const num = remaining[idx];
+      map(() => {
+        const idx = generateRandomNumberInRange(0, this._remainingArr.length);
+        const num = this._remainingArr[idx];
 
-            const updatedExtracted = [...extracted, num];
-            const updatedRemaining = [
-              ...remaining.slice(0, idx),
-              ...remaining.slice(idx + 1),
-            ];
+        const updatedExtracted = [...this._extractedArr, num];
+        const updatedRemaining = [
+          ...this._remainingArr.slice(0, idx),
+          ...this._remainingArr.slice(idx + 1),
+        ];
 
-            return [num, updatedRemaining, updatedExtracted];
-          }),
-          tap(([, remaining, extracted]) =>
-            // @ts-ignore
-            this.saveToStorage(remaining, extracted)
-          ),
-          tap(([num, remaining, extracted]) => {
-            // @ts-ignore
-            this._number.next(num);
-            // @ts-ignore
-            this._remaining.next(remaining);
-            // @ts-ignore
-            this._extracted.next(extracted);
-            // @ts-ignore
-            if (!remaining.length) {
-              this._gameStatus.next(GameStatus.OVER);
-            } else {
-              this._gameStatus.next(GameStatus.PLAYING);
-            }
-          })
-        )
-      )
+        return [num, updatedRemaining, updatedExtracted];
+      }),
+      tap(console.log),
+      tap(([, remaining, extracted]) =>
+        this.saveToStorage(remaining, extracted)
+      ),
+      tap((data) => {
+        const [num, remaining, extracted] = data;
+        this._number.next(num);
+        this._remainingArr = [...remaining];
+        this._remaining.next(remaining);
+        this._extractedArr = [...extracted];
+        this._extracted.next(extracted);
+        if (!remaining.length) {
+          this._gameStatus.next(GameStatus.OVER);
+        } else {
+          this._gameStatus.next(GameStatus.PLAYING);
+        }
+      })
     );
   }
 
@@ -100,6 +99,8 @@ export class PaniereService {
       return;
     } else {
       const { remaining, extracted } = loaded;
+      this._remainingArr = remaining;
+      this._extractedArr = extracted;
       this._remaining.next(remaining);
       this._extracted.next(extracted);
       const isPlaying = remaining.length > 0;
@@ -109,7 +110,10 @@ export class PaniereService {
 
   reset() {
     this.deleteStorage();
-    this._remaining.next(getNewBoard(MAX_SIZE));
+    this._remainingArr = getNewBoard(MAX_SIZE);
+    this._number.next(0);
+    this._extractedArr = [];
+    this._remaining.next(this._remainingArr);
     this._extracted.next([]);
     this._gameStatus.next(GameStatus.STARTING);
   }
