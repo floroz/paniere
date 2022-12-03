@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PaniereService } from '../services/paniere.service';
+import { PaniereFacade } from '../services/paniere.facade';
 
 @Component({
   selector: 'app-show-extracted',
@@ -8,15 +7,12 @@ import { PaniereService } from '../services/paniere.service';
   styleUrls: ['./show-extracted.component.scss'],
 })
 export class ShowExtractedComponent {
-  constructor(private panService: PaniereService, private router: Router) {}
+  constructor(private paniereFacade: PaniereFacade) {}
+  extracted$ = this.paniereFacade.extracted$;
 
-  ngOnInit() {
-    if (!this.getExtracted().length) {
-      this.router.navigate(['/']);
-    }
-  }
-
-  getExtracted() {
-    return this.panService.getExtracted();
-  }
+  // ngOnInit() {
+  //   if (!this.getExtracted().length) {
+  //     this.router.navigate(['/']);
+  //   }
+  // }
 }

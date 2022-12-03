@@ -1,10 +1,18 @@
 .num {
-  margin: 0.4rem;
+  border: 1px solid red;
+  width: 3rem;
+  height: 3rem;
+  display:grid;
+  place-items: center;
 }
-
+.flex {
+  display: grid;
+  place-items: center;
+}
 .show-extract {
   max-width: 80vw;
   padding: 2rem;
   display: flex;
   flex-flow: row wrap;
+  gap: 0.4rem;
 }

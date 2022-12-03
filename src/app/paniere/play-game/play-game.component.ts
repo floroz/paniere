@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { PaniereService } from '../services/paniere.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ResetGameDialogComponent } from './reset-game-dialog.component';
+import { PaniereFacade } from '../services/paniere.facade';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-play-game',
@@ -9,29 +10,36 @@ import { ResetGameDialogComponent } from './reset-game-dialog.component';
   styleUrls: ['./play-game.component.scss'],
 })
 export class PlayGameComponent {
-  number$ = this.panSer.number$;
+  number$ = this.paniereFacade.number$;
+  status$ = this.paniereFacade.gameStatus$;
+  subscription = new Subscription();
 
-  constructor(private panSer: PaniereService, public dialog: MatDialog) {}
+  constructor(private paniereFacade: PaniereFacade, public dialog: MatDialog) {}
 
   ngOnInit() {
-    this.panSer.loadGame();
+    this.paniereFacade.loadGame();
+    this.subscription.add(this.paniereFacade.start().subscribe());
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onNext() {
-    this.panSer.nextNumber();
-  }
-
-  isPlaying() {
-    return this.panSer.getExtracted().length < 90;
+    this.paniereFacade.pickNumber();
   }
 
   onRestart() {
-    this.panSer.startGame();
+    this.paniereFacade.restart();
   }
 
   onReset() {
-    const ref = this.dialog.open(ResetGameDialogComponent);
+    const dialogRef = this.dialog.open(ResetGameDialogComponent);
 
-    ref.afterClosed().subscribe((res) => res && this.onRestart());
+    dialogRef.afterClosed().subscribe((hasAccepted) => {
+      if (hasAccepted) {
+        this.onRestart();
+      }
+    });
   }
 }

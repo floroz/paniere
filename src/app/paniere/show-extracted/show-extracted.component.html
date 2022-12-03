@@ -1,6 +1,8 @@
 
-  <button mat-raised-button color="primary" role="link" [routerLink]="['/play']">Back to Game</button>
-<div class="show-extract">
+<div class="flex">
+    <button mat-raised-button color="primary" role="link" [routerLink]="['/play']">Back to Game</button>
+    <div class="show-extract">
 
-  <span class="num" *ngFor="let num of getExtracted()">{{num}}</span>
+      <div class="num" *ngFor="let num of extracted$ | async">{{num}}</div>
+    </div>
 </div>
