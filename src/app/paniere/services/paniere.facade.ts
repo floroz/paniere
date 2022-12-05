@@ -5,15 +5,11 @@ import { PaniereService } from './paniere.service';
   providedIn: 'root',
 })
 export class PaniereFacade {
-  number$ = this.paniereService.number$;
-  remaining$ = this.paniereService.remaining$;
-  extracted$ = this.paniereService.extracted$;
-  gameStatus$ = this.paniereService.gameStatus$;
+  vm$ = this.paniereService.vm$;
 
-  constructor(private paniereService: PaniereService) {}
-
-  loadGame() {
+  constructor(private paniereService: PaniereService) {
     this.paniereService.loadGame();
+    this.paniereService.start().subscribe();
   }
 
   restart() {
@@ -22,9 +18,5 @@ export class PaniereFacade {
 
   pickNumber() {
     this.paniereService.pickNumber();
-  }
-
-  start() {
-    return this.paniereService.start();
   }
 }

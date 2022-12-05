@@ -9,67 +9,114 @@ import {
 const MAX_SIZE = 91;
 const LOCAL_STORAGE_KEY = 'paniere';
 
+type PaniereState = {
+  extracted: number[];
+  remaining: number[];
+  lastNumber: number | null;
+  status: GameStatus;
+};
+
+const initialState: PaniereState = {
+  remaining: getNewBoard(MAX_SIZE),
+  extracted: [],
+  lastNumber: null,
+  status: GameStatus.STARTING,
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class PaniereService {
-  private extracted: number[] = [];
-  private remaining = getNewBoard(MAX_SIZE);
+  private _state = initialState;
+  private _vm = new BehaviorSubject<PaniereState>(this._state);
+  private _trigger = new Subject();
 
-  private _game = new Subject<undefined>();
-
-  private _number = new BehaviorSubject<number>(0);
-  private _remaining = new BehaviorSubject<number[]>(this.remaining);
-  private _extracted = new BehaviorSubject<number[]>(this.extracted);
-  private _gameStatus = new BehaviorSubject(GameStatus.STARTING);
-
-  readonly number$ = this._number.asObservable();
-  readonly remaining$ = this._remaining.asObservable();
-  readonly extracted$ = this._extracted.asObservable();
-  readonly gameStatus$ = this._gameStatus.asObservable();
+  vm$ = this._vm.asObservable();
 
   start() {
-    return this._game.pipe(
+    return this._trigger.pipe(
       map(() => {
-        const idx = generateRandomNumberInRange(0, this.remaining.length);
-        const num = this.remaining[idx];
+        const idx = generateRandomNumberInRange(
+          0,
+          this._state.remaining.length
+        );
+        const num = this._state.remaining[idx];
 
-        const updatedExtracted = [...this.extracted, num];
+        const updatedExtracted = [...this._state.extracted, num];
         const updatedRemaining = [
-          ...this.remaining.slice(0, idx),
-          ...this.remaining.slice(idx + 1),
+          ...this._state.remaining.slice(0, idx),
+          ...this._state.remaining.slice(idx + 1),
         ];
 
         return [num, updatedRemaining, updatedExtracted];
       }),
       tap(console.log),
-      tap(([, remaining, extracted]) =>
-        this.saveToStorage(remaining, extracted)
+      tap(([num, remaining, extracted]) =>
+        this.saveToStorage(remaining, extracted, num)
       ),
       tap((data) => {
         const [num, remaining, extracted] = data;
-        this._number.next(num);
-        this.remaining = [...remaining];
-        this._remaining.next(remaining);
-        this.extracted = [...extracted];
-        this._extracted.next(extracted);
-        if (!remaining.length) {
-          this._gameStatus.next(GameStatus.OVER);
-        } else {
-          this._gameStatus.next(GameStatus.PLAYING);
-        }
+
+        const newState: PaniereState = {
+          lastNumber: num,
+          remaining,
+          extracted,
+          status: remaining.length > 0 ? GameStatus.PLAYING : GameStatus.OVER,
+        };
+        this._state = { ...newState };
+        this._vm.next({ ...newState });
       })
     );
   }
 
-  private saveToStorage(remaining: number[], extracted: number[]) {
+  private saveToStorage(
+    remaining: number[],
+    extracted: number[],
+    lastNumber: number
+  ) {
     localStorage.setItem(
       LOCAL_STORAGE_KEY,
       JSON.stringify({
         remaining,
         extracted,
+        lastNumber,
       })
     );
+  }
+
+  reset() {
+    this.deleteStorage();
+    this._state = {
+      ...initialState,
+    };
+
+    this._vm.next({ ...this._state });
+  }
+
+  pickNumber() {
+    this._trigger.next(undefined);
+  }
+
+  loadGame() {
+    const loaded = this.loadFromStorage();
+
+    if (!loaded) {
+      return;
+    } else {
+      const { remaining, extracted, lastNumber } = loaded;
+
+      const isPlaying = remaining.length > 0;
+
+      const newState: PaniereState = {
+        lastNumber,
+        remaining,
+        extracted,
+        status: isPlaying ? GameStatus.PLAYING : GameStatus.OVER,
+      };
+
+      this._state = { ...newState };
+      this._vm.next({ ...newState });
+    }
   }
 
   private loadFromStorage() {
@@ -81,35 +128,5 @@ export class PaniereService {
 
   private deleteStorage() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
-  }
-
-  loadGame() {
-    const loaded = this.loadFromStorage();
-
-    if (!loaded) {
-      return;
-    } else {
-      const { remaining, extracted } = loaded;
-      this.remaining = remaining;
-      this.extracted = extracted;
-      this._remaining.next(remaining);
-      this._extracted.next(extracted);
-      const isPlaying = remaining.length > 0;
-      this._gameStatus.next(isPlaying ? GameStatus.PLAYING : GameStatus.OVER);
-    }
-  }
-
-  reset() {
-    this.deleteStorage();
-    this.remaining = getNewBoard(MAX_SIZE);
-    this._number.next(0);
-    this.extracted = [];
-    this._remaining.next(this.remaining);
-    this._extracted.next([]);
-    this._gameStatus.next(GameStatus.STARTING);
-  }
-
-  pickNumber() {
-    this._game.next(undefined);
   }
 }

@@ -1,18 +1,13 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PaniereFacade } from '../services/paniere.facade';
 
 @Component({
   selector: 'app-show-extracted',
   templateUrl: './show-extracted.component.html',
   styleUrls: ['./show-extracted.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowExtractedComponent {
   constructor(private paniereFacade: PaniereFacade) {}
-  extracted$ = this.paniereFacade.extracted$;
-
-  // ngOnInit() {
-  //   if (!this.getExtracted().length) {
-  //     this.router.navigate(['/']);
-  //   }
-  // }
+  vm$ = this.paniereFacade.vm$;
 }

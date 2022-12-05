@@ -1,16 +1,45 @@
-<div class="play">
-  <ng-container *ngIf="number$ | async as num; else emptyNum">
+<div class="play" *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="vm.lastNumber; else emptyNum">
     <p class="number">
-     {{ num }}
+      {{ vm.lastNumber }}
     </p>
   </ng-container>
   <ng-template #emptyNum>
     <p class="number">💯</p>
   </ng-template>
   <div class="btn-group">
-    <button mat-raised-button color="primary" (click)="onNext()" [disabled]="(status$ | async) === 'over'">Next Number</button>
-    <button role="link" mat-raised-button color="secondary" routerLink="/board" [disabled]="(status$ | async) === 'starting'">Show Extracted</button>
-      <button *ngIf="(status$ | async) === 'over'" mat-raised-button color="warn" (click)="onRestart()" >Restart Game</button>
-      <button *ngIf="(status$ | async) === 'playing'" mat-raised-button color="warn" (click)="onReset()" >Reset Game</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onNext()"
+      [disabled]="vm.status === 'over'"
+    >
+      Next Number
+    </button>
+    <button
+      role="link"
+      mat-raised-button
+      color="secondary"
+      routerLink="/board"
+      [disabled]="vm.status === 'starting' || !vm.extracted.length"
+    >
+      Show Extracted
+    </button>
+    <button
+      *ngIf="vm.status === 'over'"
+      mat-raised-button
+      color="warn"
+      (click)="onRestart()"
+    >
+      Restart Game
+    </button>
+    <button
+      *ngIf="vm.status === 'playing'"
+      mat-raised-button
+      color="warn"
+      (click)="onReset()"
+    >
+      Reset Game
+    </button>
   </div>
 </div>
