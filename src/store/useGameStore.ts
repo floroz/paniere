@@ -5,10 +5,6 @@ const LOCAL_STORAGE_KEY = "tombola-game";
 
 interface GameState {
   drawn: number[];
-  settings: {
-    theme: "light" | "dark";
-    lang: "it" | "en";
-  };
 }
 
 interface GameStateWithActions extends GameState {
@@ -19,10 +15,6 @@ interface GameStateWithActions extends GameState {
 
 const initialState: GameState = {
   drawn: [],
-  settings: {
-    theme: "light",
-    lang: "it",
-  },
 };
 
 export const useGameStore = create<GameStateWithActions>()(
@@ -44,21 +36,20 @@ export const useGameStore = create<GameStateWithActions>()(
         const drawnNumber = availableNumbers[randomIndex];
 
         set(() => ({
-          drawn: [...get().drawn, drawnNumber],
+          drawn: [...drawn, drawnNumber],
         }));
       },
 
       undoLastDraw: () => {
+        const { drawn } = get();
         set(() => ({
-          drawn: get().drawn.slice(0, -1),
+          drawn: drawn.slice(0, -1),
         }));
       },
 
       resetGame: () => {
-        const { settings } = get();
         set({
           ...initialState,
-          settings,
         });
       },
     }),
