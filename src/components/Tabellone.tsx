@@ -1,10 +1,9 @@
 import { neapolitanNames } from "../data/neapolitanNames";
+import { useGameStore } from "../store/useGameStore";
 
-interface TabelloneProps {
-  drawnNumbers?: number[];
-}
-
-export default function Tabellone({ drawnNumbers = [] }: TabelloneProps) {
+export default function Tabellone() {
+  const drawnNumbers = useGameStore((state) => state.drawn);
+  
   // Generate numbers 1-90
   const numbers = Array.from({ length: 90 }, (_, i) => i + 1);
   

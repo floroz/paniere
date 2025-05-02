@@ -1,0 +1,42 @@
+import { useGameStore } from '../store/useGameStore';
+import { neapolitanNames } from '../data/neapolitanNames';
+
+export default function LastDraw() {
+  const lastDrawn = useGameStore((state) => state.drawn[0]);
+  
+  if (!lastDrawn) {
+    return (
+      <div className="p-4 border rounded-md bg-white dark:bg-gray-800 shadow-md text-center">
+        <h2 className="text-lg font-bold mb-2">Last Draw</h2>
+        <p className="text-gray-500 dark:text-gray-400">No numbers drawn yet</p>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="p-4 border rounded-md bg-amber-50 dark:bg-amber-900 shadow-md text-center animate-fade-in">
+      <h2 className="text-lg font-bold mb-2">Last Draw</h2>
+      <div className="flex flex-col items-center">
+        <span className="text-4xl font-bold text-amber-800 dark:text-amber-200">
+          {lastDrawn}
+        </span>
+        <span className="text-lg text-amber-700 dark:text-amber-300">
+          {neapolitanNames[lastDrawn]}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// Add the animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+`;
+document.head.appendChild(style);
