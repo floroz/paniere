@@ -6,23 +6,10 @@ import Footer from "./components/Footer";
 import StartGameModal from "./components/StartGameModal";
 import { useGameStore } from "./store/useGameStore";
 
-function DesktopLayout({ onReset }: { onReset: () => void }){
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <div className="container max-w-6xl h-screen grid grid-cols-1 grid-rows-[85%_15%] overflow-hidden">
-        <div className="row-start-1 row-end-2 col-span-full overflow-auto">
-          <Tabellone />
-        </div>
-        <Footer onReset={onReset} />
-      </div>
-    </div>
-  );
-}
-
 function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
   const [isStartGameModalOpen, setIsStartGameModalOpen] = useState(false);
-  
+
   const drawn = useGameStore((state) => state.drawn);
   const resetGame = useGameStore((state) => state.resetGame);
 
@@ -40,17 +27,17 @@ function App() {
    * Handle opening the last draws modal
    */
   const handleOpenLastDrawsModal = () => setIsLastDrawsModalOpen(true);
-  
+
   /**
    * Handle closing the last draws modal
    */
   const handleCloseLastDrawsModal = () => setIsLastDrawsModalOpen(false);
-  
+
   /**
    * Handle closing the start game modal
    */
   const handleCloseStartGameModal = () => setIsStartGameModalOpen(false);
-  
+
   /**
    * Handle resetting the game and showing the start game modal
    */
@@ -62,11 +49,27 @@ function App() {
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <DesktopLayout onReset={handleReset} />
-        <MobileFooter onOpenLastDraws={handleOpenLastDrawsModal} onReset={handleReset} />
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+          <div className="container max-w-6xl h-screen grid grid-cols-1 grid-rows-[85%_15%] overflow-hidden">
+            <div className="row-start-1 row-end-2 col-span-full overflow-auto">
+              <Tabellone />
+            </div>
+            <Footer onReset={handleReset} />
+          </div>
+        </div>
+        <MobileFooter
+          onOpenLastDraws={handleOpenLastDrawsModal}
+          onReset={handleReset}
+        />
       </div>
-      <LastDrawsModal isOpen={isLastDrawsModalOpen} onClose={handleCloseLastDrawsModal} />
-      <StartGameModal isOpen={isStartGameModalOpen} onClose={handleCloseStartGameModal} />
+      <LastDrawsModal
+        isOpen={isLastDrawsModalOpen}
+        onClose={handleCloseLastDrawsModal}
+      />
+      <StartGameModal
+        isOpen={isStartGameModalOpen}
+        onClose={handleCloseStartGameModal}
+      />
     </>
   );
 }
