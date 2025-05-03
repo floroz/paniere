@@ -8,16 +8,14 @@ export default function LastDraw() {
 
   if (!lastDrawn) {
     return (
-      <div className="p-4 border rounded-md bg-white dark:bg-gray-800 shadow-md text-center">
-        <h2 className="text-lg font-bold mb-2">Last Draw</h2>
+      <div className="p-3 border rounded-md bg-white dark:bg-gray-800 shadow-md text-center">
         <p className="text-gray-500 dark:text-gray-400">No numbers drawn yet</p>
       </div>
     );
   }
   
   return (
-    <div className="p-4 border rounded-md bg-amber-50 dark:bg-amber-900 shadow-md">
-      <h2 className="text-lg font-bold mb-3 text-center">Last Draw</h2>
+    <div className="p-3 border rounded-md bg-amber-50 dark:bg-amber-900 shadow-md">
       <div className="grid grid-cols-3 gap-2">
         {/* Last drawn number - takes up 2/3 of the space */}
         <div 

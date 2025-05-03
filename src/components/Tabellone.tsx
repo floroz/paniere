@@ -15,14 +15,15 @@ function Casella({ number, name, isDrawn }: CasellaProps) {
     <div 
       key={number}
       className={`
-        p-2 border rounded-md flex flex-col items-center justify-center
+        p-1 border rounded-md flex flex-col items-center justify-center
         ${isDrawn ? 'bg-amber-100 dark:bg-amber-900' : 'bg-white dark:bg-gray-800'}
       `}
+      aria-label={`${number}, ${name}, ${isDrawn ? 'drawn' : 'not drawn'}`}
     >
-      <span className={`text-lg font-bold ${isDrawn ? 'text-amber-800 dark:text-amber-200' : ''}`}>
+      <span className={`text-base font-bold ${isDrawn ? 'text-amber-800 dark:text-amber-200' : ''}`}>
         {number}
       </span>
-      <span className="text-xs text-center">
+      <span className="text-xs text-center truncate w-full">
         {name}
       </span>
     </div>
@@ -37,8 +38,8 @@ export default function Tabellone() {
   const numbers = Array.from({ length: 90 }, (_, i) => i + 1);
   
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-5 md:grid-cols-9 lg:grid-cols-10 gap-2">
+    <div className="w-full h-full">
+      <div className="grid grid-cols-6 sm:grid-cols-9 md:grid-cols-10 lg:grid-cols-10 gap-1 auto-rows-fr">
         {numbers.map((number) => {
           const isDrawn = drawnNumbers.includes(number);
           return (
