@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useGameStore } from '../../store/useGameStore';
 import { neapolitanNames } from '../../data/neapolitanNames';
+import { createPortal } from 'react-dom';
 
 type LastDrawsModalProps = {
   isOpen: boolean;
@@ -51,7 +52,7 @@ export default function LastDrawsModal({ isOpen, onClose }: LastDrawsModalProps)
   
   if (!isOpen) return null;
   
-  return (
+  return createPortal(
     <div className="fixed inset-0  bg-opacity-70 backdrop-blur-sm flex items-center justify-center z-50">
       <div 
         ref={modalRef}
@@ -106,6 +107,7 @@ export default function LastDrawsModal({ isOpen, onClose }: LastDrawsModalProps)
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
