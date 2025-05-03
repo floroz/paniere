@@ -1,5 +1,9 @@
-import { useGameStore } from '../store/useGameStore';
+import { useGameStore } from '../../store/useGameStore';
 
+/**
+ * Main game control panel that provides buttons to draw numbers,
+ * undo last draw, and reset the game
+ */
 export default function Paniere() {
   const drawNumber = useGameStore((state) => state.drawNumber);
   const drawn = useGameStore((state) => state.drawn);

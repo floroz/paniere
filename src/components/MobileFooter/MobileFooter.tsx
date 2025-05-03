@@ -1,4 +1,4 @@
-import { useGameStore } from '../store/useGameStore';
+import { useGameStore } from '../../store/useGameStore';
 
 /**
  * Mobile footer component that displays game controls and last drawn number

@@ -1,6 +1,9 @@
-import { useGameStore } from '../store/useGameStore';
-import { neapolitanNames } from '../data/neapolitanNames';
+import { useGameStore } from '../../store/useGameStore';
+import { neapolitanNames } from '../../data/neapolitanNames';
 
+/**
+ * Displays the last drawn number and previous draws
+ */
 export default function LastDraw() {
   const drawn = useGameStore((state) => state.drawn);
   const lastDrawn = drawn[drawn.length - 1];

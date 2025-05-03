@@ -1,5 +1,5 @@
-import { neapolitanNames } from "../data/neapolitanNames";
-import { useGameStore } from "../store/useGameStore";
+import { neapolitanNames } from "../../data/neapolitanNames";
+import { useGameStore } from "../../store/useGameStore";
 
 type CasellaProps = {
   number: number;
@@ -30,7 +30,10 @@ function Casella({ number, name, isDrawn }: CasellaProps) {
   );
 }
 
-
+/**
+ * Grid display of all 90 numbers in the game
+ * Responsive layout that adjusts columns based on screen size
+ */
 export default function Tabellone() {
   const drawnNumbers = useGameStore((state) => state.drawn);
   

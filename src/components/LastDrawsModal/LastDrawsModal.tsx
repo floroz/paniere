@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useGameStore } from '../store/useGameStore';
-import { neapolitanNames } from '../data/neapolitanNames';
+import { useGameStore } from '../../store/useGameStore';
+import { neapolitanNames } from '../../data/neapolitanNames';
 
 type LastDrawsModalProps = {
   isOpen: boolean;
