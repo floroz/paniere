@@ -8,9 +8,10 @@ import ConfirmationDialog from '../ConfirmationDialog';
  */
 type MobileFooterProps = {
   onOpenLastDraws: () => void;
+  onReset: () => void;
 };
 
-export default function MobileFooter({ onOpenLastDraws }: MobileFooterProps) {
+export default function MobileFooter({ onOpenLastDraws, onReset }: MobileFooterProps) {
   const drawn = useGameStore((state) => state.drawn);
   const lastDrawn = drawn[drawn.length - 1];
   const drawNumber = useGameStore((state) => state.drawNumber);
@@ -26,6 +27,11 @@ export default function MobileFooter({ onOpenLastDraws }: MobileFooterProps) {
   const handleCloseUndoDialog = () => setIsUndoDialogOpen(false);
   const handleOpenResetDialog = () => setIsResetDialogOpen(true);
   const handleCloseResetDialog = () => setIsResetDialogOpen(false);
+
+  const onResetHandler = () => {
+    resetGame();
+    onReset();
+  };
   
   // Calculate remaining numbers
   const remainingNumbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(
@@ -110,7 +116,7 @@ export default function MobileFooter({ onOpenLastDraws }: MobileFooterProps) {
       <ConfirmationDialog
         isOpen={isResetDialogOpen}
         onClose={handleCloseResetDialog}
-        onConfirm={resetGame}
+        onConfirm={onResetHandler}
         title="Confirm Reset"
         message="Are you sure you want to reset the game? All drawn numbers will be cleared."
         confirmText="Reset"

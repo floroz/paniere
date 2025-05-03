@@ -1,41 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Tabellone from "./components/Tabellone";
 import LastDrawsModal from "./components/LastDrawsModal";
 import MobileFooter from "./components/MobileFooter";
 import Footer from "./components/Footer";
+import StartGameModal from "./components/StartGameModal";
+import { useGameStore } from "./store/useGameStore";
 
-/**
- * Desktop layout component that displays the tabellone and footer
- */
-function DesktopLayout(){
+function DesktopLayout({ onReset }: { onReset: () => void }){
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <div className="container max-w-6xl h-screen grid grid-cols-1 grid-rows-[85%_15%] overflow-hidden">
         <div className="row-start-1 row-end-2 col-span-full overflow-auto">
           <Tabellone />
         </div>
-        <Footer />
+        <Footer onReset={onReset} />
       </div>
     </div>
   );
 }
 
-/**
- * Main App component that orchestrates the game layout and components
- */
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
+  const [isStartGameModalOpen, setIsStartGameModalOpen] = useState(false);
+  
+  const drawn = useGameStore((state) => state.drawn);
+  const resetGame = useGameStore((state) => state.resetGame);
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  /**
+   * Check if we need to show the start game modal
+   */
+  useEffect(() => {
+    // If there are no drawn numbers, show the start game modal
+    if (drawn.length === 0) {
+      setIsStartGameModalOpen(true);
+    }
+  }, [drawn.length]);
+
+  /**
+   * Handle opening the last draws modal
+   */
+  const handleOpenLastDrawsModal = () => setIsLastDrawsModalOpen(true);
+  
+  /**
+   * Handle closing the last draws modal
+   */
+  const handleCloseLastDrawsModal = () => setIsLastDrawsModalOpen(false);
+  
+  /**
+   * Handle closing the start game modal
+   */
+  const handleCloseStartGameModal = () => setIsStartGameModalOpen(false);
+  
+  /**
+   * Handle resetting the game and showing the start game modal
+   */
+  const handleReset = () => {
+    resetGame();
+    setIsStartGameModalOpen(true);
+  };
 
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <DesktopLayout />
-        <MobileFooter onOpenLastDraws={handleOpenModal} />
+        <DesktopLayout onReset={handleReset} />
+        <MobileFooter onOpenLastDraws={handleOpenLastDrawsModal} onReset={handleReset} />
       </div>
-      <LastDrawsModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <LastDrawsModal isOpen={isLastDrawsModalOpen} onClose={handleCloseLastDrawsModal} />
+      <StartGameModal isOpen={isStartGameModalOpen} onClose={handleCloseStartGameModal} />
     </>
   );
 }
