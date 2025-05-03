@@ -23,10 +23,12 @@ function App() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <div className="container max-w-6xl mx-auto px-3 py-4 h-screen flex flex-col">
         <div className="flex-1 overflow-hidden flex flex-col">
-          <div className="flex-shrink-0 overflow-auto">
+          {/* Tabellone container - flex-grow-1 makes it take all available space */}
+          <div className="flex-grow flex-1 overflow-auto min-h-0">
             <Tabellone />
           </div>
           
+          {/* Controls section - fixed height with flex-shrink-0 */}
           <div className="hidden sm:block mt-4 flex-shrink-0">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <LastDraw />
