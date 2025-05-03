@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useGameStore } from '../../store/useGameStore';
+import { useLanguageStore } from '../../store/useLanguageStore';
+import { useTranslations } from '../../i18n/translations';
 import { neapolitanNames } from '../../data/neapolitanNames';
 import { createPortal } from 'react-dom';
 
@@ -15,6 +17,8 @@ export default function LastDrawsModal({ isOpen, onClose }: LastDrawsModalProps)
   const drawn = useGameStore((state) => state.drawn);
   const lastThreeDraws = drawn.slice(-3).reverse();
   const modalRef = useRef<HTMLDivElement>(null);
+  const language = useLanguageStore((state) => state.language);
+  const t = useTranslations(language);
   
   // Close modal when clicking outside
   useEffect(() => {
@@ -62,11 +66,11 @@ export default function LastDrawsModal({ isOpen, onClose }: LastDrawsModalProps)
         aria-labelledby="modal-title"
       >
         <div className="flex justify-between items-center mb-4">
-          <h3 id="modal-title" className="text-lg font-medium">Last 3 Draws</h3>
+          <h3 id="modal-title" className="text-lg font-medium">{t.lastDraws} 3</h3>
           <button 
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label="Close modal"
+            aria-label={t.close}
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && onClose()}
           >
@@ -93,7 +97,7 @@ export default function LastDrawsModal({ isOpen, onClose }: LastDrawsModalProps)
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 dark:text-gray-400 text-center">No numbers drawn yet</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center">{t.noNumbersDrawn}</p>
         )}
         
         <div className="mt-4 text-right">
@@ -103,7 +107,7 @@ export default function LastDrawsModal({ isOpen, onClose }: LastDrawsModalProps)
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && onClose()}
           >
-            Close
+            {t.close}
           </button>
         </div>
       </div>

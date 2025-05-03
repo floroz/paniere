@@ -1,5 +1,7 @@
 import { neapolitanNames } from "../../data/neapolitanNames";
 import { useGameStore } from "../../store/useGameStore";
+import { useLanguageStore } from "../../store/useLanguageStore";
+import { useTranslations } from "../../i18n/translations";
 
 type CasellaProps = {
   number: number;
@@ -11,6 +13,8 @@ type CasellaProps = {
  * Renders a single cell in the tabellone
  */
 function Casella({ number, name, isDrawn }: CasellaProps) {
+  const language = useLanguageStore((state) => state.language);
+  const t = useTranslations(language);
   return (
     <div 
       key={number}
@@ -19,7 +23,7 @@ function Casella({ number, name, isDrawn }: CasellaProps) {
         border rounded-md flex flex-col items-center justify-center aspect-square
         ${isDrawn ? 'bg-amber-100 dark:bg-amber-900' : 'bg-white dark:bg-gray-800'}
       `}
-      aria-label={`${number}, ${name}, ${isDrawn ? 'drawn' : 'not drawn'}`}
+      aria-label={`${number}, ${name}, ${isDrawn ? t.drawn : t.notDrawn}`}
     >
       <span className={`text-base font-bold ${isDrawn ? 'text-amber-800 dark:text-amber-200' : ''}`}>
         {number}

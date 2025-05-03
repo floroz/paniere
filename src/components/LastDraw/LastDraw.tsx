@@ -1,4 +1,6 @@
 import { useGameStore } from '../../store/useGameStore';
+import { useLanguageStore } from '../../store/useLanguageStore';
+import { useTranslations } from '../../i18n/translations';
 import { neapolitanNames } from '../../data/neapolitanNames';
 
 /**
@@ -8,11 +10,13 @@ export default function LastDraw() {
   const drawn = useGameStore((state) => state.drawn);
   const lastDrawn = drawn[drawn.length - 1];
   const previousDraws = drawn.slice(-3,-1).reverse();
+  const language = useLanguageStore((state) => state.language);
+  const t = useTranslations(language);
 
   if (!lastDrawn) {
     return (
       <div className="p-3 border rounded-md bg-white dark:bg-gray-800 shadow-md text-center">
-        <p className="text-gray-500 dark:text-gray-400">No numbers drawn yet</p>
+        <p className="text-gray-500 dark:text-gray-400">{t.noNumbersDrawn}</p>
       </div>
     );
   }
@@ -27,7 +31,7 @@ export default function LastDraw() {
         >
           <span 
             className="text-4xl font-bold text-amber-800 dark:text-amber-200"
-            aria-label={`Last drawn number: ${lastDrawn}`}
+            aria-label={`${t.lastDrawnNumber}: ${lastDrawn}`}
           >
             {lastDrawn}
           </span>
@@ -43,7 +47,7 @@ export default function LastDraw() {
               <div 
                 key={`prev-draw-${num}-${index}`} 
                 className={`flex flex-col items-center ${index === 0 ? 'animate-fade-in' : 'animate-slide-down'}`}
-                aria-label={`Previous draw: ${num}, ${neapolitanNames[num]}`}
+                aria-label={`${t.previousDraw}: ${num}, ${neapolitanNames[num]}`}
               >
                 <span className="text-sm font-medium text-amber-700 dark:text-amber-300">
                   {num}
@@ -55,7 +59,7 @@ export default function LastDraw() {
             ))
           ) : (
             <div className="text-xs text-amber-600 dark:text-amber-400 text-center italic">
-              No previous draws
+              {t.noPreviousDraws}
             </div>
           )}
         </div>

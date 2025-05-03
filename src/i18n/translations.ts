@@ -12,6 +12,17 @@ type TranslationKeys = {
   lastDraws: string;
   last: string;
   close: string;
+  remaining: string;
+  confirm: string;
+  cancel: string;
+  undoConfirmMessage: string;
+  resetConfirmMessage: string;
+  noNumbersDrawn: string;
+  lastDrawnNumber: string;
+  previousDraw: string;
+  noPreviousDraws: string;
+  drawn: string;
+  notDrawn: string;
 };
 
 type Translations = {
@@ -31,6 +42,17 @@ export const translations: Translations = {
     lastDraws: "Last Draws",
     last: "Last",
     close: "Close",
+    remaining: "Remaining",
+    confirm: "Confirm",
+    cancel: "Cancel",
+    undoConfirmMessage: "Are you sure you want to undo the last drawn number?",
+    resetConfirmMessage: "Are you sure you want to reset the game? All drawn numbers will be cleared.",
+    noNumbersDrawn: "No numbers drawn yet",
+    lastDrawnNumber: "Last drawn number",
+    previousDraw: "Previous draw",
+    noPreviousDraws: "No previous draws",
+    drawn: "drawn",
+    notDrawn: "not drawn",
   },
   it: {
     startGame: "Inizia Gioco",
@@ -44,6 +66,17 @@ export const translations: Translations = {
     lastDraws: "Ultime Estrazioni",
     last: "Ultimo",
     close: "Chiudi",
+    remaining: "Rimanenti",
+    confirm: "Conferma",
+    cancel: "Annulla",
+    undoConfirmMessage: "Sei sicuro di voler annullare l'ultimo numero estratto?",
+    resetConfirmMessage: "Sei sicuro di voler azzerare il gioco? Tutti i numeri estratti saranno cancellati.",
+    noNumbersDrawn: "Nessun numero estratto",
+    lastDrawnNumber: "Ultimo numero estratto",
+    previousDraw: "Estrazione precedente",
+    noPreviousDraws: "Nessuna estrazione precedente",
+    drawn: "estratto",
+    notDrawn: "non estratto",
   },
 };
 
