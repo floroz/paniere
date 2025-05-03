@@ -2,15 +2,11 @@
 import Tabellone from './components/Tabellone';
 import Paniere from './components/Paniere';
 import LastDraw from './components/LastDraw';
-import { useGameStore } from './store/useGameStore';
 
 function App() {
-  const settings = useGameStore((state) => state.settings);
-
   return (
-    <div className={`min-h-screen ${settings.theme === 'dark' ? 'dark' : ''}`}>
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <h1 className="text-2xl font-bold mb-6">Neapolitan Tombola</h1>
         <Tabellone />
         
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">

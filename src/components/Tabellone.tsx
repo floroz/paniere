@@ -9,7 +9,6 @@ export default function Tabellone() {
   
   return (
     <div className="w-full">
-      <h2 className="text-xl font-bold mb-4">Tabellone</h2>
       <div className="grid grid-cols-5 md:grid-cols-9 lg:grid-cols-10 gap-2">
         {numbers.map((number) => {
           const isDrawn = drawnNumbers.includes(number);

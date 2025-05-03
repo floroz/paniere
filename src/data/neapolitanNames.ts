@@ -1,4 +1,6 @@
-// Mapping of numbers 1-90 to their traditional Neapolitan names
+/**
+ * Mapping of numbers 1-90 to their traditional Neapolitan names
+ */
 export const neapolitanNames: Record<number, string> = {
   1: "L'Italia",
   2: "'A Criatura",
