@@ -15,8 +15,11 @@ function App() {
   
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const PortalLastDrawsModal = createPortal(<LastDrawsModal isOpen={isModalOpen} onClose={handleCloseModal} />, document.body);
   
   return (
+    <>
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <div className="container max-w-6xl mx-auto px-3 py-4 h-screen flex flex-col">
         <div className="flex-1 overflow-hidden flex flex-col">
@@ -33,11 +36,11 @@ function App() {
         </div>
         
         <MobileFooter onOpenLastDraws={handleOpenModal} />
-        
-        {createPortal(<LastDrawsModal isOpen={isModalOpen} onClose={handleCloseModal} />, document.body)}
       </div>
     </div>
-  )
+    {PortalLastDrawsModal}
+    </>
+  );
 }
 
 export default App
