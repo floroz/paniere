@@ -3,6 +3,7 @@ import { useGameStore } from '../../store/useGameStore';
 import { useLanguageStore } from '../../store/useLanguageStore';
 import { useTranslations } from '../../i18n/translations';
 import LanguageSelector from '../../components/LanguageSelector';
+import RulesModal from '../RulesModal/RulesModal';
 
 /**
  * Props for the StartPage component
@@ -24,6 +25,11 @@ const StartPage = ({ onStart }: StartPageProps) => {
   // Local state for the start page
   const [selectedMode, setSelectedMode] = useState<'tabellone' | 'player' | null>(null);
   const [cartelleCount, setCartelleCount] = useState(1);
+  const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
+  
+  // Handlers for the rules modal
+  const handleOpenRulesModal = () => setIsRulesModalOpen(true);
+  const handleCloseRulesModal = () => setIsRulesModalOpen(false);
   
   /**
    * Handle starting the game with the selected mode
@@ -71,9 +77,26 @@ const StartPage = ({ onStart }: StartPageProps) => {
           <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent font-serif">
             Paniere
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">
-            {t.startPage}
+          <p className="text-md md:text-lg text-gray-600 dark:text-gray-300 mb-2">
+            {language === 'en' ? 
+              'A digital version of the traditional Italian Tombola game. Draw numbers, mark your cartelle, and win prizes from ambo to tombola!' : 
+              'Una versione digitale del tradizionale gioco della Tombola italiana. Estrai numeri, segna le tue cartelle e vinci premi dall\'ambo alla tombola!'}
           </p>
+          
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={handleOpenRulesModal}
+              className="flex items-center gap-1 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-800/30 dark:hover:bg-amber-800/40 dark:text-amber-300 rounded-lg transition-colors text-sm font-medium"
+              aria-label={language === 'en' ? 'Learn how to play' : 'Impara a giocare'}
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handleOpenRulesModal()}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              {language === 'en' ? 'Learn How to Play' : 'Impara a Giocare'}
+            </button>
+          </div>
           <div className="absolute top-4 right-4">
             <LanguageSelector
               currentLanguage={language}
@@ -216,6 +239,9 @@ const StartPage = ({ onStart }: StartPageProps) => {
           </button>
         </div>
       </main>
+
+      {/* Rules Modal */}
+      <RulesModal isOpen={isRulesModalOpen} onClose={handleCloseRulesModal} />
     </div>
   );
 };
