@@ -33,7 +33,7 @@ const NumberDisplay = ({
   return (
     <div 
       className={`flex ${isCurrent ? 'flex-col items-center justify-center' : 'items-center justify-between gap-2'} ${animationClass}`}
-      aria-label={`${label || t.number}: ${number}, ${neapolitanNames[number]}`}
+      aria-label={`${label || t.lastDrawnNumber}: ${number}, ${neapolitanNames[number]}`}
     >
       {label && !isCurrent && (
         <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 font-medium">

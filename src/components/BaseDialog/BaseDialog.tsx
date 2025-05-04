@@ -1,6 +1,5 @@
 import { Fragment, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import BaseButton from '../BaseButton';
 
 /**
  * Dialog component props
