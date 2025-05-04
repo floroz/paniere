@@ -3,6 +3,8 @@
 @theme {
     --animate-fade-in: fadein 0.5s ease-out;
     --animate-slide-down: slidedown 0.5s ease-out;
+    --animate-slide-up: slideup 0.5s ease-out;
+    --animate-pulse-green: pulseGreen 2s infinite;
     
     @keyframes fadein {
         from { opacity: 0; transform: translateY(10px); }
@@ -12,5 +14,16 @@
     @keyframes slidedown {
         from { transform: translateY(-100%); }
         to { transform: translateY(0); }
+    }
+    
+    @keyframes slideup {
+        from { transform: translateY(0); }
+        to { transform: translateY(-120%); }
+    }
+    
+    @keyframes pulseGreen {
+        0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(52, 211, 153, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
     }
 }

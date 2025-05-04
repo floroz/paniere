@@ -1,13 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createCartelle, CartellaData } from "../utils/cartelleUtils";
+import { PrizeType, usePrizeStore, getPrizeName } from "./usePrizeStore";
+import { useLanguageStore } from "./useLanguageStore";
 
-const LOCAL_STORAGE_KEY = "tombola-game"; 
-
-/**
- * Types of prizes in the game
- */
-export type PrizeType = 'ambo' | 'terno' | 'quaterna' | 'cinquina' | 'tombola';
+const LOCAL_STORAGE_KEY = "tombola-game";
 
 /**
  * Map of prize types to their required counts
@@ -22,13 +19,7 @@ export const PRIZE_COUNTS: Record<PrizeType, number> = {
 
 interface GameState {
   drawn: number[];
-  prizes: {
-    ambo: boolean;
-    terno: boolean;
-    quaterna: boolean;
-    cinquina: boolean;
-    tombola: boolean;
-  };
+  prizes: Record<PrizeType, boolean>;
 }
 
 interface GameStateWithActions extends GameState {
@@ -101,6 +92,19 @@ export const useGameStore = create<GameStateWithActions>()(
         const cartelle = createCartelle();
         const newPrizes = { ...prizes };
         let prizeDetected = false;
+        let winningPrize: PrizeType | null = null;
+        let winningCartellaId = 0;
+        let winningRowIndex = 0;
+        let winningNumbers: number[] = [];
+        
+        // Get the current language for toast messages
+        const language = useLanguageStore.getState().language;
+        const isItalian = language === 'it';
+        
+        // Clear any previous winning sequences
+        if (drawnNumbers.length === 1) {
+          usePrizeStore.getState().clearWinningSequences();
+        }
         
         // For each cartella
         cartelle.forEach((cartella: CartellaData) => {
@@ -114,6 +118,9 @@ export const useGameStore = create<GameStateWithActions>()(
             if (drawnInCartella.length === 15) {
               newPrizes.tombola = true;
               prizeDetected = true;
+              winningPrize = 'tombola';
+              winningCartellaId = cartella.id;
+              winningNumbers = drawnInCartella;
             }
           }
           
@@ -128,35 +135,68 @@ export const useGameStore = create<GameStateWithActions>()(
             if (!prizes.cinquina && drawnInRow.length === 5) {
               newPrizes.cinquina = true;
               prizeDetected = true;
+              winningPrize = 'cinquina';
+              winningCartellaId = cartella.id;
+              winningRowIndex = rowIndex;
+              winningNumbers = drawnInRow;
             } else if (!prizes.quaterna && drawnInRow.length === 4) {
               newPrizes.quaterna = true;
               prizeDetected = true;
+              winningPrize = 'quaterna';
+              winningCartellaId = cartella.id;
+              winningRowIndex = rowIndex;
+              winningNumbers = drawnInRow;
             } else if (!prizes.terno && drawnInRow.length === 3) {
               newPrizes.terno = true;
               prizeDetected = true;
+              winningPrize = 'terno';
+              winningCartellaId = cartella.id;
+              winningRowIndex = rowIndex;
+              winningNumbers = drawnInRow;
             } else if (!prizes.ambo && drawnInRow.length === 2) {
               newPrizes.ambo = true;
               prizeDetected = true;
+              winningPrize = 'ambo';
+              winningCartellaId = cartella.id;
+              winningRowIndex = rowIndex;
+              winningNumbers = drawnInRow;
             }
           }
         });
         
         // Update prize state if any new prizes were detected
-        if (prizeDetected) {
+        if (prizeDetected && winningPrize) {
+          // Update game store prize state
           set({ prizes: newPrizes });
           
-          // Alert the user about the new prize(s)
-          if (newPrizes.tombola !== prizes.tombola) {
-            alert('TOMBOLA! 🎉🎊🎯');
-          } else if (newPrizes.cinquina !== prizes.cinquina) {
-            alert('Cinquina! 🎉');
-          } else if (newPrizes.quaterna !== prizes.quaterna) {
-            alert('Quaterna! 🎉');
-          } else if (newPrizes.terno !== prizes.terno) {
-            alert('Terno! 🎉');
-          } else if (newPrizes.ambo !== prizes.ambo) {
-            alert('Ambo! 🎉');
-          }
+          // We don't need to get row numbers here as we're using winningNumbers directly
+            
+          // Add the winning sequence to the prize store
+          usePrizeStore.getState().addWinningSequence({
+            cartellaId: winningCartellaId,
+            rowIndex: winningRowIndex,
+            numbers: winningNumbers,
+            prize: winningPrize
+          });
+          
+          // Set the last prize won for highlighting
+          usePrizeStore.getState().setLastPrizeWon(winningPrize);
+          
+          // Show toast notification
+          const prizeName = getPrizeName(winningPrize, isItalian ? 'it' : 'en');
+          const message = isItalian 
+            ? `${prizeName}! Cartella ${winningCartellaId}` 
+            : `${prizeName}! Cartella ${winningCartellaId}`;
+          
+          usePrizeStore.getState().showToast(message);
+          
+          // Show confetti
+          usePrizeStore.getState().showConfetti();
+          
+          // Hide confetti after 3 seconds
+          setTimeout(() => {
+            usePrizeStore.getState().hideConfetti();
+          }, 3000);
         }
       },
     }),

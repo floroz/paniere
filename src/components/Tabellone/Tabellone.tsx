@@ -3,6 +3,7 @@ import { useGameStore } from "../../store/useGameStore";
 import { useLanguageStore } from "../../store/useLanguageStore";
 import { useTranslations } from "../../i18n/translations";
 import { createCartelle } from "../../utils/cartelleUtils";
+import { usePrizeStore } from "../../store/usePrizeStore";
 import { useMemo } from "react";
 
 type CasellaProps = {
@@ -10,14 +11,32 @@ type CasellaProps = {
   name: string;
   isDrawn: boolean;
   isLatestDrawn: boolean;
+  isWinningNumber: boolean;
 };
 
 /**
  * Renders a single cell in the tabellone
  */
-const Casella = ({ number, name, isDrawn, isLatestDrawn }: CasellaProps) => {
+const Casella = ({ number, name, isDrawn, isLatestDrawn, isWinningNumber }: CasellaProps) => {
   const language = useLanguageStore((state) => state.language);
   const t = useTranslations(language);
+  
+  // Determine the cell style based on its state
+  const getBackgroundStyle = () => {
+    if (isLatestDrawn) {
+      return 'bg-gradient-to-br from-amber-300 to-amber-500 dark:from-amber-600 dark:to-amber-800 ring-4 ring-amber-300 dark:ring-amber-600 ring-opacity-50 dark:ring-opacity-50 animate-pulse';
+    }
+    
+    if (isWinningNumber) {
+      return 'bg-gradient-to-br from-green-200 to-green-400 dark:from-green-600 dark:to-green-800 ring-4 ring-green-300 dark:ring-green-600 ring-opacity-50 dark:ring-opacity-50 animate-pulseGreen';
+    }
+    
+    if (isDrawn) {
+      return 'bg-gradient-to-br from-amber-100 to-amber-300 dark:from-amber-700 dark:to-amber-900';
+    }
+    
+    return 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700';
+  };
   
   return (
     <div 
@@ -25,15 +44,11 @@ const Casella = ({ number, name, isDrawn, isLatestDrawn }: CasellaProps) => {
         relative w-14 sm:w-20 aspect-square 
         overflow-hidden group
         rounded-xl shadow-sm transition-all duration-300
-        ${isDrawn 
-          ? isLatestDrawn 
-            ? 'bg-gradient-to-br from-amber-300 to-amber-500 dark:from-amber-600 dark:to-amber-800 ring-4 ring-amber-300 dark:ring-amber-600 ring-opacity-50 dark:ring-opacity-50 animate-pulse' 
-            : 'bg-gradient-to-br from-amber-100 to-amber-300 dark:from-amber-700 dark:to-amber-900' 
-          : 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700'}
+        ${getBackgroundStyle()}
         ${isDrawn ? 'scale-[0.97]' : 'hover:scale-[0.97]'}
         flex flex-col items-center justify-center
       `}
-      aria-label={`${number}, ${name}, ${isDrawn ? t.drawn : t.notDrawn}`}
+      aria-label={`${number}, ${name}, ${isDrawn ? t.drawn : t.notDrawn}${isWinningNumber ? ', winning number' : ''}`}
       tabIndex={0}
       role="gridcell"
     >
@@ -90,6 +105,19 @@ const Casella = ({ number, name, isDrawn, isLatestDrawn }: CasellaProps) => {
 const Tabellone = () => {
   const drawnNumbers = useGameStore((state) => state.drawn);
   const lastDrawnNumber = drawnNumbers.length > 0 ? drawnNumbers[drawnNumbers.length - 1] : null;
+  
+  // Get winning sequences from the prize store for highlighting
+  const winningSequences = usePrizeStore((state) => state.winningSequences);
+  
+  // Create a set of winning numbers for faster lookups
+  const winningNumbers = useMemo(() => {
+    // Flatten all winning sequence numbers into a single set
+    const numbers = new Set<number>();
+    winningSequences.forEach(sequence => {
+      sequence.numbers.forEach(num => numbers.add(num));
+    });
+    return numbers;
+  }, [winningSequences]);
   
   // We don't need to store the cartelle array since we're using helper functions
   // to determine cartella boundaries and IDs
@@ -158,6 +186,8 @@ const Tabellone = () => {
                     }
                     const isDrawn = drawnNumbers.includes(number);
                     const isLatestDrawn = number === lastDrawnNumber;
+                    // Check if this number is part of a winning sequence
+                    const isWinningNumber = winningNumbers.has(number);
                     
                     return (
                       <div key={number} className="transform transition-transform duration-300">
@@ -166,6 +196,7 @@ const Tabellone = () => {
                           name={neapolitanNames[number]}
                           isDrawn={isDrawn}
                           isLatestDrawn={isLatestDrawn}
+                          isWinningNumber={isWinningNumber}
                         />
                       </div>
                     );
@@ -190,6 +221,8 @@ const Tabellone = () => {
             {row.map((number, colIndex) => {
               const isDrawn = drawnNumbers.includes(number);
               const isLatestDrawn = number === lastDrawnNumber;
+              // Check if this number is part of a winning sequence
+              const isWinningNumber = winningNumbers.has(number);
               const cartellaId = getCartellaId(rowIndex, colIndex);
               
               // Add special classes for cells at cartella boundaries
@@ -207,6 +240,7 @@ const Tabellone = () => {
                     name={neapolitanNames[number]}
                     isDrawn={isDrawn}
                     isLatestDrawn={isLatestDrawn}
+                    isWinningNumber={isWinningNumber}
                   />
                 </div>
               );

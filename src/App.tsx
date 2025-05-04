@@ -4,15 +4,25 @@ import LastDrawsModal from "./components/LastDrawsModal";
 import MobileFooter from "./components/MobileFooter";
 import Footer from "./components/Footer";
 import StartGameModal from "./components/StartGameModal";
+import Toast from "./components/Toast/Toast";
+import Confetti from "./components/Confetti/Confetti";
 import { useGameStore } from "./store/useGameStore";
+import { usePrizeStore } from "./store/usePrizeStore";
 
 function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
   const [isStartGameModalOpen, setIsStartGameModalOpen] = useState(false);
 
+  // Game state
   const drawn = useGameStore((state) => state.drawn);
   const resetGame = useGameStore((state) => state.resetGame);
   const checkPrizes = useGameStore((state) => state.checkPrizes);
+  
+  // Prize celebration state
+  const toastMessage = usePrizeStore((state) => state.toastMessage);
+  const isToastVisible = usePrizeStore((state) => state.isToastVisible);
+  const isConfettiActive = usePrizeStore((state) => state.isConfettiActive);
+  const hideToast = usePrizeStore((state) => state.hideToast);
 
   /**
    * Check if we need to show the start game modal
@@ -82,6 +92,20 @@ function App() {
           onReset={handleReset}
         />
       </div>
+      
+      {/* Prize celebrations */}
+      <Toast 
+        message={toastMessage}
+        isVisible={isToastVisible}
+        onClose={hideToast}
+        type="success"
+        duration={4000}
+      />
+      
+      <Confetti 
+        isActive={isConfettiActive}
+        duration={5000}
+      />
       
       <LastDrawsModal
         isOpen={isLastDrawsModalOpen}
