@@ -103,35 +103,40 @@ const Casella = ({ number, name, isDrawn, isLatestDrawn, isWinningNumber }: Case
  * with visual boundaries for Cartelle (3x5 grids)
  */
 const Tabellone = () => {
-  const drawnNumbers = useGameStore((state) => state.drawn);
+  // Use the unified data model
+  const drawnNumbers = useGameStore((state) => state.drawnNumbers);
+  const gameModeCartelle = useGameStore((state) => state.cartelle);
   const lastDrawnNumber = drawnNumbers.length > 0 ? drawnNumbers[drawnNumbers.length - 1] : null;
   
   // Get winning sequences from the prize store for highlighting
   const winningSequences = usePrizeStore((state) => state.winningSequences);
   
-  // Create a set of winning numbers for faster lookups
+  // Create a set of all numbers that are part of a winning sequence for efficient lookups
   const winningNumbers = useMemo(() => {
-    // Flatten all winning sequence numbers into a single set
     const numbers = new Set<number>();
     winningSequences.forEach(sequence => {
-      sequence.numbers.forEach(num => numbers.add(num));
+      sequence.numbers.forEach(number => numbers.add(number));
     });
     return numbers;
   }, [winningSequences]);
   
-  // We don't need to store the cartelle array since we're using helper functions
-  // to determine cartella boundaries and IDs
-  createCartelle(); // Call once to ensure the structure is initialized
-  
-  // Create a 9x10 grid for the traditional Tombola layout with memoization
+  // Create a 9x10 grid for the tabellone
+  // This matches the traditional layout of 9 rows and 10 columns
   const grid = useMemo(() => {
-    return Array.from({ length: 9 }, (_, rowIndex) => {
-      return Array.from({ length: 10 }, (_, colIndex) => {
-        // Handle the special case for number 90
-        if (rowIndex === 8 && colIndex === 9) return 90;
-        return rowIndex * 10 + colIndex + 1;
-      });
-    });
+    const result: number[][] = [];
+    for (let row = 0; row < 9; row++) {
+      const rowNumbers: number[] = [];
+      for (let col = 0; col < 10; col++) {
+        // The last cell of the 9th row is number 90
+        if (row === 8 && col === 9) {
+          rowNumbers.push(90);
+        } else {
+          rowNumbers.push(row * 10 + col + 1);
+        }
+      }
+      result.push(rowNumbers);
+    }
+    return result;
   }, []);
 
   /**
@@ -158,8 +163,8 @@ const Tabellone = () => {
    * For mobile view, we'll render cartelle vertically instead of the full grid
    */
   const renderMobileView = () => {
-    // Get the cartelle data
-    const cartelle = createCartelle();
+    // Use the cartelle from the game store
+    const cartelle = gameModeCartelle.length > 0 ? gameModeCartelle : createCartelle();
     
     return (
       <div className="flex flex-col gap-2 px-2 py-1">

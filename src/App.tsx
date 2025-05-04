@@ -14,9 +14,12 @@ function App() {
   const [isStartGameModalOpen, setIsStartGameModalOpen] = useState(false);
 
   // Game state
-  const drawn = useGameStore((state) => state.drawn);
-  const resetGame = useGameStore((state) => state.resetGame);
-  const checkPrizes = useGameStore((state) => state.checkPrizes);
+  const drawnNumbers = useGameStore(state => state.drawnNumbers);
+  const gameMode = useGameStore(state => state.gameMode);
+  const resetGame = useGameStore(state => state.resetGame);
+  const checkPrizes = useGameStore(state => state.checkPrizes);
+  const setGameMode = useGameStore(state => state.setGameMode);
+  const generateCartelle = useGameStore(state => state.generateCartelle);
   
   // Prize celebration state
   const toastMessage = usePrizeStore((state) => state.toastMessage);
@@ -25,23 +28,29 @@ function App() {
   const hideToast = usePrizeStore((state) => state.hideToast);
 
   /**
-   * Check if we need to show the start game modal
+   * Check if we need to show the start game modal and initialize game mode
    */
   useEffect(() => {
+    // Initialize app in Tabellone mode if no mode is set (temporary until Start Page is implemented)
+    if (gameMode === null) {
+      setGameMode('tabellone');
+      generateCartelle(6); // Create standard 6 cartelle for tabellone
+    }
+    
     // If there are no drawn numbers, show the start game modal
-    if (drawn.length === 0) {
+    if (drawnNumbers.length === 0) {
       setIsStartGameModalOpen(true);
     }
-  }, [drawn.length]);
+  }, [gameMode, drawnNumbers.length, setGameMode, generateCartelle]);
   
   /**
    * Check for prizes when drawn numbers change
    */
   useEffect(() => {
-    if (drawn.length > 0) {
-      checkPrizes(drawn);
+    if (drawnNumbers.length > 0) {
+      checkPrizes(drawnNumbers);
     }
-  }, [drawn, checkPrizes]);
+  }, [drawnNumbers, checkPrizes]);
 
   /**
    * Handle opening the last draws modal

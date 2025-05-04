@@ -16,11 +16,12 @@ interface PaniereControlsProps {
  * Redesigned game controls component optimized for visual appeal and space efficiency
  */
 const PaniereControls = ({ onReset }: PaniereControlsProps) => {
-  const drawNumber = useGameStore((state) => state.drawNumber);
-  const drawn = useGameStore((state) => state.drawn);
-  const resetGame = useGameStore((state) => state.resetGame);
-  const undoLastDraw = useGameStore((state) => state.undoLastDraw);
-  const language = useLanguageStore((state) => state.language);
+  // Use the unified data model
+  const drawNumber = useGameStore(state => state.drawNumber);
+  const drawnNumbers = useGameStore(state => state.drawnNumbers);
+  const resetGame = useGameStore(state => state.resetGame);
+  const undoLastDraw = useGameStore(state => state.undoLastDraw);
+  const language = useLanguageStore(state => state.language);
   const t = useTranslations(language);
   
   // State for confirmation dialogs
@@ -38,7 +39,7 @@ const PaniereControls = ({ onReset }: PaniereControlsProps) => {
   };
 
   const remainingNumbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(
-    (num) => !drawn.includes(num)
+    num => !drawnNumbers.includes(num)
   );
   
   return (
