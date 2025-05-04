@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import Tabellone from "./components/Tabellone";
-import LastDrawsModal from "./components/LastDrawsModal";
-import MobileFooter from "./components/MobileFooter";
-import Footer from "./components/Footer";
+import PlayerMode from "./components/PlayerMode/PlayerMode";
+import LastDrawsModal from "./components/LastDrawsModal/LastDrawsModal";
+import MobileFooter from "./components/MobileFooter/MobileFooter";
+import TabelloneFooter from "./components/TabelloneFooter/TabelloneFooter";
+import PlayerFooter from "./components/PlayerFooter/PlayerFooter";
 import StartGameModal from "./components/StartGameModal";
+import StartPage from "./components/StartPage/StartPage";
 import Toast from "./components/Toast/Toast";
 import Confetti from "./components/Confetti/Confetti";
 import { useGameStore } from "./store/useGameStore";
@@ -13,36 +16,31 @@ function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
   const [isStartGameModalOpen, setIsStartGameModalOpen] = useState(false);
 
-  // Game state
+  // Game state - core properties needed in this component
   const drawnNumbers = useGameStore(state => state.drawnNumbers);
   const gameMode = useGameStore(state => state.gameMode);
   const resetGame = useGameStore(state => state.resetGame);
   const checkPrizes = useGameStore(state => state.checkPrizes);
-  const setGameMode = useGameStore(state => state.setGameMode);
+  const returnToStartPage = useGameStore(state => state.returnToStartPage);
+  
+  // These actions are used by the StartPage component, not directly here
+  // But we need them for the handleGameStart function
   const generateCartelle = useGameStore(state => state.generateCartelle);
   
   // Prize celebration state
-  const toastMessage = usePrizeStore((state) => state.toastMessage);
-  const isToastVisible = usePrizeStore((state) => state.isToastVisible);
-  const isConfettiActive = usePrizeStore((state) => state.isConfettiActive);
-  const hideToast = usePrizeStore((state) => state.hideToast);
+  const toastMessage = usePrizeStore(state => state.toastMessage);
+  const isToastVisible = usePrizeStore(state => state.isToastVisible);
+  const isConfettiActive = usePrizeStore(state => state.isConfettiActive);
+  const hideToast = usePrizeStore(state => state.hideToast);
 
   /**
-   * Check if we need to show the start game modal and initialize game mode
+   * Initialize app on first load if no game mode is set
    */
   useEffect(() => {
-    // Initialize app in Tabellone mode if no mode is set (temporary until Start Page is implemented)
-    if (gameMode === null) {
-      setGameMode('tabellone');
-      generateCartelle(6); // Create standard 6 cartelle for tabellone
-    }
-    
-    // If there are no drawn numbers, show the start game modal
-    if (drawnNumbers.length === 0) {
-      setIsStartGameModalOpen(true);
-    }
-  }, [gameMode, drawnNumbers.length, setGameMode, generateCartelle]);
-  
+    // If no game mode is set, we're in the initial state
+    // Don't automatically set a mode - let the user choose from the StartPage
+  }, []);
+
   /**
    * Check for prizes when drawn numbers change
    */
@@ -51,6 +49,30 @@ function App() {
       checkPrizes(drawnNumbers);
     }
   }, [drawnNumbers, checkPrizes]);
+  
+  /**
+   * Handle starting a game from the Start Page
+   */
+  const handleGameStart = () => {
+    // If we're in Tabellone mode, show the start game modal for language selection
+    if (gameMode === 'tabellone') {
+      // Generate standard 6 cartelle if they don't exist yet
+      if (!drawnNumbers.length) {
+        generateCartelle(6);
+      }
+      setIsStartGameModalOpen(true);
+    } else if (gameMode === 'player') {
+      // Player mode is ready to go - cartelle should already be generated from StartPage
+      setIsStartGameModalOpen(false);
+    }
+  };
+  
+  /**
+   * Handle returning to the start page
+   */
+  const handleReturnToStartPage = () => {
+    returnToStartPage();
+  };
 
   /**
    * Handle opening the last draws modal
@@ -75,8 +97,17 @@ function App() {
     setIsStartGameModalOpen(true);
   };
 
-  return (
-    <>
+  /**
+   * Render the appropriate content based on the game mode
+   */
+  const renderContent = () => {
+    // If we have no game mode, show the start page
+    if (gameMode === null) {
+      return <StartPage onStart={handleGameStart} />;
+    }
+    
+    // Otherwise render the appropriate game mode
+    return (
       <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-950 dark:via-gray-900 dark:to-amber-950 text-gray-900 dark:text-gray-100 overflow-hidden">
         {/* Decorative background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -90,19 +121,31 @@ function App() {
 
         <div className="relative container max-w-6xl h-screen grid grid-cols-1 grid-rows-[1fr_min-content] overflow-hidden p-4">
           <div className="row-start-1 row-end-2 col-span-full overflow-auto">
-            <Tabellone />
+            {gameMode === 'tabellone' ? <Tabellone /> : <PlayerMode />}
           </div>
           
-          <Footer onReset={handleReset} />
+          {gameMode === 'tabellone' ? (
+            <TabelloneFooter onReset={handleReset} onReturnToStartPage={handleReturnToStartPage} />
+          ) : (
+            <PlayerFooter onReturnToStartPage={handleReturnToStartPage} />
+          )}
         </div>
 
-        <MobileFooter
-          onOpenLastDraws={handleOpenLastDrawsModal}
-          onReset={handleReset}
-        />
+        {gameMode === 'tabellone' && (
+          <MobileFooter
+            onOpenLastDraws={handleOpenLastDrawsModal}
+            onReset={handleReset}
+            onReturnToStartPage={handleReturnToStartPage}
+          />
+        )}
       </div>
+    );
+  };
+
+  return (
+    <>
+      {renderContent()}
       
-      {/* Prize celebrations */}
       <Toast 
         message={toastMessage}
         isVisible={isToastVisible}

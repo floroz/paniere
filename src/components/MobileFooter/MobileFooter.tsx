@@ -11,14 +11,15 @@ import ConfirmationDialog from '../ConfirmationDialog';
 type MobileFooterProps = {
   onOpenLastDraws: () => void;
   onReset: () => void;
+  onReturnToStartPage?: () => void;
 };
 
 /**
  * Mobile footer with game controls for small screens
  */
-const MobileFooter = ({ onOpenLastDraws, onReset }: MobileFooterProps) => {
-  const drawn = useGameStore((state) => state.drawn);
-  const lastDrawn = drawn[drawn.length - 1];
+const MobileFooter = ({ onOpenLastDraws, onReset, onReturnToStartPage }: MobileFooterProps) => {
+  const drawnNumbers = useGameStore((state) => state.drawnNumbers);
+  const lastDrawn = drawnNumbers.length > 0 ? drawnNumbers[drawnNumbers.length - 1] : null;
   const drawNumber = useGameStore((state) => state.drawNumber);
   const undoLastDraw = useGameStore((state) => state.undoLastDraw);
   const resetGame = useGameStore((state) => state.resetGame);
@@ -28,20 +29,29 @@ const MobileFooter = ({ onOpenLastDraws, onReset }: MobileFooterProps) => {
   // State for confirmation dialogs
   const [isUndoDialogOpen, setIsUndoDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
   
   const handleOpenUndoDialog = () => setIsUndoDialogOpen(true);
   const handleCloseUndoDialog = () => setIsUndoDialogOpen(false);
   const handleOpenResetDialog = () => setIsResetDialogOpen(true);
   const handleCloseResetDialog = () => setIsResetDialogOpen(false);
+  const handleOpenReturnDialog = () => setIsReturnDialogOpen(true);
+  const handleCloseReturnDialog = () => setIsReturnDialogOpen(false);
 
   const handleResetConfirm = () => {
     resetGame();
     onReset();
   };
   
+  const handleReturnConfirm = () => {
+    if (onReturnToStartPage) {
+      onReturnToStartPage();
+    }
+  };
+  
   // Calculate remaining numbers
   const remainingNumbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(
-    (num) => !drawn.includes(num)
+    (num) => !drawnNumbers.includes(num)
   );
 
   // We'll rely on CSS to hide/show based on screen size instead of JS
@@ -88,18 +98,35 @@ const MobileFooter = ({ onOpenLastDraws, onReset }: MobileFooterProps) => {
                   {t.undo}
                 </button>
                 
-                <button 
-                  onClick={handleOpenResetDialog}
-                  className="relative group flex items-center px-2 py-1.5 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-lg text-xs font-medium hover:bg-red-200 dark:hover:bg-red-800/40 active:scale-95 transition-all duration-200"
-                  aria-label={t.reset}
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === 'Enter' && handleOpenResetDialog()}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                  </svg>
-                  {t.reset}
-                </button>
+                <div className="flex gap-1.5">
+                  <button 
+                    onClick={handleOpenResetDialog}
+                    className="flex items-center gap-1 px-2 py-1.5 bg-red-500 dark:bg-red-600 text-white rounded-lg text-xs font-medium hover:bg-red-600 dark:hover:bg-red-700 active:scale-95 transition-all duration-200"
+                    aria-label={t.reset}
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && handleOpenResetDialog()}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                    </svg>
+                    {t.reset}
+                  </button>
+                  
+                  {onReturnToStartPage && (
+                    <button 
+                      onClick={handleOpenReturnDialog}
+                      className="flex items-center gap-1 px-2 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-medium hover:bg-gray-300 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200"
+                      aria-label={t.returnToStartPage}
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && handleOpenReturnDialog()}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                      </svg>
+                      {t.back}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -163,6 +190,18 @@ const MobileFooter = ({ onOpenLastDraws, onReset }: MobileFooterProps) => {
         confirmText={t.reset}
         cancelText={t.cancel}
       />
+      
+      {onReturnToStartPage && (
+        <ConfirmationDialog
+          isOpen={isReturnDialogOpen}
+          onClose={handleCloseReturnDialog}
+          onConfirm={handleReturnConfirm}
+          title={t.confirmAction}
+          message={`${t.returnConfirmation} ${t.progressLost}`}
+          confirmText={t.confirm}
+          cancelText={t.cancel}
+        />
+      )}
     </>
   );
 };

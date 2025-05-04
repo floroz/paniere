@@ -10,12 +10,13 @@ import ConfirmationDialog from '../ConfirmationDialog';
  */
 interface PaniereControlsProps {
   onReset: () => void;
+  onReturnToStartPage?: () => void;
 }
 
 /**
  * Redesigned game controls component optimized for visual appeal and space efficiency
  */
-const PaniereControls = ({ onReset }: PaniereControlsProps) => {
+const PaniereControls = ({ onReset, onReturnToStartPage }: PaniereControlsProps) => {
   // Use the unified data model
   const drawNumber = useGameStore(state => state.drawNumber);
   const drawnNumbers = useGameStore(state => state.drawnNumbers);
@@ -27,15 +28,24 @@ const PaniereControls = ({ onReset }: PaniereControlsProps) => {
   // State for confirmation dialogs
   const [isUndoDialogOpen, setIsUndoDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
   
   const handleOpenUndoDialog = () => setIsUndoDialogOpen(true);
   const handleCloseUndoDialog = () => setIsUndoDialogOpen(false);
   const handleOpenResetDialog = () => setIsResetDialogOpen(true);
   const handleCloseResetDialog = () => setIsResetDialogOpen(false);
+  const handleOpenReturnDialog = () => setIsReturnDialogOpen(true);
+  const handleCloseReturnDialog = () => setIsReturnDialogOpen(false);
   
   const handleReset = () => {
     resetGame();
     onReset();
+  };
+  
+  const handleReturn = () => {
+    if (onReturnToStartPage) {
+      onReturnToStartPage();
+    }
   };
 
   const remainingNumbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(
@@ -83,6 +93,23 @@ const PaniereControls = ({ onReset }: PaniereControlsProps) => {
                 <span>{t.reset}</span>
               </span>
             </button>
+            
+            {onReturnToStartPage && (
+              <button 
+                onClick={handleOpenReturnDialog}
+                className="group relative flex items-center px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-medium transition-all duration-200 overflow-hidden"
+                aria-label={t.returnToStartPage}
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && handleOpenReturnDialog()}
+              >
+                <span className="relative z-10 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                  </svg>
+                  <span>{t.back}</span>
+                </span>
+              </button>
+            )}
           </div>
         </div>
         
@@ -124,6 +151,18 @@ const PaniereControls = ({ onReset }: PaniereControlsProps) => {
         confirmText={t.reset}
         cancelText={t.cancel}
       />
+      
+      {onReturnToStartPage && (
+        <ConfirmationDialog
+          isOpen={isReturnDialogOpen}
+          onClose={handleCloseReturnDialog}
+          onConfirm={handleReturn}
+          title={t.confirmAction}
+          message={`${t.returnConfirmation} ${t.progressLost}`}
+          confirmText={t.confirm}
+          cancelText={t.cancel}
+        />
+      )}
     </>
   );
 };

@@ -7,7 +7,7 @@ import { neapolitanNames } from '../../data/neapolitanNames';
  * Displays the last drawn number and previous draws
  */
 const LastDraw = () => {
-  const drawn = useGameStore((state) => state.drawn);
+  const drawn = useGameStore((state) => state.drawnNumbers);
   const lastDrawn = drawn[drawn.length - 1];
   const previousDraws = drawn.slice(-3,-1).reverse();
   const language = useLanguageStore((state) => state.language);

@@ -1,16 +1,20 @@
 import LastDraw from "../LastDraw";
 import PaniereControls from "../Paniere/PaniereControls";
 
-interface FooterProps {
+/**
+ * Props for the TabelloneFooter component
+ */
+interface TabelloneFooterProps {
   onReset: () => void;
   onReturnToStartPage?: () => void;
 }
 
 /**
- * Footer component with game controls and last draws
+ * TabelloneFooter component with game controls and last draws
  * Only visible on larger screens (sm breakpoint and above)
+ * Specific to Tabellone mode
  */
-const Footer = ({ onReset, onReturnToStartPage }: FooterProps) => {
+const TabelloneFooter = ({ onReset, onReturnToStartPage }: TabelloneFooterProps) => {
   return (
     <div className="row-start-2 row-end-3 col-span-full hidden md:flex p-3 border-t border-amber-100/50 dark:border-gray-700/50">
       <div className="w-full flex items-center">
@@ -38,4 +42,4 @@ const Footer = ({ onReset, onReturnToStartPage }: FooterProps) => {
   );
 };
 
-export default Footer;
+export default TabelloneFooter;

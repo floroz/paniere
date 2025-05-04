@@ -47,6 +47,10 @@ interface GameStateWithActions extends GameState {
   undoLastNumber: () => void;               // Undo last action in either mode
   checkPrizes: (numbers?: number[]) => void;  // Prize detection for either mode
   
+  // Player mode specific actions
+  markNumber: (number: number) => void;     // Mark a number in player mode
+  unmarkNumber: (number: number) => void;   // Unmark a number in player mode
+  
   // Cartelle management
   generateCartelle: (count: number) => void;
   
@@ -141,6 +145,57 @@ export const useGameStore = create<GameStateWithActions>()(
         set({
           drawnNumbers: drawnNumbers.slice(0, -1)
         });
+        
+        // Re-check prizes with the updated numbers
+        get().checkPrizes();
+      },
+      
+      /**
+       * Mark a specific number in player mode
+       */
+      markNumber: (number: number) => {
+        const { drawnNumbers, gameMode } = get();
+        
+        // Only allow marking in player mode
+        if (gameMode !== 'player') return;
+        
+        // If the number is already marked, do nothing
+        if (drawnNumbers.includes(number)) return;
+        
+        // Clear any previous winning sequences
+        usePrizeStore.getState().clearWinningSequences();
+        
+        // Add the number to marked numbers
+        set({ 
+          drawnNumbers: [...drawnNumbers, number]
+        });
+        
+        // Check for prizes with the updated numbers
+        get().checkPrizes();
+      },
+      
+      /**
+       * Unmark a specific number in player mode
+       */
+      unmarkNumber: (number: number) => {
+        const { drawnNumbers, gameMode } = get();
+        
+        // Only allow unmarking in player mode
+        if (gameMode !== 'player') return;
+        
+        // If the number is not marked, do nothing
+        if (!drawnNumbers.includes(number)) return;
+        
+        // Clear any previous winning sequences
+        usePrizeStore.getState().clearWinningSequences();
+        
+        // Remove the number from marked numbers
+        set({
+          drawnNumbers: drawnNumbers.filter(n => n !== number)
+        });
+        
+        // Re-check prizes with the updated numbers
+        get().checkPrizes();
       },
 
       /**

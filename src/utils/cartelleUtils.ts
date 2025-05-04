@@ -118,10 +118,13 @@ export const checkPrizeInRow = (
 /**
  * Generate random cartelle for Player Mode
  * 
- * Following the constraints of Neapolitan Tombola:
- * - Each cartella has 3 rows, 5 columns (15 numbers total)
- * - Numbers are arranged according to their tens (1-9 in first column, 10-19 in second, etc.)
- * - Each row has 5 numbers, with certain positions left blank
+ * Following the constraints of traditional Tombola cartelle:
+ * - Each cartella has 3 rows, 9 columns
+ * - Each row has exactly 5 numbers and 4 empty spaces
+ * - Numbers are placed in their corresponding column based on their tens digit:
+ *   - Column 1: numbers 1-9
+ *   - Column 2: numbers 10-19
+ *   - Column 3: numbers 20-29, etc.
  * 
  * @param count Number of cartelle to generate (1-10)
  * @returns Array of randomly generated cartelle
@@ -132,56 +135,71 @@ export const generateRandomCartelle = (count: number): CartellaData[] => {
   const cartelle: CartellaData[] = [];
   
   for (let cartellaId = 1; cartellaId <= validCount; cartellaId++) {
-    // Create a 3×5 grid initially filled with zeros (representing empty spaces)
-    const numbers: number[][] = Array(3).fill(0).map(() => Array(5).fill(0));
+    // Create a 3×9 grid initially filled with zeros (representing empty spaces)
+    const grid: number[][] = Array(3).fill(0).map(() => Array(9).fill(0));
     
-    // Fill each column with numbers from the appropriate range
-    for (let col = 0; col < 5; col++) {
-      // Determine number range for this column (1-9, 10-19, 20-29, etc.)
-      // For the last column (col=4), the range is 81-90
-      const minNum = col * 10 + 1;
-      const maxNum = col === 4 ? 90 : minNum + 9;
+    // First, decide which columns will have numbers in each row
+    // We need exactly 5 columns filled in each row
+    const selectedColumns: number[][] = [];
+    
+    for (let row = 0; row < 3; row++) {
+      // Create array of column indices (0-8) and shuffle them
+      const columnIndices = Array.from({ length: 9 }, (_, i) => i)
+        .sort(() => Math.random() - 0.5);
       
-      // Create array of all possible numbers for this column
-      const availableNumbers = Array.from(
-        { length: maxNum - minNum + 1 },
-        (_, i) => minNum + i
-      );
-      
-      // Shuffle the available numbers
-      const shuffled = availableNumbers.sort(() => Math.random() - 0.5);
-      
-      // Pick the first 1-3 numbers for this column (randomly decide)
-      const numToUse = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3 numbers
-      const selectedNumbers = shuffled.slice(0, numToUse);
-      
-      // Assign numbers to rows, ensuring each row has at most 5 numbers
-      const rowAssignments = Array(3).fill(0);
-      selectedNumbers.forEach(num => {
-        // Find row with fewest numbers assigned
-        let targetRow = 0;
-        for (let row = 0; row < 3; row++) {
-          // Count non-zero entries in this row
-          const filledCount = numbers[row].filter(n => n !== 0).length;
-          if (filledCount < 5 && 
-              (rowAssignments[row] < rowAssignments[targetRow] || 
-               filledCount < numbers[targetRow].filter(n => n !== 0).length)) {
-            targetRow = row;
-          }
-        }
-        
-        // Place number in the identified row
-        numbers[targetRow][col] = num;
-        rowAssignments[targetRow]++;
-      });
+      // Select the first 5 columns to fill for this row
+      selectedColumns.push(columnIndices.slice(0, 5).sort((a, b) => a - b));
     }
     
-    // Create the cartella object
+    // Now fill each column with appropriate numbers
+    // First, generate all possible numbers for each column
+    const columnNumbers: number[][] = [];
+    
+    for (let col = 0; col < 9; col++) {
+      const minNum = col * 10 + 1;
+      const maxNum = col === 8 ? 90 : minNum + 9;
+      
+      // Create all possible numbers for this column and shuffle them
+      const numbers = Array.from(
+        { length: maxNum - minNum + 1 },
+        (_, i) => minNum + i
+      ).sort(() => Math.random() - 0.5);
+      
+      columnNumbers.push(numbers);
+    }
+    
+    // Count how many cells we need to fill in each column across all 3 rows
+    const columnCounts = Array(9).fill(0);
+    selectedColumns.forEach(rowColumns => {
+      rowColumns.forEach(col => columnCounts[col]++);
+    });
+    
+    // Now fill the grid based on selected columns
+    for (let col = 0; col < 9; col++) {
+      // Skip columns that don't need any numbers
+      if (columnCounts[col] === 0) continue;
+      
+      // Take the first N numbers needed for this column
+      const numbersToUse = columnNumbers[col].slice(0, columnCounts[col]);
+      
+      // Shuffle these numbers to randomize which rows they'll go in
+      const shuffledNumbers = [...numbersToUse].sort(() => Math.random() - 0.5);
+      
+      // Assign numbers to rows that have this column selected
+      let numberIndex = 0;
+      for (let row = 0; row < 3; row++) {
+        if (selectedColumns[row].includes(col)) {
+          grid[row][col] = shuffledNumbers[numberIndex++];
+        }
+      }
+    }
+    
+    // Create the cartella object with the complete 3x9 grid
     cartelle.push({
       id: cartellaId,
       startRow: 0, // Not relevant for player mode
       startCol: 0, // Not relevant for player mode
-      numbers
+      numbers: grid
     });
   }
   

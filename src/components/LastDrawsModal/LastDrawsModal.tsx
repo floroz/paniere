@@ -14,8 +14,8 @@ type LastDrawsModalProps = {
  * Modal component that displays the last 3 drawn numbers
  */
 export default function LastDrawsModal({ isOpen, onClose }: LastDrawsModalProps) {
-  const drawn = useGameStore((state) => state.drawn);
-  const lastThreeDraws = drawn.slice(-3).reverse();
+  const drawnNumbers = useGameStore((state) => state.drawnNumbers);
+  const lastThreeDraws = drawnNumbers.length > 0 ? drawnNumbers.slice(-3).reverse() : [];
   const modalRef = useRef<HTMLDivElement>(null);
   const language = useLanguageStore((state) => state.language);
   const t = useTranslations(language);
