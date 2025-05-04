@@ -5,6 +5,8 @@ import MobileFooter from "./components/MobileFooter";
 import Footer from "./components/Footer";
 import StartGameModal from "./components/StartGameModal";
 import { useGameStore } from "./store/useGameStore";
+import { useLanguageStore } from "./store/useLanguageStore";
+import { useTranslations } from "./i18n/translations";
 
 function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
@@ -13,6 +15,8 @@ function App() {
   const drawn = useGameStore((state) => state.drawn);
   const resetGame = useGameStore((state) => state.resetGame);
   const checkPrizes = useGameStore((state) => state.checkPrizes);
+  const language = useLanguageStore((state) => state.language);
+  const t = useTranslations(language);
 
   /**
    * Check if we need to show the start game modal
@@ -58,24 +62,43 @@ function App() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-          <div className="container max-w-6xl h-screen grid grid-cols-1 grid-rows-[1fr_min-content] overflow-hidden">
-            <div className="row-start-1 row-end-2 col-span-full overflow-auto">
-              <Tabellone />
-            </div>
-            <Footer onReset={handleReset} />
-          </div>
+      <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-950 dark:via-gray-900 dark:to-amber-950 text-gray-900 dark:text-gray-100 overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full bg-amber-200 opacity-20 dark:bg-amber-700 dark:opacity-10"></div>
+          <div className="absolute top-1/4 -left-12 w-24 h-24 rounded-full bg-amber-300 opacity-10 dark:bg-amber-600 dark:opacity-5"></div>
+          <div className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-amber-100 opacity-30 dark:bg-amber-800 dark:opacity-10"></div>
+          
+          {/* Subtle grid pattern */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTIgMmg1NnY1NkgyVjJ6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIi8+PC9nPjwvc3ZnPg==')] opacity-5 dark:opacity-[0.03]"></div>
         </div>
+
+        <div className="relative container max-w-6xl h-screen grid grid-cols-1 grid-rows-[1fr_min-content] overflow-hidden p-4">
+          {/* Game Title */}
+          <div className="absolute top-0 left-0 right-0 flex justify-center pt-2 pb-1 z-10">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-600 bg-clip-text text-transparent">
+              {t.startGame === "Start Game" ? "Paniere" : "Paniere"}
+            </h1>
+          </div>
+
+          <div className="row-start-1 row-end-2 col-span-full overflow-auto pt-10">
+            <Tabellone />
+          </div>
+          
+          <Footer onReset={handleReset} />
+        </div>
+
         <MobileFooter
           onOpenLastDraws={handleOpenLastDrawsModal}
           onReset={handleReset}
         />
       </div>
+      
       <LastDrawsModal
         isOpen={isLastDrawsModalOpen}
         onClose={handleCloseLastDrawsModal}
       />
+      
       <StartGameModal
         isOpen={isStartGameModalOpen}
         onClose={handleCloseStartGameModal}
