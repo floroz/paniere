@@ -62,11 +62,11 @@ export default function Paniere({ onReset }: PaniereProps) {
             <button 
               onClick={handleOpenUndoDialog}
               className="px-2 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-sm"
-              aria-label={t.undo}
+              aria-label={t.undoLastDraw}
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && handleOpenUndoDialog()}
             >
-              {t.undo}
+              {t.undoLastDraw}
             </button>
             <button 
               onClick={handleOpenResetDialog}
@@ -84,9 +84,9 @@ export default function Paniere({ onReset }: PaniereProps) {
         isOpen={isUndoDialogOpen}
         onClose={handleCloseUndoDialog}
         onConfirm={undoLastDraw}
-        title={`${t.confirm} ${t.undo}`}
+        title={`${t.confirm} ${t.undoLastDraw}`}
         message={t.undoConfirmMessage}
-        confirmText={t.undo}
+        confirmText={t.undoLastDraw}
         cancelText={t.cancel}
       />
       

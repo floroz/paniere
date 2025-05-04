@@ -88,14 +88,14 @@ const MobileFooter = ({ onOpenLastDraws, onReset, onReturnToStartPage }: MobileF
                 <button 
                   onClick={handleOpenUndoDialog}
                   className="relative group flex items-center px-2 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-medium hover:bg-gray-300 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200"
-                  aria-label={t.undo}
+                  aria-label={t.undoLastDraw}
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleOpenUndoDialog()}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
                   </svg>
-                  {t.undo}
+                  {t.undoLastDraw}
                 </button>
                 
                 <div className="flex gap-1.5">
@@ -175,9 +175,9 @@ const MobileFooter = ({ onOpenLastDraws, onReset, onReturnToStartPage }: MobileF
         isOpen={isUndoDialogOpen}
         onClose={handleCloseUndoDialog}
         onConfirm={undoLastDraw}
-        title={`${t.confirm} ${t.undo}`}
+        title={`${t.confirm} ${t.undoLastDraw}`}
         message={t.undoConfirmMessage}
-        confirmText={t.undo}
+        confirmText={t.undoLastDraw}
         cancelText={t.cancel}
       />
       

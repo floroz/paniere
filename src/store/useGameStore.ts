@@ -137,16 +137,37 @@ export const useGameStore = create<GameStateWithActions>()(
       },
 
       /**
-       * Undo the last drawn/marked number
+       * Undo the last drawn/marked number and invalidate any prizes that were triggered by it
        */
       undoLastNumber: () => {
         const { drawnNumbers } = get();
         
+        if (drawnNumbers.length === 0) return;
+        
+        // Simply remove the last drawn number
+        const previousDrawnNumbers = drawnNumbers.slice(0, -1);
+        
+        // Update the drawn numbers
         set({
-          drawnNumbers: drawnNumbers.slice(0, -1)
+          drawnNumbers: previousDrawnNumbers
         });
         
+        // Reset all prizes to false
+        set({
+          prizes: {
+            ambo: false,
+            terno: false,
+            quaterna: false,
+            cinquina: false,
+            tombola: false
+          }
+        });
+        
+        // Clear any previous winning sequences
+        usePrizeStore.getState().clearWinningSequences();
+        
         // Re-check prizes with the updated numbers
+        // This will detect any prizes that are still valid and update the UI accordingly
         get().checkPrizes();
       },
       

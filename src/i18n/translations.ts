@@ -8,7 +8,7 @@ type TranslationKeys = {
   english: string;
   italian: string;
   draw: string;
-  undo: string;
+  undoLastDraw: string;
   reset: string;
   lastDraws: string;
   last: string;
@@ -64,7 +64,7 @@ export const translations: Translations = {
     english: "English",
     italian: "Italian",
     draw: "Draw",
-    undo: "Undo",
+    undoLastDraw: "Undo last draw",
     reset: "Reset",
     lastDraws: "Last Draws",
     last: "Last",
@@ -114,7 +114,7 @@ export const translations: Translations = {
     english: "English",
     italian: "Italiano",
     draw: "Estrai",
-    undo: "Annulla",
+    undoLastDraw: "Annulla ultimo estratto",
     reset: "Azzera",
     lastDraws: "Ultime Estrazioni",
     last: "Ultimo",
