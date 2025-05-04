@@ -1,5 +1,6 @@
 import LastDraw from "../LastDraw";
 import PaniereControls from "../Paniere/PaniereControls";
+import RemainingCount from "../RemainingCount";
 
 /**
  * Props for the TabelloneFooter component
@@ -18,14 +19,17 @@ const TabelloneFooter = ({ onReset, onReturnToStartPage }: TabelloneFooterProps)
   return (
     <div className="row-start-2 row-end-3 col-span-full hidden md:flex p-3 border-t border-amber-100/50 dark:border-gray-700/50">
       <div className="w-full flex items-center">
-        {/* Paniere image (desktop only) */}
-        <div className="pr-3 flex-shrink-0">
+        {/* Paniere image and remaining count (desktop only) */}
+        <div className="pr-3 flex-shrink-0 flex flex-col items-center">
           <img 
             src="/images/paniere.png" 
             alt="" 
             className="h-16 w-16 object-contain" 
             aria-hidden="true" 
           />
+          <div className="mt-1">
+            <RemainingCount />
+          </div>
         </div>
         
         {/* Main footer content */}
