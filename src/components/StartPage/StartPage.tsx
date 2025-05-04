@@ -74,10 +74,10 @@ const StartPage = ({ onStart }: StartPageProps) => {
               aria-hidden="true"
             />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent font-serif">
+          <h1 className="text-4xl italic md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent font-serif">
             Paniere
           </h1>
-          <p className="text-md md:text-lg text-gray-600 dark:text-gray-300 mb-2">
+          <p className="text-md  md:text-lg text-gray-600 dark:text-gray-300 mb-6 max-w-2xl">
             {t.gameDescription}
           </p>
           

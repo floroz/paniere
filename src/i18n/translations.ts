@@ -84,7 +84,7 @@ export const translations: Translations = {
     // Start Page
     startPage: "Welcome to Paniere",
     selectMode: "Select Game Mode",
-    tabelloneMode: "Tabellone Mode",
+    tabelloneMode: "Game Master Mode",
     playerMode: "Player Mode",
     tabelloneDescription: "Draw numbers and manage the game",
     playerDescription: "Play with your own Cartelle",
