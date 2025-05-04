@@ -14,7 +14,7 @@ interface PaniereProps {
 
 export default function Paniere({ onReset }: PaniereProps) {
   const drawNumber = useGameStore((state) => state.drawNumber);
-  const drawn = useGameStore((state) => state.drawn);
+  const drawn = useGameStore((state) => state.drawnNumbers);
   const resetGame = useGameStore((state) => state.resetGame);
   const undoLastDraw = useGameStore((state) => state.undoLastDraw);
   const language = useLanguageStore((state) => state.language);
