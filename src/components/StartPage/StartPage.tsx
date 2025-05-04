@@ -59,14 +59,27 @@ const StartPage = ({ onStart }: StartPageProps) => {
       
       <main className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center justify-center gap-8">
         {/* Header with logo and language selector */}
-        <header className="w-full flex items-center justify-between mb-4">
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-600 bg-clip-text text-transparent">
-            {t.startPage}
+        <header className="w-full flex flex-col items-center justify-center mb-8 text-center">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/images/paniere.png" 
+              alt="Paniere" 
+              className="w-32 h-32 object-contain" 
+              aria-hidden="true"
+            />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent font-serif">
+            Paniere
           </h1>
-          <LanguageSelector
-            currentLanguage={language}
-            onChange={setLanguage}
-          />
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">
+            {t.startPage}
+          </p>
+          <div className="absolute top-4 right-4">
+            <LanguageSelector
+              currentLanguage={language}
+              onChange={setLanguage}
+            />
+          </div>
         </header>
         
         {/* Game mode selection */}
@@ -90,18 +103,12 @@ const StartPage = ({ onStart }: StartPageProps) => {
               onKeyDown={(e) => e.key === 'Enter' && setSelectedMode('tabellone')}
             >
               <div className="mb-4 flex justify-center">
-                <div className="grid grid-cols-3 grid-rows-2 gap-1 scale-75">
-                  {/* Simplified tabellone preview */}
-                  {Array.from({ length: 6 }, (_, idx) => (
-                    <div 
-                      key={`preview-tabellone-${idx}`}
-                      className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 border border-amber-200 dark:border-amber-800 rounded-md flex items-center justify-center"
-                    >
-                      <span className="text-xs font-bold text-amber-800 dark:text-amber-300">
-                        {(idx + 1) * 10}
-                      </span>
-                    </div>
-                  ))}
+                <div className="w-48 h-36 overflow-hidden rounded-lg shadow-md">
+                  <img 
+                    src="/images/tabellone.webp" 
+                    alt="Tabellone preview" 
+                    className="w-full h-full object-cover" 
+                  />
                 </div>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -128,8 +135,8 @@ const StartPage = ({ onStart }: StartPageProps) => {
               <div className="mb-4 flex justify-center">
                 <div className="w-48 h-36 overflow-hidden rounded-lg shadow-md">
                   <img 
-                    src="/images/cartella.png" 
-                    alt="Cartella preview" 
+                    src="/images/cartelle.jpg" 
+                    alt="Cartelle preview" 
                     className="w-full h-full object-cover" 
                   />
                 </div>
@@ -184,10 +191,11 @@ const StartPage = ({ onStart }: StartPageProps) => {
         <div className="w-full flex flex-col items-center mt-4">
           <button
             className={`
-              w-full max-w-xs py-4 px-8 rounded-xl font-bold text-lg
-              transition-all duration-300 transform
+              group relative flex w-full max-w-xs items-center justify-center overflow-hidden rounded-xl
+              p-4 text-lg font-medium text-white shadow-lg transition-all duration-300 
+              hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
               ${selectedMode 
-                ? 'bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 text-white shadow-lg hover:scale-[1.02] active:scale-[0.98]' 
+                ? 'bg-gradient-to-br from-red-500 to-orange-500' 
                 : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'}
             `}
             onClick={handleStartGame}
@@ -196,7 +204,15 @@ const StartPage = ({ onStart }: StartPageProps) => {
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && selectedMode && handleStartGame()}
           >
-            {t.startGame}
+            {selectedMode && (
+              <span className="absolute inset-0 h-full w-full bg-white/10 scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+            )}
+            <span className="relative flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+              </svg>
+              {t.startGame}
+            </span>
           </button>
         </div>
       </main>

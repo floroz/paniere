@@ -90,11 +90,11 @@ function App() {
   const handleCloseStartGameModal = () => setIsStartGameModalOpen(false);
 
   /**
-   * Handle resetting the game and showing the start game modal
+   * Handle resetting the game
    */
   const handleReset = () => {
     resetGame();
-    setIsStartGameModalOpen(true);
+    // Don't show the start game modal anymore - just reset the game
   };
 
   /**
