@@ -36,7 +36,6 @@ const LastDrawDisplay = () => {
         >
           <NumberDisplay 
             number={lastDrawn}
-            label={t.last}
             isCurrent={true}
             animationClass="animate-fade-in"
           />
