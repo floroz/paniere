@@ -4,6 +4,8 @@ import { useTranslations } from '../../i18n/translations';
 import BaseButton from '../BaseButton';
 import { useConfirmation } from '../../hooks/useConfirmation';
 import BaseConfirmationDialog from '../BaseConfirmationDialog';
+import { useEffect, useState, useRef } from 'react';
+import { neapolitanNames } from '../../data/neapolitanNames';
 
 /**
  * GameControls component props
@@ -27,6 +29,30 @@ const GameControls = ({ onReset, onReturnToStartPage }: GameControlsProps) => {
   const language = useLanguageStore(state => state.language);
   const t = useTranslations(language);
   
+  // For accessibility announcements
+  const [drawnNumberAnnouncement, setDrawnNumberAnnouncement] = useState('');
+  const prevDrawnNumbersLength = useRef(drawnNumbers.length);
+  
+  // Announce when a new number is drawn
+  useEffect(() => {
+    if (drawnNumbers.length === 0 || drawnNumbers.length <= prevDrawnNumbersLength.current) {
+      prevDrawnNumbersLength.current = drawnNumbers.length;
+      return;
+    }
+
+    const lastDrawn = drawnNumbers[drawnNumbers.length - 1];
+    const announcement = `${t.drawn}: ${lastDrawn}, ${neapolitanNames[lastDrawn]}`;
+    setDrawnNumberAnnouncement(announcement);
+    
+    // Clear the announcement after a delay
+    const timer = setTimeout(() => {
+      setDrawnNumberAnnouncement('');
+    }, 3000);
+    
+    prevDrawnNumbersLength.current = drawnNumbers.length;
+    return () => clearTimeout(timer);
+  }, [drawnNumbers, t]);
+  
   // Remaining numbers calculation
   const remainingNumbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(
     num => !drawnNumbers.includes(num)
@@ -45,8 +71,15 @@ const GameControls = ({ onReset, onReturnToStartPage }: GameControlsProps) => {
 
   return (
     <div className="h-full grid grid-cols-[1fr_auto] gap-4 items-center">
-      {/* Main draw button */}
-      <div className="flex justify-center">
+      <div className="flex justify-center relative">
+        {/* ARIA live region for announcing drawn numbers */}
+        <div 
+          className="sr-only" 
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {drawnNumberAnnouncement}
+        </div>
         <BaseButton
           onClick={drawNumber}
           disabled={remainingNumbers.length === 0}

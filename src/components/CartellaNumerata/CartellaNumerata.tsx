@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, KeyboardEvent, useCallback } from 'react';
 import { useGameStore } from '../../store/useGameStore';
 import { useLanguageStore } from '../../store/useLanguageStore';
 import { useTranslations } from '../../i18n/translations';
@@ -31,7 +31,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
   /**
    * Handle clicking on a number in the cartella
    */
-  const handleNumberClick = (number: number) => {
+  const handleNumberClick = useCallback((number: number) => {
     if (number === 0) return; // Skip empty cells
     
     // If number is already marked, show confirmation dialog
@@ -43,7 +43,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
     
     // Otherwise, mark the number
     markNumber(number);
-  };
+  }, [drawnNumbers, markNumber, setIsUnmarkDialogOpen, setNumberToUnmark]);
   
   /**
    * Handle confirming number unmarking
@@ -64,6 +64,88 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
     setIsUnmarkDialogOpen(false);
     setNumberToUnmark(null);
   };
+
+  // State for active descendant pattern - track the currently active cell
+  const [activeCell, setActiveCell] = useState<{row: number, col: number} | null>(null);
+  
+  // Container ref for the grid
+  const gridRef = useRef<HTMLDivElement>(null);
+  
+  /**
+   * Handle keyboard navigation within the cartella using active descendant pattern
+   */
+  const handleGridKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
+    // Skip if user is typing Ctrl, Alt, or meta key combos
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    
+    // If no cell is active yet, set the first valid cell as active
+    if (!activeCell) {
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (cartella.numbers[r][c] !== 0) {
+            setActiveCell({row: r, col: c});
+            return;
+          }
+        }
+      }
+      return;
+    }
+    
+    let {row: newRow, col: newCol} = activeCell;
+    let handled = true;
+
+    // Handle arrow key navigation
+    switch (e.key) {
+      case 'ArrowUp':
+        newRow = Math.max(0, newRow - 1);
+        break;
+      case 'ArrowDown':
+        newRow = Math.min(2, newRow + 1);
+        break;
+      case 'ArrowLeft':
+        newCol = Math.max(0, newCol - 1);
+        break;
+      case 'ArrowRight':
+        newCol = Math.min(8, newCol + 1);
+        break;
+      case 'Home':
+        newCol = 0;
+        break;
+      case 'End':
+        newCol = 8;
+        break;
+      case 'Enter':
+      case ' ':
+        // Activate the current cell
+        if (cartella.numbers[activeCell.row][activeCell.col] > 0) {
+          handleNumberClick(cartella.numbers[activeCell.row][activeCell.col]);
+        }
+        break;
+      default:
+        handled = false;
+        return; // Return early for other keys
+    }
+    
+    // If we handled the key, prevent default
+    if (handled) {
+      e.preventDefault();
+    }
+
+    // Find the next valid cell (skip empty cells)
+    while (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 9) {
+      if (cartella.numbers[newRow][newCol] !== 0) {
+        setActiveCell({row: newRow, col: newCol});
+        return;
+      }
+      
+      // If we didn't find a valid cell, try the next one in the same direction
+      if (e.key === 'ArrowUp') newRow--;
+      else if (e.key === 'ArrowDown') newRow++;
+      else if (e.key === 'ArrowLeft') newCol--;
+      else if (e.key === 'ArrowRight') newCol++;
+      else break; // For home/end, don't loop
+    }
+  }, [activeCell, cartella.numbers, handleNumberClick]);
   
   /**
    * Get the appropriate style for a cell based on its state
@@ -82,7 +164,15 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
   
   return (
     <>
-      <div className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-gray-800 dark:to-gray-750 border border-amber-200 dark:border-amber-800 p-3 rounded-xl shadow-md">
+      <div 
+        ref={gridRef}
+        className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-gray-800 dark:to-gray-750 border border-amber-200 dark:border-amber-800 p-3 rounded-xl shadow-md"
+        role="grid"
+        aria-label={`Cartella ${cartella.id}`}
+        tabIndex={0} /* Make the grid container focusable */
+        onKeyDown={handleGridKeyDown}
+        aria-activedescendant={activeCell ? `cartella-${cartella.id}-cell-${activeCell.row}-${activeCell.col}` : undefined}
+      >
         <div className="mb-2 px-1">
           <div className="text-xs font-medium text-amber-800 dark:text-amber-400">
             Cartella {cartella.id}
@@ -91,27 +181,34 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
         
         <div className="grid grid-rows-3 gap-1 w-full">
           {Array.from({ length: 3 }, (_, rowIdx) => (
-            <div key={`row-${rowIdx}`} className="grid grid-cols-9 gap-1">
+            <div 
+              key={`row-${rowIdx}`} 
+              className="grid grid-cols-9 gap-1"
+              role="row"
+            >
               {Array.from({ length: 9 }, (_, colIdx) => {
                 // Each number is placed in its corresponding column based on its value
                 // Column 0: numbers 1-9, Column 1: numbers 10-19, etc.
                 const number = cartella.numbers[rowIdx][colIdx];
+                const isActive = activeCell?.row === rowIdx && activeCell?.col === colIdx;
                 
                 return (
-                  <button
+                  <div
                     key={`cell-${rowIdx}-${colIdx}`}
+                    id={`cartella-${cartella.id}-cell-${rowIdx}-${colIdx}`}
                     className={`
                       relative w-7 h-7 sm:w-9 sm:h-9 
                       overflow-hidden group
                       rounded-md ${number > 0 ? 'shadow-sm' : ''} transition-all duration-300
                       ${getCellStyle(number)}
                       flex flex-col items-center justify-center
+                      ${isActive && number > 0 ? 'ring-2 ring-amber-500 ring-offset-1' : ''}
                     `}
                     onClick={() => number > 0 && handleNumberClick(number)}
-                    disabled={number === 0}
                     aria-label={number === 0 ? 'Empty cell' : `${number}, ${neapolitanNames[number]}, ${drawnNumbers.includes(number) ? t.drawn : t.notDrawn}`}
-                    tabIndex={number === 0 ? -1 : 0}
-                    onKeyDown={(e) => e.key === 'Enter' && number > 0 && handleNumberClick(number)}
+                    role="gridcell"
+                    aria-disabled={number === 0 ? 'true' : 'false'}
+                    aria-selected={isActive ? 'true' : 'false'}
                   >
                     {number !== 0 && (
                       <>
@@ -129,7 +226,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
                         <div className="absolute inset-0 bg-gradient-to-tr from-white/0 to-white/20 dark:from-white/0 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </>
                     )}
-                  </button>
+                  </div>
                 );
               })}
             </div>

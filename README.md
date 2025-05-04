@@ -35,7 +35,7 @@ Paniere is a modern digital adaptation of the traditional Neapolitan Tombola (To
 
 ## 🛠️ Technologies
 
-- **React 18** with **TypeScript**
+- **React 19** with **TypeScript**
 - **Tailwind CSS** for styling with responsive design
 - **Zustand** for lightweight state management
 - **Vite** for fast development and optimized builds

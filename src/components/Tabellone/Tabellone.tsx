@@ -49,8 +49,9 @@ const Casella = ({ number, name, isDrawn, isLatestDrawn, isWinningNumber }: Case
         flex flex-col items-center justify-center
       `}
       aria-label={`${number}, ${name}, ${isDrawn ? t.drawn : t.notDrawn}${isWinningNumber ? ', winning number' : ''}`}
-      tabIndex={0}
+      tabIndex={-1} /* Make cells not focusable in Tabellone mode */
       role="gridcell"
+      aria-readonly="true"
     >
       {/* Border overlay */}
       <div className={`absolute inset-0 border border-gray-200 dark:border-gray-700 rounded-xl ${isDrawn ? 'opacity-0' : 'opacity-100'}`}></div>
