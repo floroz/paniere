@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Daniele Tortora",
+  "license": "MIT",
+  "description": "An interactive Paniere (Tombola) game",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
