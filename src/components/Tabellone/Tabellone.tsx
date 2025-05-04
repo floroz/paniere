@@ -19,8 +19,8 @@ function Casella({ number, name, isDrawn }: CasellaProps) {
   return (
     <div 
       className={`
-        sm:w-auto w-10
-        border rounded-md flex flex-col items-center justify-center aspect-square
+        sm:w-20 w-12 aspect-square 
+        border rounded-md flex flex-col items-center justify-center
         ${isDrawn ? 'bg-amber-100 dark:bg-amber-900' : 'bg-white dark:bg-gray-800'}
       `}
       aria-label={`${number}, ${name}, ${isDrawn ? t.drawn : t.notDrawn}`}
@@ -28,7 +28,7 @@ function Casella({ number, name, isDrawn }: CasellaProps) {
       <span className={`text-base font-bold ${isDrawn ? 'text-amber-800 dark:text-amber-200' : ''}`}>
         {number}
       </span>
-      <span className="sm:block hidden text-xs text-center break-words">
+      <span className="sm:block hidden text-xs text-center max-w-full px-1">
         {name}
       </span>
     </div>
@@ -72,10 +72,10 @@ export default function Tabellone() {
   };
   
   return (
-    <div className="max-h-full w-full h-auto">
-      <div className="grid grid-rows-[9] grid-cols-[10] gap-0.5">
+    <div className="max-h-full w-full h-auto overflow-auto">
+      <div className="grid grid-flow-row auto-rows-auto gap-0.5 justify-center">
         {grid.map((row, rowIndex) => (
-          <div key={`row-${rowIndex}`} className="grid grid-cols-10 gap-0.5">
+          <div key={`row-${rowIndex}`} className="flex flex-row gap-0.5">
             {row.map((number, colIndex) => {
               const isDrawn = drawnNumbers.includes(number);
               const cartellaId = getCartellaId(rowIndex, colIndex);
@@ -87,7 +87,7 @@ export default function Tabellone() {
               return (
                 <div 
                   key={number}
-                  className={`relative ${rightBorder} ${bottomBorder}`}
+                  className={`${rightBorder} ${bottomBorder}`}
                   aria-label={`Cartella ${cartellaId}`}
                 >
                   <Casella 
