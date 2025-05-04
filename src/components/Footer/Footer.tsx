@@ -11,12 +11,12 @@ interface FooterProps {
  */
 const Footer = ({ onReset }: FooterProps) => {
   return (
-    <div className="row-start-2 row-end-3 col-span-full hidden sm:flex p-3 border-t border-amber-100/50 dark:border-gray-700/50">
-      <div className="w-full grid grid-cols-1 md:grid-cols-5 gap-3 h-full">
-        <div className="md:col-span-3 h-full">
+    <div className="row-start-2 row-end-3 col-span-full hidden md:flex p-3 border-t border-amber-100/50 dark:border-gray-700/50">
+      <div className="w-full grid grid-cols-5 gap-3 h-full">
+        <div className="col-span-3 h-full">
           <LastDraw />
         </div>
-        <div className="md:col-span-2 h-full">
+        <div className="col-span-2 h-full">
           <PaniereControls onReset={onReset} />
         </div>
       </div>

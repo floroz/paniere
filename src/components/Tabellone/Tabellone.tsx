@@ -219,10 +219,10 @@ const Tabellone = () => {
   
   return (
     <div className="max-h-full w-full h-auto overflow-auto py-4">
-      <div className="sm:hidden">
+      <div className="md:hidden">
         {renderMobileView()}
       </div>
-      <div className="hidden sm:block">
+      <div className="hidden md:block">
         {renderDesktopView()}
       </div>
     </div>

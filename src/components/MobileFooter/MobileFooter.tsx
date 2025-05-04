@@ -48,7 +48,7 @@ const MobileFooter = ({ onOpenLastDraws, onReset }: MobileFooterProps) => {
   
   return (
     <>
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-amber-50/90 to-white/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-sm border-t border-amber-100 dark:border-gray-700 shadow-lg px-3 py-2 z-40">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-amber-50/90 to-white/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-sm border-t border-amber-100 dark:border-gray-700 shadow-lg px-3 py-2 z-40">
         <div className="flex justify-between items-center">
           {/* Left section: Controls */}
           <div className="flex flex-col space-y-1">
