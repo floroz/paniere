@@ -1,6 +1,7 @@
 import { Language } from "../store/useLanguageStore";
 
 type TranslationKeys = {
+  // Core translations
   startGame: string;
   newGame: string;
   language: string;
@@ -23,6 +24,30 @@ type TranslationKeys = {
   noPreviousDraws: string;
   drawn: string;
   notDrawn: string;
+  
+  // Start Page
+  startPage: string;
+  selectMode: string;
+  tabelloneMode: string;
+  playerMode: string;
+  tabelloneDescription: string;
+  playerDescription: string;
+  selectCartelle: string;
+  howManyCartelle: string;
+  cartelle: string;
+  switchToEnglish: string;
+  switchToItalian: string;
+  settings: string;
+  back: string;
+  returnToStartPage: string;
+  confirmAction: string;
+  returnConfirmation: string;
+  unmarkConfirmation: (num: number) => string;
+  progressLost: string;
+  
+  // Player Mode
+  noCartelleFound: string;
+  stopPlaying: string;
 };
 
 type Translations = {
@@ -31,6 +56,7 @@ type Translations = {
 
 export const translations: Translations = {
   en: {
+    // Core translations
     startGame: "Start Game",
     newGame: "New Game",
     language: "Language",
@@ -53,8 +79,33 @@ export const translations: Translations = {
     noPreviousDraws: "No previous draws",
     drawn: "drawn",
     notDrawn: "not drawn",
+    
+    // Start Page
+    startPage: "Welcome to Paniere",
+    selectMode: "Select Game Mode",
+    tabelloneMode: "Tabellone Mode",
+    playerMode: "Player Mode",
+    tabelloneDescription: "Draw numbers and manage the game",
+    playerDescription: "Play with your own Cartelle",
+    selectCartelle: "Select Cartelle",
+    howManyCartelle: "How many Cartelle would you like?",
+    cartelle: "Cartelle",
+    switchToEnglish: "Switch to English",
+    switchToItalian: "Switch to Italian",
+    settings: "Settings",
+    back: "Back",
+    returnToStartPage: "Return to Start Page",
+    confirmAction: "Confirm Action",
+    returnConfirmation: "Are you sure you want to end your current game?",
+    unmarkConfirmation: (num: number) => `Are you sure you want to unmark number ${num}?`,
+    progressLost: "All progress will be lost.",
+    
+    // Player Mode
+    noCartelleFound: "No cartelle found. Please return to the Start Page and select some cartelle.",
+    stopPlaying: "Stop playing",
   },
   it: {
+    // Core translations
     startGame: "Inizia Gioco",
     newGame: "Nuovo Gioco",
     language: "Lingua",
@@ -77,6 +128,30 @@ export const translations: Translations = {
     noPreviousDraws: "Nessuna estrazione precedente",
     drawn: "estratto",
     notDrawn: "non estratto",
+    
+    // Start Page
+    startPage: "Benvenuto a Paniere",
+    selectMode: "Seleziona Modalità di Gioco",
+    tabelloneMode: "Modalità Tabellone",
+    playerMode: "Modalità Giocatore",
+    tabelloneDescription: "Estrai numeri e gestisci il gioco",
+    playerDescription: "Gioca con le tue Cartelle",
+    selectCartelle: "Seleziona Cartelle",
+    howManyCartelle: "Quante Cartelle vorresti?",
+    cartelle: "Cartelle",
+    switchToEnglish: "Passa all'inglese",
+    switchToItalian: "Passa all'italiano",
+    settings: "Impostazioni",
+    back: "Indietro",
+    returnToStartPage: "Torna alla pagina iniziale",
+    confirmAction: "Conferma Azione",
+    returnConfirmation: "Sei sicuro di voler terminare la partita corrente?",
+    unmarkConfirmation: (num: number) => `Sei sicuro di voler deselezionare il numero ${num}?`,
+    progressLost: "Tutti i progressi andranno persi.",
+    
+    // Player Mode
+    noCartelleFound: "Nessuna cartella trovata. Torna alla pagina iniziale e seleziona alcune cartelle.",
+    stopPlaying: "Smetti di giocare",
   },
 };
 
