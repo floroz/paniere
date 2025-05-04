@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Tombola (also known as Italian Bingo) is a traditional Italian game typically played during holidays and family gatherings, especially during Christmas and New Year celebrations. It's a game of chance that brings people together in a fun and engaging way.
+Tombola (also known as Italian Bingo) is a traditional Neapolitan game typically played during holidays and family gatherings, especially during Christmas and New Year celebrations. It's a game of chance that brings people together in a fun and engaging way.
 
 ## Game Components
 

@@ -2,7 +2,7 @@
 
 ## Introduzione
 
-La Tombola è un gioco tradizionale italiano tipicamente giocato durante le festività e le riunioni familiari, soprattutto durante il Natale e le celebrazioni di Capodanno. È un gioco di fortuna che riunisce le persone in modo divertente e coinvolgente.
+La Tombola (conosciuta come Tombola Napoletana) è un gioco tradizionale napoletano tipicamente giocato durante le festività e le riunioni familiari, soprattutto durante il Natale e le celebrazioni di Capodanno. È un gioco di fortuna che riunisce le persone in modo divertente e coinvolgente.
 
 ## Componenti del Gioco
 

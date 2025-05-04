@@ -78,9 +78,7 @@ const StartPage = ({ onStart }: StartPageProps) => {
             Paniere
           </h1>
           <p className="text-md md:text-lg text-gray-600 dark:text-gray-300 mb-2">
-            {language === 'en' ? 
-              'A digital version of the traditional Italian Tombola game. Draw numbers, mark your cartelle, and win prizes from ambo to tombola!' : 
-              'Una versione digitale del tradizionale gioco della Tombola italiana. Estrai numeri, segna le tue cartelle e vinci premi dall\'ambo alla tombola!'}
+            {t.gameDescription}
           </p>
           
           <div className="flex justify-center mb-6">

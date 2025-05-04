@@ -24,6 +24,7 @@ type TranslationKeys = {
   noPreviousDraws: string;
   drawn: string;
   notDrawn: string;
+  gameDescription: string;
   
   // Start Page
   startPage: string;
@@ -87,6 +88,7 @@ export const translations: Translations = {
     playerMode: "Player Mode",
     tabelloneDescription: "Draw numbers and manage the game",
     playerDescription: "Play with your own Cartelle",
+    gameDescription: "A digital version of the traditional Neapolitan Tombola game. Draw numbers, mark your cartelle, and win prizes from ambo to tombola!",
     selectCartelle: "Select Cartelle",
     howManyCartelle: "How many Cartelle would you like?",
     cartelle: "Cartelle",
@@ -136,6 +138,7 @@ export const translations: Translations = {
     playerMode: "Modalità Giocatore",
     tabelloneDescription: "Estrai numeri e gestisci il gioco",
     playerDescription: "Gioca con le tue Cartelle",
+    gameDescription: "Una versione digitale del tradizionale gioco della Tombola Napoletana. Estrai numeri, segna le tue cartelle e vinci premi dall'ambo alla tombola!",
     selectCartelle: "Seleziona Cartelle",
     howManyCartelle: "Quante Cartelle vorresti?",
     cartelle: "Cartelle",
