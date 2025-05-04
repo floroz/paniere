@@ -104,96 +104,122 @@ const StartPage = ({ onStart }: StartPageProps) => {
         </header>
         
         {/* Game mode selection */}
-        <section className="w-full">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+        <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+          <h2 className="col-span-full text-2xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-500 dark:to-amber-700 bg-clip-text text-transparent">
             {t.selectMode}
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Tabellone Mode */}
-            <button
-              className={`
-                flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md border-2 transition-all duration-300
-                ${selectedMode === 'tabellone' 
-                  ? 'border-amber-500 dark:border-amber-600 ring-4 ring-amber-200 dark:ring-amber-900 scale-[1.02]' 
-                  : 'border-gray-200 dark:border-gray-700 hover:scale-[1.01] hover:shadow-lg'}
-              `}
-              onClick={() => setSelectedMode('tabellone')}
-              aria-label={t.tabelloneMode}
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && setSelectedMode('tabellone')}
-            >
-              <div className="mb-4 flex justify-center">
-                <div className="w-48 h-36 overflow-hidden rounded-lg shadow-md">
-                  <img 
-                    src="/images/tabellone.webp" 
-                    alt="Tabellone preview" 
-                    className="w-full h-full object-cover" 
-                  />
-                </div>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t.tabelloneMode}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center">
-                {t.tabelloneDescription}
-              </p>
-            </button>
+          {/* Tabellone mode */}
+          <button
+            className={`
+              group relative flex flex-col items-center p-6 rounded-xl transition-all duration-300 overflow-hidden
+              ${selectedMode === 'tabellone' 
+                ? 'bg-gradient-to-br from-amber-50 to-amber-100/70 dark:from-amber-900/40 dark:to-amber-800/20 border-2 border-amber-500 dark:border-amber-600 shadow-lg transform scale-[1.02]' 
+                : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-700'}
+            `}
+            onClick={() => setSelectedMode('tabellone')}
+            aria-label={t.tabelloneMode}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && setSelectedMode('tabellone')}
+          >
+            {/* Decorative background elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10 dark:opacity-5">
+              <div className="absolute -top-8 -right-8 w-16 h-16 rounded-full bg-amber-300 dark:bg-amber-600"></div>
+              <div className="absolute bottom-4 -left-6 w-12 h-12 rounded-full bg-amber-200 dark:bg-amber-700"></div>
+            </div>
             
-            {/* Player Mode */}
-            <button
-              className={`
-                flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md border-2 transition-all duration-300
-                ${selectedMode === 'player' 
-                  ? 'border-amber-500 dark:border-amber-600 ring-4 ring-amber-200 dark:ring-amber-900 scale-[1.02]' 
-                  : 'border-gray-200 dark:border-gray-700 hover:scale-[1.01] hover:shadow-lg'}
-              `}
-              onClick={() => setSelectedMode('player')}
-              aria-label={t.playerMode}
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && setSelectedMode('player')}
-            >
-              <div className="mb-4 flex justify-center">
-                <div className="w-48 h-36 overflow-hidden rounded-lg shadow-md">
-                  <img 
-                    src="/images/cartelle.jpg" 
-                    alt="Cartelle preview" 
-                    className="w-full h-full object-cover" 
-                  />
-                </div>
+            {selectedMode === 'tabellone' && (
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 rounded-full flex items-center justify-center shadow-md z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t.playerMode}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center">
-                {t.playerDescription}
-              </p>
-            </button>
-          </div>
+            )}
+            <div className="mb-5 relative">
+              <div className="w-48 h-36 overflow-hidden rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105">
+                <img 
+                  src="/images/tabellone.webp" 
+                  alt="Tabellone preview" 
+                  className="w-full h-full object-cover" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            </div>
+            <h3 className="text-xl font-bold bg-gradient-to-r from-amber-700 to-amber-900 dark:from-amber-500 dark:to-amber-600 bg-clip-text text-transparent">
+              {t.tabelloneMode}
+            </h3>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-3 text-center font-medium">
+              {t.tabelloneDescription}
+            </p>
+          </button>
+          
+          {/* Player mode */}
+          <button
+            className={`
+              group relative flex flex-col items-center p-6 rounded-xl transition-all duration-300 overflow-hidden
+              ${selectedMode === 'player' 
+                ? 'bg-gradient-to-br from-amber-50 to-amber-100/70 dark:from-amber-900/40 dark:to-amber-800/20 border-2 border-amber-500 dark:border-amber-600 shadow-lg transform scale-[1.02]' 
+                : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-700'}
+            `}
+            onClick={() => setSelectedMode('player')}
+            aria-label={t.playerMode}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && setSelectedMode('player')}
+          >
+            {/* Decorative background elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10 dark:opacity-5">
+              <div className="absolute -top-8 -right-8 w-16 h-16 rounded-full bg-amber-300 dark:bg-amber-600"></div>
+              <div className="absolute bottom-4 -left-6 w-12 h-12 rounded-full bg-amber-200 dark:bg-amber-700"></div>
+            </div>
+            
+            {selectedMode === 'player' && (
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 rounded-full flex items-center justify-center shadow-md z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+            )}
+            <div className="mb-5 relative">
+              <div className="w-48 h-36 overflow-hidden rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105">
+                <img 
+                  src="/images/cartelle.jpg" 
+                  alt="Cartelle preview" 
+                  className="w-full h-full object-cover" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            </div>
+            <h3 className="text-xl font-bold bg-gradient-to-r from-amber-700 to-amber-900 dark:from-amber-500 dark:to-amber-600 bg-clip-text text-transparent">
+              {t.playerMode}
+            </h3>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-3 text-center font-medium">
+              {t.playerDescription}
+            </p>
+          </button>
         </section>
         
         {/* Cartelle count selection (only for Player mode) */}
         {selectedMode === 'player' && (
-          <section className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+          <section className="w-full bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-900/30 dark:to-amber-800/10 rounded-xl shadow-md p-6 border border-amber-200/70 dark:border-amber-800/30">
+            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-amber-700 to-amber-900 dark:from-amber-500 dark:to-amber-600 bg-clip-text text-transparent">
               {t.selectCartelle}
             </h2>
             
             <div className="flex flex-col items-center">
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-gray-700 dark:text-gray-300 mb-5 font-medium text-center">
                 {t.howManyCartelle}
               </p>
               
-              <div className="flex gap-2 flex-wrap justify-center">
+              <div className="flex gap-3 flex-wrap justify-center">
                 {Array.from({ length: 10 }, (_, idx) => idx + 1).map(count => (
                   <button
                     key={`cartelle-count-${count}`}
                     className={`
-                      w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg
-                      transition-all duration-200
+                      w-14 h-14 rounded-full flex items-center justify-center font-bold text-lg
+                      transition-all duration-300 shadow-sm
                       ${cartelleCount === count 
-                        ? 'bg-amber-500 dark:bg-amber-600 text-white transform scale-110' 
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}
+                        ? 'bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 text-white transform scale-110 shadow-md ring-2 ring-amber-300 dark:ring-amber-700/50' 
+                        : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:scale-105'}
                     `}
                     onClick={() => setCartelleCount(count)}
                     aria-label={`${count} ${t.cartelle}`}
@@ -209,14 +235,14 @@ const StartPage = ({ onStart }: StartPageProps) => {
         )}
         
         {/* Start game button */}
-        <div className="w-full flex flex-col items-center mt-4">
+        <div className="w-full flex flex-col items-center mt-6">
           <button
             className={`
               group relative flex w-full max-w-xs items-center justify-center overflow-hidden rounded-xl
-              p-4 text-lg font-medium text-white shadow-lg transition-all duration-300 
-              hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+              py-5 text-xl font-bold text-white shadow-lg transition-all duration-300 
+              hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2
               ${selectedMode 
-                ? 'bg-gradient-to-br from-red-500 to-orange-500' 
+                ? 'bg-gradient-to-br from-amber-500 to-amber-700 dark:from-amber-600 dark:to-amber-800 transform hover:scale-[1.02] active:scale-[0.98]' 
                 : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'}
             `}
             onClick={handleStartGame}
@@ -226,10 +252,13 @@ const StartPage = ({ onStart }: StartPageProps) => {
             onKeyDown={(e) => e.key === 'Enter' && selectedMode && handleStartGame()}
           >
             {selectedMode && (
-              <span className="absolute inset-0 h-full w-full bg-white/10 scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+              <>
+                <span className="absolute inset-0 h-full w-full bg-gradient-to-t from-black/20 to-transparent opacity-50" />
+                <span className="absolute inset-0 h-full w-full bg-white/10 scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+              </>
             )}
-            <span className="relative flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <span className="relative flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
               </svg>
               {t.startGame}
