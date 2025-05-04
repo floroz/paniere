@@ -42,7 +42,7 @@ const BaseButton = ({
   ...props
 }: BaseButtonProps) => {
   // Base classes for all buttons
-  const baseClasses = 'relative flex items-center justify-center font-medium rounded-lg transition-all duration-200 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'font-display relative flex items-center justify-center font-medium rounded-lg transition-all duration-200 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   // Size-specific classes
   const sizeClasses = {
