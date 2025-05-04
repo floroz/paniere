@@ -11,12 +11,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky && husky install"
+    "prepare": "husky && husky install",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
-      "tsc-files --noEmit"
+      "prettier --write"
     ]
   },
   "dependencies": {
@@ -39,7 +41,7 @@
     "globals": "^16.0.0",
     "husky": "^8.0.0",
     "lint-staged": "^15.5.1",
-    "tsc-files": "^1.1.4",
+    "prettier": "^3.5.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1"

@@ -1,0 +1,38 @@
+# Build artifacts
+dist
+build
+coverage
+
+# Node modules
+node_modules
+
+# Cache directories
+.cache
+.npm
+
+# Environment files
+.env*
+!.env.example
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Generated files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Other
+.DS_Store

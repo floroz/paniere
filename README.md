@@ -7,6 +7,11 @@
   <p><em>A digital version of the traditional Neapolitan Tombola game</em></p>
 </div>
 
+## Play now!
+
+- Visit [Paniere](https://paniere.netlify.app) in your browser
+
+
 ## 📖 Overview
 
 Paniere is a modern digital adaptation of the traditional Neapolitan Tombola (Tombola Napoletana) game (similar to Bingo), featuring:
