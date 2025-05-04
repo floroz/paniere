@@ -8,8 +8,6 @@ import { neapolitanNames } from '../../data/neapolitanNames';
 interface NumberDisplayProps {
   /** Number to display */
   number: number;
-  /** Optional label */
-  label?: string;
   /** Whether this is the main/current number */
   isCurrent?: boolean;
   /** Optional animation class */
@@ -21,7 +19,6 @@ interface NumberDisplayProps {
  */
 const NumberDisplay = ({ 
   number, 
-  label, 
   isCurrent = false,
   animationClass = ''
 }: NumberDisplayProps) => {
@@ -33,20 +30,8 @@ const NumberDisplay = ({
   return (
     <div 
       className={`flex ${isCurrent ? 'flex-col items-center justify-center' : 'items-center justify-between gap-2'} ${animationClass}`}
-      aria-label={`${label || t.lastDrawnNumber}: ${number}, ${neapolitanNames[number]}`}
+      aria-label={`${t.lastDrawnNumber}: ${number}, ${neapolitanNames[number]}`}
     >
-      {label && !isCurrent && (
-        <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 font-medium">
-          {label}
-        </span>
-      )}
-      
-      {label && isCurrent && (
-        <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1 font-medium">
-          {label}
-        </span>
-      )}
-      
       <span 
         className={`${isCurrent 
           ? 'text-4xl md:text-5xl font-bold text-amber-800 dark:text-amber-200 leading-none' 
