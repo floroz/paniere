@@ -13,7 +13,10 @@ type MobileFooterProps = {
   onReset: () => void;
 };
 
-export default function MobileFooter({ onOpenLastDraws, onReset }: MobileFooterProps) {
+/**
+ * Mobile footer with game controls for small screens
+ */
+const MobileFooter = ({ onOpenLastDraws, onReset }: MobileFooterProps) => {
   const drawn = useGameStore((state) => state.drawn);
   const lastDrawn = drawn[drawn.length - 1];
   const drawNumber = useGameStore((state) => state.drawNumber);
@@ -26,13 +29,12 @@ export default function MobileFooter({ onOpenLastDraws, onReset }: MobileFooterP
   const [isUndoDialogOpen, setIsUndoDialogOpen] = useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   
-  // Handlers for dialog actions
   const handleOpenUndoDialog = () => setIsUndoDialogOpen(true);
   const handleCloseUndoDialog = () => setIsUndoDialogOpen(false);
   const handleOpenResetDialog = () => setIsResetDialogOpen(true);
   const handleCloseResetDialog = () => setIsResetDialogOpen(false);
 
-  const onResetHandler = () => {
+  const handleResetConfirm = () => {
     resetGame();
     onReset();
   };
@@ -41,67 +43,102 @@ export default function MobileFooter({ onOpenLastDraws, onReset }: MobileFooterP
   const remainingNumbers = Array.from({ length: 90 }, (_, i) => i + 1).filter(
     (num) => !drawn.includes(num)
   );
+
+  // We'll rely on CSS to hide/show based on screen size instead of JS
   
   return (
     <>
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg p-3 z-40">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-amber-50/90 to-white/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-sm border-t border-amber-100 dark:border-gray-700 shadow-lg px-3 py-2 z-40">
         <div className="flex justify-between items-center">
+          {/* Left section: Controls */}
           <div className="flex flex-col space-y-1">
-            <div className="text-xs text-gray-600 dark:text-gray-300 mb-1">{t.remaining}: {remainingNumbers.length}</div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center mb-1 gap-1">
+              <div className="text-xs font-medium text-amber-700 dark:text-amber-400">
+                {t.remaining}:
+              </div>
+              <div className="text-sm font-bold bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-500 bg-clip-text text-transparent">
+                {remainingNumbers.length}
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
               <button 
                 onClick={drawNumber}
                 disabled={remainingNumbers.length === 0}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md text-base font-medium disabled:opacity-50 hover:bg-blue-600"
+                className="relative group px-3.5 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-800 text-white rounded-lg text-base font-medium disabled:opacity-50 shadow-sm hover:shadow-md active:scale-95 transition-all duration-200 overflow-hidden"
                 aria-label={t.draw}
                 tabIndex={0}
                 onKeyDown={(e) => e.key === 'Enter' && remainingNumbers.length > 0 && drawNumber()}
               >
-                {t.draw}
+                <span className="absolute inset-0 bg-white/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left group-disabled:hidden"></span>
+                <span className="relative">{t.draw}</span>
               </button>
-              <div className="flex space-x-1">
+              
+              <div className="flex gap-1.5">
                 <button 
                   onClick={handleOpenUndoDialog}
-                  className="px-2 py-1.5 bg-gray-500 text-white rounded-md text-xs"
+                  className="relative group flex items-center px-2 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-medium hover:bg-gray-300 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200"
                   aria-label={t.undo}
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleOpenUndoDialog()}
                 >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                  </svg>
                   {t.undo}
                 </button>
+                
                 <button 
                   onClick={handleOpenResetDialog}
-                  className="px-2 py-1.5 bg-red-500 text-white rounded-md text-xs"
+                  className="relative group flex items-center px-2 py-1.5 bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-lg text-xs font-medium hover:bg-red-200 dark:hover:bg-red-800/40 active:scale-95 transition-all duration-200"
                   aria-label={t.reset}
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleOpenResetDialog()}
                 >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                  </svg>
                   {t.reset}
                 </button>
               </div>
             </div>
           </div>
           
-          <div className="flex items-center space-x-3">
-            {lastDrawn && (
-              <div className="flex items-center space-x-2 bg-amber-50 dark:bg-amber-900 px-2 py-1 rounded-md">
-                <span className="text-xs text-amber-700 dark:text-amber-300 mr-1">
-                  {t.last}:
+          {/* Right section: Last drawn number and history */}
+          <div className="flex items-center gap-2">
+            {lastDrawn ? (
+              <div className="flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/50 dark:to-amber-800/30 px-2 py-1 rounded-lg shadow-inner border border-amber-200/50 dark:border-amber-700/30">
+                <span className="text-xs font-medium text-amber-700 dark:text-amber-400 leading-none mb-0.5">
+                  {t.last}
                 </span>
-                <span className="text-xl font-bold text-amber-800 dark:text-amber-200">
+                <span className="text-xl font-bold text-amber-800 dark:text-amber-300 leading-none">
                   {lastDrawn}
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-lg shadow-inner border border-gray-200 dark:border-gray-700">
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-none mb-0.5">
+                  {t.last}
+                </span>
+                <span className="text-xl font-bold text-gray-400 dark:text-gray-500 leading-none">
+                  -
                 </span>
               </div>
             )}
             
             <button
               onClick={onOpenLastDraws}
-              className="px-3 py-1 bg-amber-500 text-white rounded-md text-sm"
+              className="group flex items-center gap-1 px-2.5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg text-sm font-medium shadow-sm hover:shadow-md active:scale-95 transition-all duration-200 overflow-hidden"
               aria-label={`${t.lastDraws} 3`}
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && onOpenLastDraws()}
             >
-              {t.last} 3
+              <span className="absolute inset-0 bg-white/10 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+              </svg>
+              <span className="relative">{t.last} 3</span>
             </button>
           </div>
         </div>
@@ -120,7 +157,7 @@ export default function MobileFooter({ onOpenLastDraws, onReset }: MobileFooterP
       <ConfirmationDialog
         isOpen={isResetDialogOpen}
         onClose={handleCloseResetDialog}
-        onConfirm={onResetHandler}
+        onConfirm={handleResetConfirm}
         title={`${t.confirm} ${t.reset}`}
         message={t.resetConfirmMessage}
         confirmText={t.reset}
@@ -128,4 +165,6 @@ export default function MobileFooter({ onOpenLastDraws, onReset }: MobileFooterP
       />
     </>
   );
-}
+};
+
+export default MobileFooter;

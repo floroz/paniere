@@ -52,9 +52,12 @@ const StartGameModal = ({ isOpen, onClose }: StartGameModalProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold mb-1 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
+            Paniere
+          </h1>
           <h2 
             id="modal-title"
-            className="mb-2 text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+            className="mb-2 text-xl font-medium text-gray-700 dark:text-gray-300"
           >
             {t.startGame}
           </h2>

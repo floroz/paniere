@@ -5,8 +5,6 @@ import MobileFooter from "./components/MobileFooter";
 import Footer from "./components/Footer";
 import StartGameModal from "./components/StartGameModal";
 import { useGameStore } from "./store/useGameStore";
-import { useLanguageStore } from "./store/useLanguageStore";
-import { useTranslations } from "./i18n/translations";
 
 function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
@@ -15,8 +13,6 @@ function App() {
   const drawn = useGameStore((state) => state.drawn);
   const resetGame = useGameStore((state) => state.resetGame);
   const checkPrizes = useGameStore((state) => state.checkPrizes);
-  const language = useLanguageStore((state) => state.language);
-  const t = useTranslations(language);
 
   /**
    * Check if we need to show the start game modal
@@ -74,14 +70,7 @@ function App() {
         </div>
 
         <div className="relative container max-w-6xl h-screen grid grid-cols-1 grid-rows-[1fr_min-content] overflow-hidden p-4">
-          {/* Game Title */}
-          <div className="absolute top-0 left-0 right-0 flex justify-center pt-2 pb-1 z-10">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-600 bg-clip-text text-transparent">
-              {t.startGame === "Start Game" ? "Paniere" : "Paniere"}
-            </h1>
-          </div>
-
-          <div className="row-start-1 row-end-2 col-span-full overflow-auto pt-10">
+          <div className="row-start-1 row-end-2 col-span-full overflow-auto">
             <Tabellone />
           </div>
           
