@@ -45,7 +45,17 @@ This specification outlines the expansion of the Paniere application to include 
    - Auto-detection of winning patterns (ambo, terno, etc.)
    - Visual celebration for wins (confetti, toast notifications)
 
-3. **Enhanced Session Management**
+3. **Game Instructions**
+   - Comprehensive instructions for both Player Mode and Tabellone Mode
+   - Interactive tutorials showing how to play each mode
+   - Instructions displayed on the Start Page before game begins
+   - Clear explanation of Tombola rules and winning patterns (ambo, terno, quaterna, cinquina, tombola)
+   - Visual examples of cartelle and how to mark numbers
+   - Explanations of game controls and actions available in each mode
+   - Option to view instructions again during gameplay via help button
+   - Instructions available in all supported languages
+
+4. **Enhanced Session Management**
    - Unified state management approach across both modes
    - Persistent game state with shared prize detection logic
    - Simplified data model with shared core state
@@ -530,7 +540,17 @@ This specification outlines the expansion of the Paniere application to include 
    - Auto-detection of winning patterns (ambo, terno, etc.)
    - Visual celebration for wins (confetti, toast notifications)
 
-3. **Enhanced Session Management**
+3. **Game Instructions**
+   - Comprehensive instructions for both Player Mode and Tabellone Mode
+   - Interactive tutorials showing how to play each mode
+   - Instructions displayed on the Start Page before game begins
+   - Clear explanation of Tombola rules and winning patterns (ambo, terno, quaterna, cinquina, tombola)
+   - Visual examples of cartelle and how to mark numbers
+   - Explanations of game controls and actions available in each mode
+   - Option to view instructions again during gameplay via help button
+   - Instructions available in all supported languages
+
+4. **Enhanced Session Management**
    - Unified state management approach across both modes
    - Persistent game state with shared prize detection logic
    - Simplified data model with shared core state
