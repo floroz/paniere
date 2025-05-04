@@ -5,7 +5,6 @@ import LastDrawsModal from "./components/LastDrawsModal/LastDrawsModal";
 import MobileFooter from "./components/MobileFooter/MobileFooter";
 import TabelloneFooter from "./components/TabelloneFooter/TabelloneFooter";
 import PlayerFooter from "./components/PlayerFooter/PlayerFooter";
-import StartGameModal from "./components/StartGameModal";
 import StartPage from "./components/StartPage/StartPage";
 import Toast from "./components/Toast/Toast";
 import Confetti from "./components/Confetti/Confetti";
@@ -14,7 +13,6 @@ import { usePrizeStore } from "./store/usePrizeStore";
 
 function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
-  const [isStartGameModalOpen, setIsStartGameModalOpen] = useState(false);
 
   // Game state - core properties needed in this component
   const drawnNumbers = useGameStore(state => state.drawnNumbers);
@@ -60,10 +58,8 @@ function App() {
       if (!drawnNumbers.length) {
         generateCartelle(6);
       }
-      setIsStartGameModalOpen(true);
     } else if (gameMode === 'player') {
       // Player mode is ready to go - cartelle should already be generated from StartPage
-      setIsStartGameModalOpen(false);
     }
   };
   
@@ -83,11 +79,6 @@ function App() {
    * Handle closing the last draws modal
    */
   const handleCloseLastDrawsModal = () => setIsLastDrawsModalOpen(false);
-
-  /**
-   * Handle closing the start game modal
-   */
-  const handleCloseStartGameModal = () => setIsStartGameModalOpen(false);
 
   /**
    * Handle resetting the game
@@ -164,10 +155,6 @@ function App() {
         onClose={handleCloseLastDrawsModal}
       />
       
-      <StartGameModal
-        isOpen={isStartGameModalOpen}
-        onClose={handleCloseStartGameModal}
-      />
     </>
   );
 }
