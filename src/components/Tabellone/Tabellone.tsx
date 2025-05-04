@@ -71,8 +71,52 @@ export default function Tabellone() {
     return (rowIndex + 1) % 3 === 0 && rowIndex !== 8;
   };
   
-  return (
-    <div className="max-h-full w-full h-auto overflow-auto">
+  // For mobile view, we'll render cartelle vertically instead of the full grid
+  const renderMobileView = () => {
+    // Get the cartelle data
+    const cartelle = createCartelle();
+    
+    return (
+      <div className="flex flex-col gap-y-0.5">
+        {cartelle.map((cartella) => (
+          <div key={`cartella-${cartella.id}`} className="flex flex-col gap-0.5 border-2 border-amber-500 p-1 rounded-md">
+            {Array.from({ length: 3 }, (_, rowIdx) => {
+              const actualRowIdx = cartella.startRow + rowIdx;
+              return (
+                <div key={`cartella-${cartella.id}-row-${rowIdx}`} className="flex flex-row gap-0.5">
+                  {Array.from({ length: 5 }, (_, colIdx) => {
+                    const actualColIdx = cartella.startCol + colIdx;
+                    // Handle special case for number 90
+                    let number;
+                    if (actualRowIdx === 8 && actualColIdx === 9) {
+                      number = 90;
+                    } else {
+                      number = actualRowIdx * 10 + actualColIdx + 1;
+                    }
+                    const isDrawn = drawnNumbers.includes(number);
+                    
+                    return (
+                      <div key={number}>
+                        <Casella 
+                          number={number}
+                          name={neapolitanNames[number]}
+                          isDrawn={isDrawn}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // For desktop view, we'll render the traditional 9×10 grid
+  const renderDesktopView = () => {
+    return (
       <div className="grid grid-flow-row auto-rows-auto gap-0.5 justify-center">
         {grid.map((row, rowIndex) => (
           <div key={`row-${rowIndex}`} className="flex flex-row gap-0.5">
@@ -100,6 +144,18 @@ export default function Tabellone() {
             })}
           </div>
         ))}
+      </div>
+    );
+  };
+  
+  return (
+    <div className="max-h-full w-full h-auto overflow-auto">
+      {/* Show mobile view on small screens, desktop view on larger screens */}
+      <div className="sm:hidden">
+        {renderMobileView()}
+      </div>
+      <div className="hidden sm:block">
+        {renderDesktopView()}
       </div>
     </div>
   );
