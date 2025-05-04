@@ -7,7 +7,7 @@ const LOCAL_STORAGE_KEY = "tombola-game";
 /**
  * Types of prizes in the game
  */
-export type PrizeType = 'ambo' | 'terno' | 'quaterna' | 'cinquina';
+export type PrizeType = 'ambo' | 'terno' | 'quaterna' | 'cinquina' | 'tombola';
 
 /**
  * Map of prize types to their required counts
@@ -16,7 +16,8 @@ export const PRIZE_COUNTS: Record<PrizeType, number> = {
   ambo: 2,
   terno: 3,
   quaterna: 4,
-  cinquina: 5
+  cinquina: 5,
+  tombola: 15
 };
 
 interface GameState {
@@ -26,6 +27,7 @@ interface GameState {
     terno: boolean;
     quaterna: boolean;
     cinquina: boolean;
+    tombola: boolean;
   };
 }
 
@@ -43,7 +45,8 @@ const initialState: GameState = {
     ambo: false,
     terno: false,
     quaterna: false,
-    cinquina: false
+    cinquina: false,
+    tombola: false
   }
 };
 
@@ -101,6 +104,19 @@ export const useGameStore = create<GameStateWithActions>()(
         
         // For each cartella
         cartelle.forEach((cartella: CartellaData) => {
+          // Check for Tombola (all 15 numbers in a cartella)
+          if (!prizes.tombola) {
+            // Flatten all numbers in this cartella
+            const allCartellaNumbers = cartella.numbers.flat();
+            // Count how many drawn numbers are in this cartella
+            const drawnInCartella = allCartellaNumbers.filter((num: number) => drawnNumbers.includes(num));
+            
+            if (drawnInCartella.length === 15) {
+              newPrizes.tombola = true;
+              prizeDetected = true;
+            }
+          }
+          
           // For each row in the cartella
           for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
             // Get all numbers in this row
@@ -130,7 +146,9 @@ export const useGameStore = create<GameStateWithActions>()(
           set({ prizes: newPrizes });
           
           // Alert the user about the new prize(s)
-          if (newPrizes.cinquina !== prizes.cinquina) {
+          if (newPrizes.tombola !== prizes.tombola) {
+            alert('TOMBOLA! 🎉🎊🎯');
+          } else if (newPrizes.cinquina !== prizes.cinquina) {
             alert('Cinquina! 🎉');
           } else if (newPrizes.quaterna !== prizes.quaterna) {
             alert('Quaterna! 🎉');
