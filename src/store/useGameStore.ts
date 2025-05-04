@@ -56,6 +56,9 @@ export const useGameStore = create<GameStateWithActions>()(
 
         if (availableNumbers.length === 0) return;
 
+        // Clear any previous winning sequences before drawing a new number
+        usePrizeStore.getState().clearWinningSequences();
+        
         const randomIndex = Math.floor(Math.random() * availableNumbers.length);
         const drawnNumber = availableNumbers[randomIndex];
 

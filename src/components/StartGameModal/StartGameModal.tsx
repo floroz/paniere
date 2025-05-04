@@ -51,6 +51,14 @@ const StartGameModal = ({ isOpen, onClose }: StartGameModalProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-8 text-center">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/images/paniere.png" 
+              alt="Paniere" 
+              className="w-32 h-32 object-contain" 
+              aria-hidden="true"
+            />
+          </div>
           <h1 className="text-4xl font-bold mb-1 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent">
             Paniere
           </h1>
