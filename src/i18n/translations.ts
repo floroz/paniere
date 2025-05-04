@@ -61,7 +61,7 @@ export const translations: Translations = {
     english: "English",
     italian: "Italiano",
     draw: "Estrai",
-    undo: "Annulla ultima estrazione",
+    undo: "Annulla",
     reset: "Azzera",
     lastDraws: "Ultime Estrazioni",
     last: "Ultimo",
