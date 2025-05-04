@@ -55,13 +55,13 @@ const PaniereControls = ({ onReset }: PaniereControlsProps) => {
           <div className="flex items-center gap-2">
             <button 
               onClick={handleOpenUndoDialog}
-              className="group relative flex items-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium transition-all duration-200 overflow-hidden"
+              className="group relative flex items-center px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-medium transition-all duration-200 overflow-hidden"
               aria-label={t.undo}
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && handleOpenUndoDialog()}
             >
               <span className="relative z-10 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
                 </svg>
                 <span>{t.undo}</span>
@@ -70,13 +70,13 @@ const PaniereControls = ({ onReset }: PaniereControlsProps) => {
             
             <button 
               onClick={handleOpenResetDialog}
-              className="group relative flex items-center px-3 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-800/40 text-red-700 dark:text-red-300 rounded-lg text-sm font-medium transition-all duration-200 overflow-hidden"
+              className="group relative flex items-center px-2 py-1 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-800/40 text-red-700 dark:text-red-300 rounded-lg text-xs font-medium transition-all duration-200 overflow-hidden"
               aria-label={t.reset}
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && handleOpenResetDialog()}
             >
               <span className="relative z-10 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
                 </svg>
                 <span>{t.reset}</span>
@@ -85,23 +85,23 @@ const PaniereControls = ({ onReset }: PaniereControlsProps) => {
           </div>
         </div>
         
-        <button 
-          onClick={drawNumber}
-          disabled={remainingNumbers.length === 0}
-          className="group relative flex-1 flex items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-bold text-xl transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg active:scale-[0.98] overflow-hidden"
-          aria-label={t.draw}
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && remainingNumbers.length > 0 && drawNumber()}
-        >
-          <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          
-          <span className="flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+        <div className="flex-1 flex items-center justify-center">
+          <button 
+            onClick={drawNumber}
+            disabled={remainingNumbers.length === 0}
+            className="group relative max-w-[180px] h-14 flex items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-bold text-lg transition-all duration-300 transform disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg active:scale-[0.98] overflow-hidden px-6"
+            aria-label={t.draw}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && remainingNumbers.length > 0 && drawNumber()}
+          >
+            <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
             </svg>
             {t.draw}
-          </span>
-        </button>
+          </button>
+        </div>
       </div>
       
       <ConfirmationDialog

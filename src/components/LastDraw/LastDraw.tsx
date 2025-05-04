@@ -23,40 +23,40 @@ const LastDraw = () => {
   
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-900/50 dark:to-amber-800/20 rounded-xl shadow-sm border border-amber-200/50 dark:border-amber-800/30 overflow-hidden">
-      <div className="h-full flex">
+      <div className="h-full grid grid-cols-[60%_40%]">
         {/* Last drawn number */}
         <div 
           key={`last-drawn-${lastDrawn}`} 
-          className="flex-1 flex flex-col items-center justify-center animate-fade-in border-r border-amber-200/70 dark:border-amber-700/30"
+          className="flex flex-col items-center justify-center animate-fade-in border-r border-amber-200/70 dark:border-amber-700/30"
         >
           <div className="flex flex-col items-center justify-center">
             <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1 font-medium">
               {t.last}
             </span>
             <span 
-              className="text-5xl md:text-6xl font-bold text-amber-800 dark:text-amber-200 leading-none"
+              className="text-4xl md:text-5xl font-bold text-amber-800 dark:text-amber-200 leading-none"
               aria-label={`${t.lastDrawnNumber}: ${lastDrawn}`}
             >
               {lastDrawn}
             </span>
-            <span className="mt-1 text-base text-amber-700 dark:text-amber-300 text-center w-full max-w-[150px] line-clamp-1">
+            <span className="mt-1 text-sm text-amber-700 dark:text-amber-300 text-center w-full max-w-[150px] line-clamp-1">
               {neapolitanNames[lastDrawn]}
             </span>
           </div>
         </div>
         
         {/* Previous draws */}
-        <div className="w-28 flex flex-col justify-center pr-2 pl-2 space-y-3">
+        <div className="flex flex-col justify-center pr-2 pl-2 space-y-3">
           <div className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 text-center font-medium">
             {t.previousDraw}
           </div>
           
           {previousDraws.length > 0 ? (
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-2.5 w-full">
               {previousDraws.map((num, index) => (
                 <div 
                   key={`prev-draw-${num}-${index}`} 
-                  className={`flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-amber-100/50 dark:bg-amber-800/20 ${index === 0 ? 'animate-fade-in' : 'animate-slide-down'}`}
+                  className={`flex w-full items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-amber-100/50 dark:bg-amber-800/20 ${index === 0 ? 'animate-fade-in' : 'animate-slide-down'}`}
                   aria-label={`${t.previousDraw}: ${num}, ${neapolitanNames[num]}`}
                 >
                   <span className="text-base font-bold text-amber-700 dark:text-amber-300 min-w-[24px] text-right">
