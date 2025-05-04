@@ -16,16 +16,17 @@ const StartGameModal = ({ isOpen, onClose }: StartGameModalProps) => {
   const resetGame = useGameStore((state) => state.resetGame);
   const t = useTranslations(language);
   
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>(language);
+  console.log({
+    language,
+  })
 
   const handleStartGame = () => {
-    setLanguage(selectedLanguage);
     resetGame();
     onClose();
   };
 
   const handleLanguageChange = (lang: Language) => {
-    setSelectedLanguage(lang);
+    setLanguage(lang);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -61,23 +62,23 @@ const StartGameModal = ({ isOpen, onClose }: StartGameModalProps) => {
           <div className="flex gap-2">
             <button
               className={`flex-1 py-2 px-4 rounded-md ${
-                selectedLanguage === "en"
+                language === "en"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 dark:bg-gray-700"
               }`}
               onClick={() => handleLanguageChange("en")}
-              aria-pressed={selectedLanguage === "en"}
+              aria-pressed={language === "en"}
             >
               {t.english}
             </button>
             <button
               className={`flex-1 py-2 px-4 rounded-md ${
-                selectedLanguage === "it"
+                language === "it"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 dark:bg-gray-700"
               }`}
               onClick={() => handleLanguageChange("it")}
-              aria-pressed={selectedLanguage === "it"}
+              aria-pressed={language === "it"}
             >
               {t.italian}
             </button>

@@ -58,7 +58,7 @@ export const translations: Translations = {
     startGame: "Inizia Gioco",
     newGame: "Nuovo Gioco",
     language: "Lingua",
-    english: "Inglese",
+    english: "English",
     italian: "Italiano",
     draw: "Estrai",
     undo: "Annulla ultima estrazione",
