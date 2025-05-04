@@ -12,6 +12,7 @@ function App() {
 
   const drawn = useGameStore((state) => state.drawn);
   const resetGame = useGameStore((state) => state.resetGame);
+  const checkPrizes = useGameStore((state) => state.checkPrizes);
 
   /**
    * Check if we need to show the start game modal
@@ -22,6 +23,15 @@ function App() {
       setIsStartGameModalOpen(true);
     }
   }, [drawn.length]);
+  
+  /**
+   * Check for prizes when drawn numbers change
+   */
+  useEffect(() => {
+    if (drawn.length > 0) {
+      checkPrizes(drawn);
+    }
+  }, [drawn, checkPrizes]);
 
   /**
    * Handle opening the last draws modal
