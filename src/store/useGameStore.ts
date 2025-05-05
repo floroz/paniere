@@ -1,10 +1,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createCartelle, CartellaData, generateRandomCartelle } from "../utils/cartelleUtils";
+import {
+  createCartelle,
+  CartellaData,
+  generateRandomCartelle,
+} from "../utils/cartelleUtils";
 import { PrizeType, usePrizeStore, getPrizeName } from "./usePrizeStore";
 import { useLanguageStore } from "./useLanguageStore";
 
-const LOCAL_STORAGE_KEY = "tombola-game";
+const STORAGE_VERSION = "1.0"; // Define storage version
+const LOCAL_STORAGE_KEY = `tombola-game-v${STORAGE_VERSION}`; // Append version to key
+
+// Define expiration time (48 hours in milliseconds)
+const EXPIRATION_TIME_MS = 48 * 60 * 60 * 1000;
 
 /**
  * Map of prize types to their required counts
@@ -14,13 +22,13 @@ export const PRIZE_COUNTS: Record<PrizeType, number> = {
   terno: 3,
   quaterna: 4,
   cinquina: 5,
-  tombola: 15
+  tombola: 15,
 };
 
 /**
  * Available game modes
  */
-export type GameMode = 'tabellone' | 'player' | null;
+export type GameMode = "tabellone" | "player" | null;
 
 /**
  * Unified game state for both Tabellone and Player modes
@@ -28,11 +36,12 @@ export type GameMode = 'tabellone' | 'player' | null;
 interface GameState {
   // Common properties
   gameMode: GameMode;
-  
+
   // Shared game state (for both modes)
-  cartelle: CartellaData[];   // Includes both tabellone cartelle and player cartelle
-  drawnNumbers: number[];     // In tabellone mode: numbers drawn; in player mode: marked numbers
+  cartelle: CartellaData[]; // Includes both tabellone cartelle and player cartelle
+  drawnNumbers: number[]; // In tabellone mode: numbers drawn; in player mode: marked numbers
   prizes: Record<PrizeType, boolean>; // Shared prize tracking for both modes
+  lastSavedAt?: number; // Timestamp for expiration
 }
 
 /**
@@ -41,23 +50,23 @@ interface GameState {
 interface GameStateWithActions extends GameState {
   // Mode management actions
   setGameMode: (mode: GameMode) => void;
-  
+
   // Shared actions for both modes
-  toggleNumber: (number: number) => void;   // Draw in tabellone mode, mark in player mode
-  undoLastNumber: () => void;               // Undo last action in either mode
-  checkPrizes: (numbers?: number[]) => void;  // Prize detection for either mode
-  
+  toggleNumber: (number: number) => void; // Draw in tabellone mode, mark in player mode
+  undoLastNumber: () => void; // Undo last action in either mode
+  checkPrizes: (numbers?: number[]) => void; // Prize detection for either mode
+
   // Player mode specific actions
-  markNumber: (number: number) => void;     // Mark a number in player mode
-  unmarkNumber: (number: number) => void;   // Unmark a number in player mode
-  
+  markNumber: (number: number) => void; // Mark a number in player mode
+  unmarkNumber: (number: number) => void; // Unmark a number in player mode
+
   // Cartelle management
   generateCartelle: (count: number) => void;
-  
+
   // Backward compatibility actions (redirects to new unified methods)
-  drawNumber: () => void;        // Redirects to toggleNumber for tabellone mode
-  undoLastDraw: () => void;      // Redirects to undoLastNumber for compatibility
-  
+  drawNumber: () => void; // Redirects to toggleNumber for tabellone mode
+  undoLastDraw: () => void; // Redirects to undoLastNumber for compatibility
+
   // Session management
   resetGame: () => void;
   returnToStartPage: () => void;
@@ -76,8 +85,9 @@ const initialState: GameState = {
     terno: false,
     quaterna: false,
     cinquina: false,
-    tombola: false
-  }
+    tombola: false,
+  },
+  lastSavedAt: undefined,
 };
 
 export const useGameStore = create<GameStateWithActions>()(
@@ -89,7 +99,7 @@ export const useGameStore = create<GameStateWithActions>()(
        * Set the current game mode (tabellone or player)
        */
       setGameMode: (mode: GameMode) => {
-        set({ gameMode: mode });
+        set({ gameMode: mode, lastSavedAt: Date.now() });
       },
 
       /**
@@ -101,10 +111,10 @@ export const useGameStore = create<GameStateWithActions>()(
         const { gameMode } = get();
         let cartelle: CartellaData[];
 
-        if (gameMode === 'tabellone') {
+        if (gameMode === "tabellone") {
           // In tabellone mode, we always create the standard layout
           cartelle = createCartelle();
-        } else if (gameMode === 'player') {
+        } else if (gameMode === "player") {
           // In player mode, we generate random cartelle with the specified count
           cartelle = generateRandomCartelle(count);
         } else {
@@ -112,7 +122,7 @@ export const useGameStore = create<GameStateWithActions>()(
           return;
         }
 
-        set({ cartelle });
+        set({ cartelle, lastSavedAt: Date.now() });
       },
 
       /**
@@ -126,10 +136,11 @@ export const useGameStore = create<GameStateWithActions>()(
 
         // Clear any previous winning sequences
         usePrizeStore.getState().clearWinningSequences();
-        
+
         // Add the number to drawn/marked numbers
-        set({ 
-          drawnNumbers: [...drawnNumbers, number]
+        set({
+          drawnNumbers: [...drawnNumbers, number],
+          lastSavedAt: Date.now(),
         });
 
         // Check for prizes with the updated numbers
@@ -141,17 +152,18 @@ export const useGameStore = create<GameStateWithActions>()(
        */
       undoLastNumber: () => {
         const { drawnNumbers } = get();
-        
+
         if (drawnNumbers.length === 0) return;
-        
+
         // Simply remove the last drawn number
         const previousDrawnNumbers = drawnNumbers.slice(0, -1);
-        
-        // Update the drawn numbers
+
+        // Update the drawn numbers and timestamp
         set({
-          drawnNumbers: previousDrawnNumbers
+          drawnNumbers: previousDrawnNumbers,
+          lastSavedAt: Date.now(),
         });
-        
+
         // Reset all prizes to false
         set({
           prizes: {
@@ -159,62 +171,64 @@ export const useGameStore = create<GameStateWithActions>()(
             terno: false,
             quaterna: false,
             cinquina: false,
-            tombola: false
-          }
+            tombola: false,
+          },
         });
-        
+
         // Clear any previous winning sequences
         usePrizeStore.getState().clearWinningSequences();
-        
+
         // Re-check prizes with the updated numbers
         // This will detect any prizes that are still valid and update the UI accordingly
         get().checkPrizes();
       },
-      
+
       /**
        * Mark a specific number in player mode
        */
       markNumber: (number: number) => {
         const { drawnNumbers, gameMode } = get();
-        
+
         // Only allow marking in player mode
-        if (gameMode !== 'player') return;
-        
+        if (gameMode !== "player") return;
+
         // If the number is already marked, do nothing
         if (drawnNumbers.includes(number)) return;
-        
+
         // Clear any previous winning sequences
         usePrizeStore.getState().clearWinningSequences();
-        
-        // Add the number to marked numbers
-        set({ 
-          drawnNumbers: [...drawnNumbers, number]
+
+        // Add the number to marked numbers and update timestamp
+        set({
+          drawnNumbers: [...drawnNumbers, number],
+          lastSavedAt: Date.now(),
         });
-        
+
         // Check for prizes with the updated numbers
         get().checkPrizes();
       },
-      
+
       /**
        * Unmark a specific number in player mode
        */
       unmarkNumber: (number: number) => {
         const { drawnNumbers, gameMode } = get();
-        
+
         // Only allow unmarking in player mode
-        if (gameMode !== 'player') return;
-        
+        if (gameMode !== "player") return;
+
         // If the number is not marked, do nothing
         if (!drawnNumbers.includes(number)) return;
-        
+
         // Clear any previous winning sequences
         usePrizeStore.getState().clearWinningSequences();
-        
-        // Remove the number from marked numbers
+
+        // Remove the number from marked numbers and update timestamp
         set({
-          drawnNumbers: drawnNumbers.filter(n => n !== number)
+          drawnNumbers: drawnNumbers.filter((n) => n !== number),
+          lastSavedAt: Date.now(),
         });
-        
+
         // Re-check prizes with the updated numbers
         get().checkPrizes();
       },
@@ -224,12 +238,13 @@ export const useGameStore = create<GameStateWithActions>()(
        */
       resetGame: () => {
         const { gameMode, cartelle } = get();
-        
+
         // Reset to initial state but keep the same game mode and cartelle
         set({
-          ...initialState,
+          ...initialState, // Resetting to initial state which has undefined lastSavedAt
           gameMode,
-          cartelle
+          cartelle,
+          lastSavedAt: Date.now(), // Set timestamp on reset
         });
 
         // Also reset the prize store
@@ -242,10 +257,11 @@ export const useGameStore = create<GameStateWithActions>()(
        */
       returnToStartPage: () => {
         set({
-          ...initialState
+          ...initialState, // Resetting to initial state which has undefined lastSavedAt
+          lastSavedAt: undefined, // Explicitly clear timestamp when returning to start
         });
       },
-      
+
       /**
        * Set the state of a specific prize
        */
@@ -254,11 +270,12 @@ export const useGameStore = create<GameStateWithActions>()(
         set({
           prizes: {
             ...prizes,
-            [prize]: value
-          }
+            [prize]: value,
+          },
+          lastSavedAt: Date.now(), // Update timestamp when prize state changes
         });
       },
-      
+
       /**
        * Check for prizes based on the drawn/marked numbers
        */
@@ -266,107 +283,131 @@ export const useGameStore = create<GameStateWithActions>()(
         const { prizes, drawnNumbers, cartelle } = get();
         // Use provided numbers or fall back to current state
         const numbersToCheck = numbers || drawnNumbers;
-        
+
         if (numbersToCheck.length === 0) return;
-        
+
         const newPrizes = { ...prizes };
         let prizeDetected = false;
         let winningPrize: PrizeType | null = null;
         let winningCartellaId = 0;
         let winningRowIndex = 0;
         let winningNumbers: number[] = [];
-        
+
         // Get the current language for toast messages
         const language = useLanguageStore.getState().language;
-        const isItalian = language === 'it';
-        
+        const isItalian = language === "it";
+
         // For each cartella
         cartelle.forEach((cartella: CartellaData) => {
           // Check for Tombola (all 15 numbers in a cartella)
           if (!prizes.tombola) {
             // Flatten all numbers in this cartella (excluding zeros)
-            const allCartellaNumbers = cartella.numbers.flat().filter(num => num !== 0);
+            const allCartellaNumbers = cartella.numbers
+              .flat()
+              .filter((num) => num !== 0);
             // Count how many drawn numbers are in this cartella
-            const drawnInCartella = allCartellaNumbers.filter(num => numbersToCheck.includes(num));
-            
+            const drawnInCartella = allCartellaNumbers.filter((num) =>
+              numbersToCheck.includes(num),
+            );
+
             if (drawnInCartella.length === allCartellaNumbers.length) {
               newPrizes.tombola = true;
               prizeDetected = true;
-              winningPrize = 'tombola';
+              winningPrize = "tombola";
               winningCartellaId = cartella.id;
               winningNumbers = drawnInCartella;
             }
           }
-          
+
           // For each row in the cartella
           for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
             // Get all numbers in this row (exclude zeros/empty spaces)
-            const rowNumbers = cartella.numbers[rowIndex].filter(num => num !== 0);
+            const rowNumbers = cartella.numbers[rowIndex].filter(
+              (num) => num !== 0,
+            );
             if (rowNumbers.length === 0) continue;
-            
+
             // Count how many drawn numbers are in this row
-            const drawnInRow = rowNumbers.filter(num => numbersToCheck.includes(num));
-            
+            const drawnInRow = rowNumbers.filter((num) =>
+              numbersToCheck.includes(num),
+            );
+
             // Check for each prize type (based on percentage of row completed)
-            if (!prizes.cinquina && rowNumbers.length === 5 && drawnInRow.length === 5) {
+            if (
+              !prizes.cinquina &&
+              rowNumbers.length === 5 &&
+              drawnInRow.length === 5
+            ) {
               newPrizes.cinquina = true;
               prizeDetected = true;
-              winningPrize = 'cinquina';
+              winningPrize = "cinquina";
               winningCartellaId = cartella.id;
               winningRowIndex = rowIndex;
               winningNumbers = drawnInRow;
-            } else if (!prizes.quaterna && rowNumbers.length >= 4 && drawnInRow.length >= 4) {
+            } else if (
+              !prizes.quaterna &&
+              rowNumbers.length >= 4 &&
+              drawnInRow.length >= 4
+            ) {
               newPrizes.quaterna = true;
               prizeDetected = true;
-              winningPrize = 'quaterna';
+              winningPrize = "quaterna";
               winningCartellaId = cartella.id;
               winningRowIndex = rowIndex;
               winningNumbers = drawnInRow;
-            } else if (!prizes.terno && rowNumbers.length >= 3 && drawnInRow.length >= 3) {
+            } else if (
+              !prizes.terno &&
+              rowNumbers.length >= 3 &&
+              drawnInRow.length >= 3
+            ) {
               newPrizes.terno = true;
               prizeDetected = true;
-              winningPrize = 'terno';
+              winningPrize = "terno";
               winningCartellaId = cartella.id;
               winningRowIndex = rowIndex;
               winningNumbers = drawnInRow;
-            } else if (!prizes.ambo && rowNumbers.length >= 2 && drawnInRow.length >= 2) {
+            } else if (
+              !prizes.ambo &&
+              rowNumbers.length >= 2 &&
+              drawnInRow.length >= 2
+            ) {
               newPrizes.ambo = true;
               prizeDetected = true;
-              winningPrize = 'ambo';
+              winningPrize = "ambo";
               winningCartellaId = cartella.id;
               winningRowIndex = rowIndex;
               winningNumbers = drawnInRow;
             }
           }
         });
-        
+
         // Update prize state if any new prizes were detected
         if (prizeDetected && winningPrize) {
           // Update game store prize state
           set({ prizes: newPrizes });
-            
+
           // Add the winning sequence to the prize store
           usePrizeStore.getState().addWinningSequence({
             cartellaId: winningCartellaId,
             rowIndex: winningRowIndex,
             numbers: winningNumbers,
-            prize: winningPrize
+            prize: winningPrize,
           });
-          
+
           // Set the last prize won for highlighting
           usePrizeStore.getState().setLastPrizeWon(winningPrize);
-          
+
           // Show toast notification
-          const prizeName = getPrizeName(winningPrize, isItalian ? 'it' : 'en');
-          const message = isItalian 
-            ? `${prizeName}! Cartella ${winningCartellaId}` 
+          const prizeName = getPrizeName(winningPrize, isItalian ? "it" : "en");
+          const message = isItalian
+            ? `${prizeName}! Cartella ${winningCartellaId}`
             : `${prizeName}! Cartella ${winningCartellaId}`;
-          
+
           usePrizeStore.getState().showToast(message);
-          
+
           // Show confetti
           usePrizeStore.getState().showConfetti();
-          
+
           // Hide confetti after 3 seconds
           setTimeout(() => {
             usePrizeStore.getState().hideConfetti();
@@ -379,13 +420,13 @@ export const useGameStore = create<GameStateWithActions>()(
        */
       drawNumber: () => {
         const { gameMode, drawnNumbers } = get();
-        if (gameMode !== 'tabellone') return;
+        if (gameMode !== "tabellone") return;
 
         // Find an available number to draw
         const availableNumbers = Array.from(
           { length: 90 },
-          (_, i) => i + 1
-        ).filter(num => !drawnNumbers.includes(num));
+          (_, i) => i + 1,
+        ).filter((num) => !drawnNumbers.includes(num));
 
         if (availableNumbers.length === 0) return;
 
@@ -405,6 +446,34 @@ export const useGameStore = create<GameStateWithActions>()(
     }),
     {
       name: LOCAL_STORAGE_KEY,
-    }
-  )
+      version: 1, // Add a version number for potential future migrations
+      partialize: (state) => ({
+        // Only persist essential game state and the timestamp
+        gameMode: state.gameMode,
+        cartelle: state.cartelle,
+        drawnNumbers: state.drawnNumbers,
+        prizes: state.prizes,
+        lastSavedAt: state.lastSavedAt,
+      }),
+      onRehydrateStorage: (state): void => {
+        // Explicitly return void
+        // This function runs before the state is applied
+        console.log("Attempting to rehydrate state:", state);
+        if (state?.lastSavedAt) {
+          const now = Date.now();
+          const timeDiff = now - state.lastSavedAt;
+          if (timeDiff > EXPIRATION_TIME_MS) {
+            console.log("Saved state expired, preventing rehydration.");
+            // Returning void. If this doesn't prevent rehydration, further action might be needed.
+            return; // Implicitly returns void
+          }
+          console.log("Saved state is valid.");
+        } else {
+          console.log("No timestamp found in saved state.");
+        }
+        // If state is valid or has no timestamp, allow default rehydration by returning void.
+        return; // Implicitly returns void
+      },
+    },
+  ),
 );
