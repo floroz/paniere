@@ -82,89 +82,91 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
    */
   const handleGridKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
-      // Skip if user is typing Ctrl, Alt, or meta key combos
       if (e.ctrlKey || e.altKey || e.metaKey) return;
 
-      // If no cell is active yet, set the first valid cell as active
-      if (!activeCell) {
+      const currentActive = activeCell; // Use const as it's not reassigned
+
+      // Initialize active cell if none exists
+      if (!currentActive) {
         for (let r = 0; r < 3; r++) {
           for (let c = 0; c < 9; c++) {
             if (cartella.numbers[r][c] !== 0) {
               setActiveCell({ row: r, col: c });
+              e.preventDefault(); // Prevent scroll if initializing
               return;
             }
           }
         }
-        return;
+        return; // No valid cells found
       }
 
-      let { row: newRow, col: newCol } = activeCell;
-      let handled = true;
+      let { row: targetRow, col: targetCol } = currentActive;
+      let direction: "up" | "down" | "left" | "right" | null = null;
+      let actionHandled = true; // Assume we handle it unless default case
 
-      // Handle arrow key navigation
       switch (e.key) {
         case "ArrowUp":
-          newRow = Math.max(0, newRow - 1);
+          targetRow = Math.max(0, currentActive.row - 1);
+          direction = "up";
           break;
         case "ArrowDown":
-          newRow = Math.min(2, newRow + 1);
+          targetRow = Math.min(2, currentActive.row + 1);
+          direction = "down";
           break;
         case "ArrowLeft":
-          newCol = Math.max(0, newCol - 1);
+          targetCol = Math.max(0, currentActive.col - 1);
+          direction = "left";
           break;
         case "ArrowRight":
-          newCol = Math.min(8, newCol + 1);
+          targetCol = Math.min(8, currentActive.col + 1);
+          direction = "right";
           break;
         case "Home":
-          newCol = 0;
+          targetCol = 0;
+          direction = "right"; // Search right from home
           break;
         case "End":
-          newCol = 8;
+          targetCol = 8;
+          direction = "left"; // Search left from end
           break;
         case "Enter":
         case " ":
-          // Activate the current cell
-          if (cartella.numbers[activeCell.row][activeCell.col] > 0) {
-            handleNumberClick(cartella.numbers[activeCell.row][activeCell.col]);
+          if (cartella.numbers[currentActive.row][currentActive.col] > 0) {
+            handleNumberClick(
+              cartella.numbers[currentActive.row][currentActive.col],
+            );
           }
-          break;
+          break; // Action handled, but no cell change
         default:
-          handled = false;
-          return; // Return early for other keys
+          actionHandled = false; // Key not handled by navigation/action
+          return;
       }
 
-      // If we handled the key, prevent default
-      if (handled) {
+      // If the key was handled (navigation or action), prevent default browser behavior (like scrolling)
+      if (actionHandled) {
         e.preventDefault();
       }
 
-      // Find the next valid cell (skip empty cells)
-      while (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 9) {
-        if (cartella.numbers[newRow][newCol] !== 0) {
-          setActiveCell({ row: newRow, col: newCol });
-          return;
-        }
-
-        // If we didn't find a valid cell, try the next one in the same direction
-        if (e.key === "ArrowUp") newRow--;
-        else if (e.key === "ArrowDown") newRow++;
-        else if (e.key === "ArrowLeft") newCol--;
-        else if (e.key === "ArrowRight") newCol++;
-        else break; // For home/end, don't loop
+      // If it was an action key (Enter/Space), we already handled it and don't need to move
+      if (!direction) {
+        return;
       }
+
+      // Directly set the new active cell based on the calculated targetRow/targetCol
+      // Boundary checks were already applied in the switch statement
+      // This allows navigation *to* empty cells
+      setActiveCell({ row: targetRow, col: targetCol });
     },
-    [activeCell, cartella.numbers, handleNumberClick],
+    // Dependency array for useCallback - added setActiveCell
+    [activeCell, cartella.numbers, handleNumberClick, setActiveCell],
   );
 
   /**
    * Get the appropriate style for a cell based on its state
    */
-  const getCellStyle = (number: number) => {
-    if (number === 0) {
-      return "bg-transparent";
-    }
-
-    if (drawnNumbers.includes(number)) {
+  const getCellStyle = (number: number, isDrawn: boolean) => {
+    // No special style needed for empty cells here anymore, handled below
+    if (isDrawn) {
       return "bg-gradient-to-br from-amber-300 to-amber-500 dark:from-amber-600 dark:to-amber-800 text-white dark:text-white scale-95 shadow-md";
     }
 
@@ -175,7 +177,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
     <>
       <div
         ref={gridRef}
-        className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-gray-800 dark:to-gray-750 border border-amber-200 dark:border-amber-800 p-3 rounded-xl shadow-md"
+        className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-gray-800 dark:to-gray-750 border border-amber-200 dark:border-amber-800 p-2 rounded-xl shadow-md" // Reduced padding slightly
         role="grid"
         aria-label={`Cartella ${cartella.id}`}
         tabIndex={0} /* Make the grid container focusable */
@@ -211,27 +213,33 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
                     key={`cell-${rowIdx}-${colIdx}`}
                     id={`cartella-${cartella.id}-cell-${rowIdx}-${colIdx}`}
                     className={`
-                      relative w-7 h-7 sm:w-9 sm:h-9 
+                      relative w-8 h-8
                       overflow-hidden group
-                      rounded-md ${number > 0 ? "shadow-sm" : ""} transition-all duration-300
-                      ${getCellStyle(number)}
+                      rounded-md shadow-sm transition-all duration-300
+                      border border-black/10 dark:border-white/10
+                      ${getCellStyle(number, drawnNumbers.includes(number))}
+                      ${number === 0 ? "bg-gray-100/50 dark:bg-gray-800/30" : ""}
                       flex flex-col items-center justify-center
-                      ${isActive && number > 0 ? "ring-2 ring-amber-500 ring-offset-1" : ""}
+                      ${isActive ? "ring-2 ring-amber-500 ring-offset-1" : ""}
                     `}
-                    onClick={() => number > 0 && handleNumberClick(number)}
+                    // Allow click handling even on empty cells if needed in future, but action depends on number > 0
+                    onClick={() => handleNumberClick(number)}
                     aria-label={
                       number === 0
-                        ? "Empty cell"
+                        ? "Empty cell" // Use placeholder text for now
                         : `${number}, ${neapolitanNames[number]}, ${drawnNumbers.includes(number) ? t.drawn : t.notDrawn}`
                     }
                     role="gridcell"
+                    // Empty cells are part of the grid but cannot be interacted with in the same way
                     aria-disabled={number === 0 ? "true" : "false"}
                     aria-selected={isActive ? "true" : "false"}
+                    tabIndex={-1} // Individual cells not focusable, grid container is
                   >
-                    {number !== 0 && (
+                    {/* Render number only if it's not 0 */}
+                    {number !== 0 ? (
                       <>
-                        {/* Number */}
-                        <span className="text-sm sm:text-base font-bold transition-colors duration-300">
+                        {/* Number - Adjusted font size */}
+                        <span className="text-base font-bold transition-colors duration-300">
                           {number}
                         </span>
 
@@ -243,7 +251,8 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
                         {/* Radial gradient overlay for hover effect */}
                         <div className="absolute inset-0 bg-gradient-to-tr from-white/0 to-white/20 dark:from-white/0 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </>
-                    )}
+                    ) : null}{" "}
+                    {/* Explicitly render null for empty cells */}
                   </div>
                 );
               })}

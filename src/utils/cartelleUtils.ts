@@ -19,11 +19,11 @@ export type CartellaData = {
   id: number; // Unique identifier (1-6)
   startRow: number; // Starting row in the Tabellone (0-based)
   startCol: number; // Starting column in the Tabellone (0-based)
-  numbers: number[][]; // 3×5 grid of numbers
+  numbers: number[][]; // 3×5 or 3x9 grid of numbers
 };
 
 /**
- * Creates the traditional 6 Cartelle layout for Tombola
+ * Creates the traditional 6 Cartelle layout for Tombola (Tabellone Mode)
  * Each Cartella is a 3×5 grid, and they are arranged in a 2×3 grid
  */
 export const createCartelle = (): CartellaData[] => {
@@ -64,19 +64,28 @@ export const createCartelle = (): CartellaData[] => {
 };
 
 /**
- * Map of number (1-90) to its position in the Cartelle structure
+ * Map of number (1-90) to its position in the Tabellone Cartelle structure
  */
 export const createNumberToPositionMap = (): Record<number, NumberPosition> => {
-  const cartelle = createCartelle();
+  const cartelle = createCartelle(); // Uses the Tabellone structure
   const map: Record<number, NumberPosition> = {};
 
   cartelle.forEach((cartella) => {
     cartella.numbers.forEach((row, rowIndex) => {
       row.forEach((number, colIndex) => {
+        // Need to map back to the overall 9x10 Tabellone grid coordinates
+        const actualRow = cartella.startRow + rowIndex;
+        const actualCol = cartella.startCol + colIndex;
+        // Find the corresponding Tabellone cartella ID based on actualRow/Col
+        const tabelloneCartellaRow = Math.floor(actualRow / 3);
+        const tabelloneCartellaCol = Math.floor(actualCol / 5);
+        const tabelloneCartellaId =
+          tabelloneCartellaRow * 2 + tabelloneCartellaCol + 1;
+
         map[number] = {
-          cartellaId: cartella.id,
-          row: rowIndex,
-          col: colIndex,
+          cartellaId: tabelloneCartellaId, // ID within the 6-cartella Tabellone layout
+          row: rowIndex, // Row within the 3x5 subgrid
+          col: colIndex, // Col within the 3x5 subgrid
         };
       });
     });
@@ -89,13 +98,13 @@ export const createNumberToPositionMap = (): Record<number, NumberPosition> => {
 export const numberToPositionMap = createNumberToPositionMap();
 
 /**
- * Gets all numbers in a specific row of a Cartella
+ * Gets all numbers in a specific row of a Tabellone Cartella
  */
 export const getNumbersInCartellaRow = (
   cartellaId: number,
   rowIndex: number,
 ): number[] => {
-  const cartelle = createCartelle();
+  const cartelle = createCartelle(); // Uses the Tabellone structure
   const cartella = cartelle.find((c) => c.id === cartellaId);
 
   if (!cartella) return [];
@@ -104,7 +113,7 @@ export const getNumbersInCartellaRow = (
 };
 
 /**
- * Checks if a row in a Cartella has achieved a specific prize based on drawn numbers
+ * Checks if a row in a Tabellone Cartella has achieved a specific prize based on drawn numbers
  */
 export const checkPrizeInRow = (
   cartellaId: number,
@@ -122,96 +131,152 @@ export const checkPrizeInRow = (
   };
 };
 
+// Helper function to shuffle an array (Fisher-Yates algorithm)
+function shuffleArray<T>(array: T[]): T[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+  }
+  return array;
+}
+
+// Define max attempts for grid generation globally for the helper function
+const MAX_GRID_ATTEMPTS = 500; // Increased attempts
+
 /**
- * Generate random cartelle for Player Mode
- *
- * Following the constraints of traditional Tombola cartelle:
- * - Each cartella has 3 rows, 9 columns
- * - Each row has exactly 5 numbers and 4 empty spaces
- * - Numbers are placed in their corresponding column based on their tens digit:
- *   - Column 1: numbers 1-9
- *   - Column 2: numbers 10-19
- *   - Column 3: numbers 20-29, etc.
+ * Generates a single valid Tombola card grid (3x9).
+ * Returns null if unable to generate a valid grid within MAX_GRID_ATTEMPTS.
+ * New Algorithm: Focus on column constraints and row balancing.
+ */
+function createSingleCartellaGrid(): number[][] | null {
+  for (let attempt = 0; attempt < MAX_GRID_ATTEMPTS; attempt++) {
+    try {
+      const grid: number[][] = Array(3)
+        .fill(0)
+        .map(() => Array(9).fill(0));
+      const numbersByCol: number[][] = Array(9)
+        .fill(0)
+        .map(() => []);
+      const colCounts = Array(9).fill(0);
+      const rowCounts = Array(3).fill(0);
+
+      // 1. Generate numbers for each column (decade) and shuffle them
+      const decadeNumbers: number[][] = Array(9)
+        .fill(0)
+        .map(() => []);
+      for (let i = 1; i <= 90; i++) {
+        const colIndex = i === 90 ? 8 : Math.floor((i - 1) / 10);
+        decadeNumbers[colIndex].push(i);
+      }
+      decadeNumbers.forEach(shuffleArray); // Shuffle within each decade
+
+      // 2. Determine column counts (1-3 per column, sum 15)
+      const currentCounts = [1, 1, 1, 1, 1, 1, 1, 1, 1]; // Start with 1 per column
+      let remainingToAssign = 15 - 9;
+      let assignAttempts = 0;
+      while (remainingToAssign > 0 && assignAttempts < 100) {
+        const randCol = Math.floor(Math.random() * 9);
+        if (currentCounts[randCol] < 3) {
+          currentCounts[randCol]++;
+          remainingToAssign--;
+        }
+        assignAttempts++;
+      }
+      if (currentCounts.reduce((a, b) => a + b, 0) !== 15) continue; // Retry if sum isn't 15
+
+      // 3. Select and sort numbers for each column based on determined counts
+      for (let col = 0; col < 9; col++) {
+        numbersByCol[col] = decadeNumbers[col]
+          .slice(0, currentCounts[col])
+          .sort((a, b) => a - b);
+      }
+
+      // 4. Place numbers onto grid, enforcing last-digit row rule and vertical sort
+      for (let col = 0; col < 9; col++) {
+        const numsToPlace = numbersByCol[col]; // Already sorted vertically
+
+        for (const num of numsToPlace) {
+          // Determine target row based on the last digit rule
+          const lastDigit = num % 10;
+          const targetRow = lastDigit <= 3 ? 0 : lastDigit <= 6 ? 1 : 2;
+
+          // Validate placement
+          if (rowCounts[targetRow] >= 5) {
+            throw new Error(
+              `Cannot place ${num} in row ${targetRow} (col ${col}): Row already has 5 numbers.`,
+            );
+          }
+          if (grid[targetRow][col] !== 0) {
+            // This should ideally not happen if column selection is correct
+            throw new Error(
+              `Cannot place ${num} in row ${targetRow} (col ${col}): Cell already occupied by ${grid[targetRow][col]}.`,
+            );
+          }
+
+          // Place the number
+          grid[targetRow][col] = num;
+          rowCounts[targetRow]++;
+          colCounts[col]++;
+        }
+      }
+
+      // 5. Final Validation (Row counts and Col counts already checked implicitly during placement)
+      // We still need to explicitly check the final counts and vertical sort as a safeguard.
+      if (!rowCounts.every((c) => c === 5)) {
+        // console.log("Row count validation failed:", rowCounts);
+        continue; // Retry attempt
+      }
+      if (!colCounts.every((c) => c >= 1 && c <= 3)) {
+        // console.log("Column count validation failed:", colCounts);
+        continue; // Retry attempt
+      }
+      // Check vertical sort explicitly
+      for (let c = 0; c < 9; c++) {
+        const colNums = [grid[0][c], grid[1][c], grid[2][c]].filter(
+          (n) => n !== 0,
+        );
+        for (let i = 0; i < colNums.length - 1; i++) {
+          if (colNums[i] > colNums[i + 1]) {
+            throw new Error(`Vertical sort failed in col ${c}: ${colNums}`);
+          }
+        }
+      }
+
+      return grid; // Valid grid found!
+    } catch {
+      // Remove unused 'e' parameter
+      // console.warn(`Retrying cartella generation due to error:`);
+    }
+  } // End attempt loop
+
+  console.error(
+    `Failed to generate a valid single cartella grid after ${MAX_GRID_ATTEMPTS} attempts.`,
+  );
+  return null; // Failed to generate
+}
+
+/**
+ * Generate random cartelle for Player Mode adhering to Tombola rules.
  *
  * @param count Number of cartelle to generate (1-10)
  * @returns Array of randomly generated cartelle
  */
 export const generateRandomCartelle = (count: number): CartellaData[] => {
-  // Validate count range
   const validCount = Math.min(Math.max(1, count), 10);
-  const cartelle: CartellaData[] = [];
+  const allGeneratedCartelle: CartellaData[] = [];
 
   for (let cartellaId = 1; cartellaId <= validCount; cartellaId++) {
-    // Create a 3×9 grid initially filled with zeros (representing empty spaces)
-    const grid: number[][] = Array(3)
-      .fill(0)
-      .map(() => Array(9).fill(0));
-
-    // First, decide which columns will have numbers in each row
-    // We need exactly 5 columns filled in each row
-    const selectedColumns: number[][] = [];
-
-    for (let row = 0; row < 3; row++) {
-      // Create array of column indices (0-8) and shuffle them
-      const columnIndices = Array.from({ length: 9 }, (_, i) => i).sort(
-        () => Math.random() - 0.5,
-      );
-
-      // Select the first 5 columns to fill for this row
-      selectedColumns.push(columnIndices.slice(0, 5).sort((a, b) => a - b));
-    }
-
-    // Now fill each column with appropriate numbers
-    // First, generate all possible numbers for each column
-    const columnNumbers: number[][] = [];
-
-    for (let col = 0; col < 9; col++) {
-      const minNum = col * 10 + 1;
-      const maxNum = col === 8 ? 90 : minNum + 9;
-
-      // Create all possible numbers for this column and shuffle them
-      const numbers = Array.from(
-        { length: maxNum - minNum + 1 },
-        (_, i) => minNum + i,
-      ).sort(() => Math.random() - 0.5);
-
-      columnNumbers.push(numbers);
-    }
-
-    // Count how many cells we need to fill in each column across all 3 rows
-    const columnCounts = Array(9).fill(0);
-    selectedColumns.forEach((rowColumns) => {
-      rowColumns.forEach((col) => columnCounts[col]++);
-    });
-
-    // Now fill the grid based on selected columns
-    for (let col = 0; col < 9; col++) {
-      // Skip columns that don't need any numbers
-      if (columnCounts[col] === 0) continue;
-
-      // Take the first N numbers needed for this column
-      const numbersToUse = columnNumbers[col].slice(0, columnCounts[col]);
-
-      // Shuffle these numbers to randomize which rows they'll go in
-      const shuffledNumbers = [...numbersToUse].sort(() => Math.random() - 0.5);
-
-      // Assign numbers to rows that have this column selected
-      let numberIndex = 0;
-      for (let row = 0; row < 3; row++) {
-        if (selectedColumns[row].includes(col)) {
-          grid[row][col] = shuffledNumbers[numberIndex++];
-        }
-      }
-    }
-
-    // Create the cartella object with the complete 3x9 grid
-    cartelle.push({
+    const grid = createSingleCartellaGrid();
+    allGeneratedCartelle.push({
       id: cartellaId,
       startRow: 0, // Not relevant for player mode
       startCol: 0, // Not relevant for player mode
-      numbers: grid,
+      numbers:
+        grid ??
+        Array(3)
+          .fill(0)
+          .map(() => Array(9).fill(0)), // Use generated or empty grid
     });
   }
-
-  return cartelle;
+  return allGeneratedCartelle;
 };

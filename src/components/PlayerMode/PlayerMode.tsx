@@ -13,7 +13,8 @@ const PlayerMode = () => {
   const t = useTranslations(language);
 
   return (
-    <div className="max-h-full w-full h-auto overflow-auto py-4">
+    // Removed max-h-full and overflow-auto to allow page scroll and prevent footer overlap
+    <div className="w-full h-auto py-4">
       <div className="flex flex-col items-center gap-4">
         {cartelle.length === 0 ? (
           <div className="text-center p-4">

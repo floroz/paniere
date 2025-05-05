@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react"; // Added useRe
 import Tabellone from "./components/Tabellone"; // Re-added 'type' keyword
 import PlayerMode from "./components/PlayerMode/PlayerMode";
 import LastDrawsModal from "./components/LastDrawsModal/LastDrawsModal";
-import MobileFooter from "./components/MobileFooter/MobileFooter";
+import MobileFooter from "./components/MobileFooter/MobileFooter"; // Footer for Tabellone mode
+import MobilePlayerFooter from "./components/MobilePlayerFooter/MobilePlayerFooter"; // Footer for Player mode
 import TabelloneFooter from "./components/TabelloneFooter/TabelloneFooter";
 import PlayerFooter from "./components/PlayerFooter/PlayerFooter";
 import StartPage from "./components/StartPage/StartPage";
@@ -15,6 +16,10 @@ import type { TabelloneHandle } from "./components/Tabellone/Tabellone";
 function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
   const tabelloneRef = useRef<TabelloneHandle>(null);
+  const mobileFooterRef = useRef<HTMLDivElement>(null); // Ref for mobile footer (Tabellone)
+  const mobilePlayerFooterRef = useRef<HTMLDivElement>(null); // Ref for mobile footer (Player)
+  const desktopFooterRef = useRef<HTMLDivElement>(null); // Ref for desktop footer
+  const [footerHeight, setFooterHeight] = useState(0); // State for dynamic padding
 
   // Game state - core properties needed in this component
   const drawnNumbers = useGameStore((state) => state.drawnNumbers);
@@ -40,6 +45,43 @@ function App() {
     // If no game mode is set, we're in the initial state
     // Don't automatically set a mode - let the user choose from the StartPage
   }, []);
+
+  // Effect to measure footer height for dynamic padding
+  useEffect(() => {
+    // Determine which footer is currently potentially visible
+    const currentFooterRef =
+      gameMode === "tabellone"
+        ? window.innerWidth < 768 // md breakpoint
+          ? mobileFooterRef.current
+          : desktopFooterRef.current // Assuming TabelloneFooter uses this ref
+        : gameMode === "player"
+          ? window.innerWidth < 768
+            ? mobilePlayerFooterRef.current
+            : desktopFooterRef.current // Assuming PlayerFooter uses this ref
+          : null;
+
+    if (currentFooterRef) {
+      // Use ResizeObserver for better accuracy if dimensions change
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          // Use const
+          // Check if the target is an HTMLElement before accessing offsetHeight
+          if (entry.target instanceof HTMLElement) {
+            setFooterHeight(entry.target.offsetHeight);
+          }
+        }
+      });
+      resizeObserver.observe(currentFooterRef);
+      // Initial measurement
+      setFooterHeight(currentFooterRef.offsetHeight);
+      // Cleanup observer on component unmount or ref change
+      return () => resizeObserver.disconnect();
+    } else {
+      // Reset height if no footer is visible (e.g., on StartPage)
+      setFooterHeight(0);
+    }
+    // Rerun when gameMode changes or potentially on resize (handled by ResizeObserver)
+  }, [gameMode]);
 
   /**
    * Check for prizes when drawn numbers change
@@ -116,10 +158,10 @@ function App() {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTIgMmg1NnY1NkgyVjJ6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIi8+PC9nPjwvc3ZnPg==')] opacity-5 dark:opacity-[0.03]"></div>
         </div>
 
-        {/* Removed grid layout, added padding for fixed footer */}
-        <div className="relative container max-w-6xl p-4">
-          {/* Added pb-28 for footer height */}
-          <div className="pb-28">
+        {/* Removed grid layout */}
+        <div className="relative container max-w-6xl sm:p-4">
+          {/* Apply dynamic padding using inline style, remove Tailwind class */}
+          <div style={{ paddingBottom: `${footerHeight}px` }}>
             {/* Pass ref to Tabellone */}
             {gameMode === "tabellone" ? (
               <Tabellone ref={tabelloneRef} />
@@ -129,25 +171,46 @@ function App() {
           </div>
         </div>
 
-        {/* Render footers outside the main container div, conditionally */}
+        {/* Render footers outside the main container div, conditionally, and add refs */}
         {gameMode === "tabellone" && (
           <>
-            <TabelloneFooter
-              onReset={handleReset}
-              onReturnToStartPage={handleReturnToStartPage}
-            />
-            <MobileFooter
-              onReset={handleReset}
-              onReturnToStartPage={handleReturnToStartPage}
-              onScrollRequest={handleScrollRequest}
-            />
+            <div ref={desktopFooterRef}>
+              {" "}
+              {/* Ref wrapper for desktop footer */}
+              <TabelloneFooter
+                onReset={handleReset}
+                onReturnToStartPage={handleReturnToStartPage}
+              />
+            </div>
+            <div ref={mobileFooterRef}>
+              {" "}
+              {/* Ref wrapper for mobile footer */}
+              <MobileFooter
+                onReset={handleReset}
+                onReturnToStartPage={handleReturnToStartPage}
+                onScrollRequest={handleScrollRequest}
+              />
+            </div>
           </>
         )}
         {gameMode === "player" && (
-          <PlayerFooter onReturnToStartPage={handleReturnToStartPage} />
-          // Note: Player mode currently doesn't have a specific mobile footer in this structure
-          // If needed, a similar conditional rendering for a mobile player footer would go here.
+          <>
+            <div ref={desktopFooterRef}>
+              {" "}
+              {/* Ref wrapper for desktop footer */}
+              <PlayerFooter onReturnToStartPage={handleReturnToStartPage} />
+            </div>
+            <div ref={mobilePlayerFooterRef}>
+              {" "}
+              {/* Ref wrapper for mobile footer */}
+              <MobilePlayerFooter
+                onReturnToStartPage={handleReturnToStartPage}
+              />
+            </div>
+            {/* Removed duplicated block below */}
+          </>
         )}
+        {/* Removed duplicated gameMode === "player" block */}
       </div>
     );
   };
