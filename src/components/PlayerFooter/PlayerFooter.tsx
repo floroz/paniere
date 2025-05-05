@@ -43,8 +43,7 @@ const PlayerFooter = ({ onReturnToStartPage }: PlayerFooterProps) => {
 
   return (
     <>
-      {/* Added fixed positioning, background, z-index, removed grid positioning, added md:flex */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 hidden md:flex bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-md">
+      <div className="fixed bottom-0 left-0 right-0 z-40 hidden md:flex bg-orange-100 dark:bg-orange-900 border-t border-orange-200 dark:border-orange-800 shadow-md">
         {/* Added container to constrain width and maintain padding/layout */}
         <div className="w-full max-w-6xl mx-auto flex items-center justify-between p-3">
           {/* Paniere logo */}
@@ -63,7 +62,7 @@ const PlayerFooter = ({ onReturnToStartPage }: PlayerFooterProps) => {
             <button
               onClick={handleOpenUndoDialog}
               disabled={drawnNumbers.length === 0}
-              className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-red-100 dark:bg-gray-800 dark:hover:bg-red-900/40 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label={t.undoLastDraw}
               tabIndex={0}
               onKeyDown={(e) =>

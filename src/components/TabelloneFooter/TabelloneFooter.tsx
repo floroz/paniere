@@ -20,11 +20,8 @@ const TabelloneFooter = ({
   onReturnToStartPage,
 }: TabelloneFooterProps) => {
   return (
-    // Added fixed positioning, background, z-index, removed grid positioning
-    <div className="fixed bottom-0 left-0 right-0 z-40 hidden md:flex bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-md">
-      {/* Added container to constrain width */}
+    <div className="fixed bottom-0 left-0 right-0 z-40 hidden md:flex bg-orange-100 dark:bg-orange-900 border-t border-orange-200 dark:border-orange-800 shadow-md">
       <div className="w-full max-w-6xl mx-auto flex items-center p-3">
-        {/* Paniere image and remaining count (desktop only) */}
         <div className="pr-3 flex-shrink-0 flex flex-col items-center">
           <img
             src="/images/paniere.png"

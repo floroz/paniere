@@ -51,8 +51,7 @@ const MobilePlayerFooter = ({
 
   return (
     <>
-      {/* Fixed footer container for mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-amber-50/90 to-white/95 dark:from-gray-800/95 dark:to-gray-900/95 backdrop-blur-sm border-t border-amber-100 dark:border-gray-700 shadow-lg px-3 py-2 z-40 flex items-center justify-between gap-2">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-orange-100 dark:bg-orange-900 backdrop-blur-sm border-t border-orange-200 dark:border-orange-800 shadow-lg px-3 py-2 z-40 flex items-center justify-between gap-2">
         <div className="pr-3 flex-shrink-0">
           <img
             src="/images/paniere.png"
@@ -69,7 +68,8 @@ const MobilePlayerFooter = ({
             onClick={handleOpenUndoDialog}
             aria-label={t.undoLastDraw}
             disabled={drawnNumbers.length === 0}
-            className="h-11 w-11 p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200 flex items-center justify-center"
+            // Changed background/hover colors
+            className="h-11 w-11 p-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 active:scale-95 transition-all duration-200 flex items-center justify-center"
             icon={<FaUndoAlt className="h-5 w-5" />}
           />
 
@@ -78,7 +78,7 @@ const MobilePlayerFooter = ({
             <BaseIconButton
               onClick={handleOpenReturnDialog}
               aria-label={t.returnToStartPage}
-              className="h-11 w-11 p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 active:scale-95 transition-all duration-200 flex items-center justify-center"
+              className="h-11 w-11 p-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 active:scale-95 transition-all duration-200 flex items-center justify-center"
               icon={<FaHome className="h-5 w-5" />}
             />
           )}

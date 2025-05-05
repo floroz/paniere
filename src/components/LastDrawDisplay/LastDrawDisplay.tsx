@@ -25,12 +25,12 @@ const LastDrawDisplay = () => {
   }
 
   return (
-    <BaseCard variant="amber" padding={false} className="h-full flex flex-col">
+    <BaseCard variant="red" padding={false} className="h-full flex flex-col">
       <div className="h-full grid grid-cols-[60%_40%]">
         {/* Last drawn number */}
         <div
           key={`last-drawn-${lastDrawn}`}
-          className="flex flex-col items-center justify-center animate-fade-in border-r border-amber-200/70 dark:border-amber-700/30"
+          className="flex flex-col items-center justify-center animate-fade-in border-r border-red-200/70 dark:border-red-700/30"
         >
           <NumberDisplay
             number={lastDrawn}
@@ -41,7 +41,7 @@ const LastDrawDisplay = () => {
 
         {/* Previous draws */}
         <div className="flex flex-col justify-center pr-2 pl-2 space-y-3">
-          <div className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 text-center font-medium">
+          <div className="text-xs uppercase tracking-wider text-red-600 dark:text-red-400 text-center font-medium">
             {t.previousDraw}
           </div>
 
@@ -50,7 +50,7 @@ const LastDrawDisplay = () => {
               {previousDraws.map((num, index) => (
                 <div
                   key={`prev-draw-${num}-${index}`}
-                  className={`flex w-full items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-amber-100/50 dark:bg-amber-800/20 ${index === 0 ? "animate-fade-in" : "animate-slide-down"}`}
+                  className={`flex w-full items-center justify-between gap-2 px-2 py-1.5 rounded-lg bg-red-100/50 dark:bg-red-800/20 ${index === 0 ? "animate-fade-in" : "animate-slide-down"}`}
                 >
                   <NumberDisplay
                     number={num}
@@ -62,7 +62,7 @@ const LastDrawDisplay = () => {
               ))}
             </div>
           ) : (
-            <div className="text-xs text-amber-600 dark:text-amber-400 text-center italic py-4">
+            <div className="text-xs text-red-600 dark:text-red-400 text-center italic py-4">
               {t.noPreviousDraws}
             </div>
           )}

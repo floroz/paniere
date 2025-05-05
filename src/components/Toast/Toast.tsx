@@ -45,7 +45,7 @@ const Toast = ({
   const typeClasses = {
     success: "bg-gradient-to-r from-green-500 to-green-600 text-white",
     error: "bg-gradient-to-r from-red-500 to-red-600 text-white",
-    info: "bg-gradient-to-r from-amber-500 to-amber-600 text-white",
+    info: "bg-gradient-to-r from-orange-500 to-orange-600 text-white",
   };
 
   const enterClass = "animate-slideDown";

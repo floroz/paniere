@@ -64,21 +64,24 @@ export default function LastDrawsModal({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0  bg-opacity-70 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
       <div
         ref={modalRef}
-        className="bg-white dark:bg-gray-800 rounded-lg p-4 max-w-sm w-full mx-4 animate-fade-in"
+        className="bg-orange-50 dark:bg-orange-950 rounded-lg p-4 max-w-sm w-full mx-4 animate-fade-in shadow-xl border border-orange-200 dark:border-orange-800"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
         <div className="flex justify-between items-center mb-4">
-          <h3 id="modal-title" className="text-lg font-medium">
+          <h3
+            id="modal-title"
+            className="text-lg font-medium text-red-800 dark:text-red-200"
+          >
             {t.lastDraws} 3
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="text-gray-500 hover:text-red-700 dark:text-gray-400 dark:hover:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/40 p-1 rounded-full transition-colors"
             aria-label={t.close}
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && onClose()}
@@ -105,12 +108,12 @@ export default function LastDrawsModal({
             {lastThreeDraws.map((num, index) => (
               <div
                 key={`modal-draw-${num}-${index}`}
-                className="flex items-center space-x-3 p-2 bg-amber-50 dark:bg-amber-900 rounded-md"
+                className="flex items-center space-x-3 p-2 bg-red-50 dark:bg-red-900/30 rounded-md"
               >
-                <span className="text-2xl font-bold text-amber-800 dark:text-amber-200">
+                <span className="text-2xl font-bold text-red-800 dark:text-red-200">
                   {num}
                 </span>
-                <span className="text-sm text-amber-700 dark:text-amber-300">
+                <span className="text-sm text-red-700 dark:text-red-300">
                   {neapolitanNames[num]}
                 </span>
               </div>
@@ -125,7 +128,7 @@ export default function LastDrawsModal({
         <div className="mt-4 text-right">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="px-4 py-2 bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white rounded-lg transition-colors"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && onClose()}
           >

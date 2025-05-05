@@ -61,20 +61,10 @@ const StartPage = ({ onStart }: StartPageProps) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start pt-40 sm:justify-center sm:pt-4 p-4 md:p-8 bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-950 dark:via-gray-900 dark:to-amber-950 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-start pt-40 sm:justify-center sm:pt-4 p-4 md:p-8 bg-orange-50 dark:bg-orange-950 text-gray-900 dark:text-gray-100">
       {/* Language selector - placed first for better focus hierarchy */}
       <div className="absolute top-4 right-4 z-20">
         <LanguageSelector currentLanguage={language} onChange={setLanguage} />
-      </div>
-
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full bg-amber-200 opacity-20 dark:bg-amber-700 dark:opacity-10"></div>
-        <div className="absolute top-1/4 -left-12 w-24 h-24 rounded-full bg-amber-300 opacity-10 dark:bg-amber-600 dark:opacity-5"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-amber-100 opacity-30 dark:bg-amber-800 dark:opacity-10"></div>
-
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTIgMmg1NnY1NkgyVjJ6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIi8+PC9nPjwvc3ZnPg==')] opacity-5 dark:opacity-[0.03]"></div>
       </div>
 
       <main className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center justify-center gap-8">
@@ -88,7 +78,7 @@ const StartPage = ({ onStart }: StartPageProps) => {
               aria-hidden="true"
             />
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent font-display italic">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-red-700 to-red-900 dark:from-red-500 dark:to-red-700 bg-clip-text text-transparent font-display italic">
             Paniere
           </h1>
           <p className="text-md md:text-lg text-gray-600 dark:text-gray-300 mb-6 max-w-2xl">
@@ -98,7 +88,7 @@ const StartPage = ({ onStart }: StartPageProps) => {
           <div className="flex justify-center mb-6">
             <button
               onClick={handleOpenRulesModal}
-              className="flex items-center gap-1 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-800/30 dark:hover:bg-amber-800/40 dark:text-amber-300 rounded-lg transition-colors text-sm font-medium"
+              className="flex items-center gap-1 px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-800 dark:bg-red-900/30 dark:hover:bg-red-900/40 dark:text-red-300 rounded-lg transition-colors text-sm font-medium"
               aria-label={t.learnToPlay}
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && handleOpenRulesModal()}
@@ -122,7 +112,7 @@ const StartPage = ({ onStart }: StartPageProps) => {
 
         {/* Game mode selection */}
         <section className="w-full max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <h2 className="col-span-full text-2xl font-bold mb-6 text-center bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-500 dark:to-amber-700 bg-clip-text text-transparent">
+          <h2 className="col-span-full text-2xl font-bold mb-6 text-center bg-gradient-to-r from-red-700 to-red-900 dark:from-red-500 dark:to-red-700 bg-clip-text text-transparent">
             {t.selectMode}
           </h2>
 
@@ -133,8 +123,8 @@ const StartPage = ({ onStart }: StartPageProps) => {
               flex flex-col items-center p-6 rounded-xl shadow-md transition-all duration-300
               ${
                 selectedMode === "tabellone"
-                  ? "bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/20 border-2 border-amber-400 dark:border-amber-700 transform scale-[1.02]"
-                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-amber-50 dark:hover:bg-gray-700/80"
+                  ? "bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900/40 dark:to-red-800/20 border-2 border-red-400 dark:border-red-700 transform scale-[1.02]"
+                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-red-50 dark:hover:bg-gray-700/80"
               }
             `}
             aria-pressed={selectedMode === "tabellone"}
@@ -145,16 +135,16 @@ const StartPage = ({ onStart }: StartPageProps) => {
               setSelectedMode("tabellone")
             }
           >
-            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-full bg-amber-500/10 dark:bg-amber-700/20">
+            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-full bg-red-500/10 dark:bg-red-700/20">
               <TabelloneIcon
-                className="text-amber-600 dark:text-amber-500 transform scale-125"
+                className="text-red-600 dark:text-red-500 transform scale-125"
                 aria-hidden="true"
                 width="64"
                 height="64"
               />
             </div>
             <h3
-              className="text-xl font-bold mb-2 text-amber-700 dark:text-amber-500 font-display"
+              className="text-xl font-bold mb-2 text-red-700 dark:text-red-500 font-display"
               id="tabellone-mode-label"
             >
               {t.tabelloneMode}
@@ -174,8 +164,8 @@ const StartPage = ({ onStart }: StartPageProps) => {
               flex flex-col items-center p-6 rounded-xl shadow-md transition-all duration-300
               ${
                 selectedMode === "player"
-                  ? "bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/20 border-2 border-amber-400 dark:border-amber-700 transform scale-[1.02]"
-                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-amber-50 dark:hover:bg-gray-700/80"
+                  ? "bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900/40 dark:to-red-800/20 border-2 border-red-400 dark:border-red-700 transform scale-[1.02]"
+                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-red-50 dark:hover:bg-gray-700/80"
               }
             `}
             aria-pressed={selectedMode === "player"}
@@ -185,16 +175,16 @@ const StartPage = ({ onStart }: StartPageProps) => {
               (e.key === "Enter" || e.key === " ") && setSelectedMode("player")
             }
           >
-            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-full bg-amber-500/10 dark:bg-amber-700/20">
+            <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-full bg-red-500/10 dark:bg-red-700/20">
               <CartellaIcon
-                className="text-amber-600 dark:text-amber-500 transform scale-125"
+                className="text-red-600 dark:text-red-500 transform scale-125"
                 aria-hidden="true"
                 width="64"
                 height="38"
               />
             </div>
             <h3
-              className="text-xl font-bold mb-2 text-amber-700 dark:text-amber-500 font-display"
+              className="text-xl font-bold mb-2 text-red-700 dark:text-red-500 font-display"
               id="player-mode-label"
             >
               {t.playerMode}
@@ -210,8 +200,8 @@ const StartPage = ({ onStart }: StartPageProps) => {
 
         {/* Cartelle count selection (only for Player mode) */}
         {selectedMode === "player" && (
-          <section className="w-full bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-900/30 dark:to-amber-800/10 rounded-xl shadow-md p-6 border border-amber-200/70 dark:border-amber-800/30">
-            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-amber-700 to-amber-900 dark:from-amber-500 dark:to-amber-600 bg-clip-text text-transparent font-display">
+          <section className="w-full bg-gradient-to-br from-red-50 to-red-100/50 dark:from-red-900/30 dark:to-red-800/10 rounded-xl shadow-md p-6 border border-red-200/70 dark:border-red-800/30">
+            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-red-700 to-red-900 dark:from-red-500 dark:to-red-600 bg-clip-text text-transparent font-display">
               {t.selectCartelle}
             </h2>
 
@@ -230,8 +220,8 @@ const StartPage = ({ onStart }: StartPageProps) => {
                       transition-all duration-300 shadow-sm
                       ${
                         cartelleCount === count
-                          ? "bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 text-white transform scale-110 shadow-md ring-2 ring-amber-300 dark:ring-amber-700/50"
-                          : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-amber-900/30 hover:scale-105"
+                          ? "bg-gradient-to-br from-red-500 to-red-700 dark:from-red-600 dark:to-red-800 text-white transform scale-110 shadow-md ring-2 ring-red-300 dark:ring-red-700/50"
+                          : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:scale-105"
                       }
                     `}
                       onClick={() => setCartelleCount(count)}
@@ -257,11 +247,11 @@ const StartPage = ({ onStart }: StartPageProps) => {
           <button
             className={`
               group relative flex w-full max-w-xs items-center justify-center overflow-hidden rounded-xl
-              py-5 text-xl font-bold text-white shadow-lg transition-all duration-300 
-              hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2
+              py-5 text-xl font-bold text-white shadow-lg transition-all duration-300
+              hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
               ${
                 selectedMode
-                  ? "bg-gradient-to-br from-amber-500 to-amber-700 dark:from-amber-600 dark:to-amber-800 transform hover:scale-[1.02] active:scale-[0.98]"
+                  ? "bg-gradient-to-br from-red-600 to-red-800 dark:from-red-700 dark:to-red-900 transform hover:scale-[1.02] active:scale-[0.98]"
                   : "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
               }
             `}

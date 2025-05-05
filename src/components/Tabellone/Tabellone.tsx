@@ -32,21 +32,19 @@ const Casella = ({
   const language = useLanguageStore((state) => state.language);
   const t = useTranslations(language);
 
-  // Determine the cell style based on its state
   const getBackgroundStyle = () => {
     if (isLatestDrawn) {
-      return "bg-gradient-to-br from-amber-300 to-amber-500 dark:from-amber-600 dark:to-amber-800 ring-4 ring-amber-300 dark:ring-amber-600 ring-opacity-50 dark:ring-opacity-50 animate-pulse";
+      return "bg-gradient-to-br from-red-400 to-red-600 dark:from-red-600 dark:to-red-800 ring-4 ring-red-400 dark:ring-red-600 ring-opacity-50 dark:ring-opacity-50 animate-pulse";
     }
 
     if (isWinningNumber) {
-      return "bg-gradient-to-br from-green-200 to-green-400 dark:from-green-600 dark:to-green-800 ring-4 ring-green-300 dark:ring-green-600 ring-opacity-50 dark:ring-opacity-50 animate-pulseGreen";
+      return "bg-gradient-to-br from-green-400 to-green-600 dark:from-green-600 dark:to-green-800 ring-4 ring-green-400 dark:ring-green-600 ring-opacity-50 dark:ring-opacity-50 animate-pulseGreen";
     }
 
     if (isDrawn) {
-      return "bg-gradient-to-br from-amber-100 to-amber-300 dark:from-amber-700 dark:to-amber-900";
+      return "bg-gradient-to-br from-red-100 to-red-300 dark:from-red-700 dark:to-red-900";
     }
-
-    return "bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700";
+    return "bg-white hover:bg-red-50 dark:bg-gray-800 dark:hover:bg-gray-700";
   };
 
   return (
@@ -69,12 +67,10 @@ const Casella = ({
         className={`absolute inset-0 border border-gray-200 dark:border-gray-700 rounded-xl ${isDrawn ? "opacity-0" : "opacity-100"}`}
       ></div>
 
-      {/* Background overlay with animation */}
       {isDrawn && (
-        <div className="absolute inset-0 bg-amber-50 dark:bg-amber-950 opacity-10"></div>
+        <div className="absolute inset-0 bg-orange-50 dark:bg-orange-950 opacity-10"></div>
       )}
 
-      {/* Small decorative square in corner */}
       <div className="absolute top-1 left-1 w-2 h-2 rounded-sm bg-gray-200 dark:bg-gray-700 opacity-50"></div>
 
       {/* Number */}
@@ -84,7 +80,7 @@ const Casella = ({
             isLatestDrawn
               ? "text-white dark:text-white"
               : isDrawn
-                ? "text-amber-800 dark:text-amber-200"
+                ? "text-red-800 dark:text-red-200"
                 : "text-gray-800 dark:text-gray-200"
           }
         `}
@@ -97,10 +93,11 @@ const Casella = ({
         className={`
           text-2xs sm:text-xs text-center max-w-full px-1 truncate transition-colors duration-300
           ${
+            // Updated text colors
             isLatestDrawn
               ? "text-white dark:text-white"
               : isDrawn
-                ? "text-amber-700 dark:text-amber-300"
+                ? "text-red-700 dark:text-red-300"
                 : "text-gray-600 dark:text-gray-400"
           }
         `}
@@ -198,10 +195,10 @@ const Tabellone = forwardRef<TabelloneHandle>((_, ref) => {
             key={`cartella-${cartella.id}`}
             ref={(el) => {
               mobileCartellaRefs.current.set(cartella.id, el);
-            }} // Corrected ref assignment
-            className="flex flex-col gap-1 bg-gradient-to-r from-amber-50 to-amber-100 dark:from-gray-800 dark:to-gray-750 border border-amber-200 dark:border-amber-800 p-3 rounded-xl shadow-md scroll-mt-4" // Added scroll-mt for better positioning
+            }}
+            className="flex flex-col gap-1 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 border border-orange-200 dark:border-orange-700 p-3 rounded-xl shadow-md scroll-mt-4"
           >
-            <div className="text-xs font-medium text-amber-800 dark:text-amber-400 mb-1 px-1">
+            <div className="text-xs font-medium text-red-800 dark:text-red-400 mb-1 px-1">
               Cartella {cartella.id}
             </div>
             {Array.from({ length: 3 }, (_, rowIdx) => {
@@ -264,12 +261,11 @@ const Tabellone = forwardRef<TabelloneHandle>((_, ref) => {
               const isWinningNumber = winningNumbers.has(number);
               const cartellaId = getCartellaId(rowIndex, colIndex);
 
-              // Add special classes for cells at cartella boundaries
               const rightBorder = isRightBoundary(colIndex)
-                ? "border-r-2 border-r-amber-400 dark:border-r-amber-700 pr-1 mr-1"
+                ? "border-r-2 border-r-red-400 dark:border-r-red-700 pr-1 mr-1"
                 : "";
               const bottomBorder = isBottomBoundary(rowIndex)
-                ? "border-b-2 border-b-amber-400 dark:border-b-amber-700 pb-1 mb-1"
+                ? "border-b-2 border-b-red-400 dark:border-b-red-700 pb-1 mb-1"
                 : "";
 
               return (

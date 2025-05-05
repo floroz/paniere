@@ -54,11 +54,11 @@ const BaseIconButton = ({
     primary:
       "bg-blue-500 hover:bg-blue-600 text-white focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700",
     secondary:
-      "bg-gray-100 hover:bg-gray-200 text-gray-700 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200",
+      "bg-gray-100 hover:bg-red-100 text-gray-700 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-red-900/40 dark:text-gray-200",
     danger:
       "bg-red-100 hover:bg-red-200 text-red-700 focus:ring-red-500 dark:bg-red-900/30 dark:hover:bg-red-800/40 dark:text-red-300",
     ghost:
-      "bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-gray-500 dark:hover:bg-gray-800 dark:text-gray-200",
+      "bg-transparent hover:bg-red-100 text-gray-700 focus:ring-gray-500 dark:hover:bg-red-900/40 dark:text-gray-200",
   };
 
   // Disabled state

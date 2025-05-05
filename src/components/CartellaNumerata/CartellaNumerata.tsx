@@ -165,19 +165,19 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
    * Get the appropriate style for a cell based on its state
    */
   const getCellStyle = (isDrawn: boolean) => {
-    // No special style needed for empty cells here anymore, handled below
     if (isDrawn) {
-      return "bg-gradient-to-br from-amber-300 to-amber-500 dark:from-amber-600 dark:to-amber-800 text-white dark:text-white scale-95 shadow-md";
+      // Use red gradient for drawn
+      return "bg-gradient-to-br from-red-300 to-red-500 dark:from-red-600 dark:to-red-800 text-white dark:text-white scale-95 shadow-md";
     }
-
-    return "bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:scale-95";
+    // Use red hover for default state
+    return "bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-gray-700 hover:scale-95";
   };
 
   return (
     <>
       <div
         ref={gridRef}
-        className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-gray-800 dark:to-gray-750 border border-amber-200 dark:border-amber-800 p-2 rounded-xl shadow-md" // Reduced padding slightly
+        className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 border border-orange-200 dark:border-orange-700 p-2 rounded-xl shadow-md"
         role="grid"
         aria-label={`Cartella ${cartella.id}`}
         tabIndex={0} /* Make the grid container focusable */
@@ -189,7 +189,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
         }
       >
         <div className="mb-2 px-1">
-          <div className="text-xs font-medium text-amber-800 dark:text-amber-400">
+          <div className="text-xs font-medium text-red-800 dark:text-red-400">
             Cartella {cartella.id}
           </div>
         </div>
@@ -220,7 +220,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
                       ${getCellStyle(drawnNumbers.includes(number))}
                       ${number === 0 ? "bg-gray-100/50 dark:bg-gray-800/30" : ""}
                       flex flex-col items-center justify-center
-                      ${isActive ? "ring-2 ring-amber-500 ring-offset-1" : ""}
+                      ${isActive ? "ring-2 ring-red-500 ring-offset-1" : ""} 
                     `}
                     // Allow click handling even on empty cells if needed in future, but action depends on number > 0
                     onClick={() => handleNumberClick(number)}
@@ -243,9 +243,9 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
                           {number}
                         </span>
 
-                        {/* Background overlay with animation */}
+                        {/* Background overlay with animation - Use main theme background */}
                         {drawnNumbers.includes(number) && (
-                          <div className="absolute inset-0 bg-amber-50 dark:bg-amber-950 opacity-10"></div>
+                          <div className="absolute inset-0 bg-orange-50 dark:bg-orange-950 opacity-10"></div>
                         )}
 
                         {/* Radial gradient overlay for hover effect */}

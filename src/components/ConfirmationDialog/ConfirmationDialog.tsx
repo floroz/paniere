@@ -86,15 +86,15 @@ const ConfirmationDialog = ({
         aria-modal="true"
         aria-labelledby="dialog-title"
       >
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="bg-orange-50 dark:bg-orange-950 rounded-2xl shadow-2xl overflow-hidden border border-orange-200 dark:border-orange-800">
           <div className="relative p-6">
             {/* Top decorative gradient bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-red-500"></div>
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-red-800"></div>
 
             <div className="mb-5">
               <h3
                 id="dialog-title"
-                className="text-xl font-bold mb-2 bg-gradient-to-r from-amber-600 to-red-600 bg-clip-text text-transparent"
+                className="text-xl font-bold mb-2 bg-gradient-to-r from-red-700 to-red-900 dark:from-red-500 dark:to-red-700 bg-clip-text text-transparent"
               >
                 {title}
               </h3>
@@ -104,18 +104,18 @@ const ConfirmationDialog = ({
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={onClose}
-                className="group relative px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 overflow-hidden"
+                className="group relative px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium hover:bg-red-100 dark:hover:bg-red-900/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 overflow-hidden"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === "Enter" && onClose()}
                 aria-label={cancelText}
               >
                 <span className="relative z-10">{cancelText}</span>
-                <span className="absolute inset-0 bg-gray-200 dark:bg-gray-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                <span className="absolute inset-0 bg-red-100 dark:bg-red-900/40 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </button>
 
               <button
                 onClick={handleConfirm}
-                className="group relative px-4 py-2.5 rounded-xl bg-gradient-to-br from-red-500 to-amber-600 text-white font-medium transition-all duration-300 transform hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 overflow-hidden"
+                className="group relative px-4 py-2.5 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white font-medium transition-all duration-300 transform hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 overflow-hidden"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === "Enter" && handleConfirm()}
                 aria-label={confirmText}

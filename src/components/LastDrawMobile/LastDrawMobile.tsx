@@ -43,14 +43,14 @@ export const LastDrawMobile = ({
 
   // Rewriting the return block to ensure correct JSX structure
   return (
-    <div className="flex justify-between items-center w-full px-1 py-1 border-b border-amber-100 dark:border-gray-700 mb-2">
+    <div className="flex justify-between items-center w-full px-1 py-1 border-b border-red-100 dark:border-red-800/50 mb-2">
       {/* Last Drawn Info */}
       <div className="flex flex-col items-start overflow-hidden mr-2">
-        <span className="text-xs font-medium text-amber-700 dark:text-amber-400 leading-tight">
+        <span className="text-xs font-medium text-red-700 dark:text-red-400 leading-tight">
           {t.lastDraws}: {/* Corrected key */}
         </span>
         <div className="flex items-baseline gap-1.5">
-          <span className="text-lg font-bold text-amber-800 dark:text-amber-300 leading-none truncate">
+          <span className="text-lg font-bold text-red-800 dark:text-red-300 leading-none truncate">
             {lastDrawnNumber ?? "-"}
           </span>
           <span className="text-xs text-gray-600 dark:text-gray-400 leading-none truncate">

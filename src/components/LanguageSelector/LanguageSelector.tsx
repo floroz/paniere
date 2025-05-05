@@ -7,7 +7,6 @@ interface LanguageSelectorProps {
   currentLanguage: "en" | "it";
   onChange: (language: "en" | "it") => void;
 }
-
 /**
  * SVG component for the UK flag
  */
@@ -57,7 +56,6 @@ const ItalianFlagIcon = () => (
 
 /**
  * Language selector component that allows switching between English and Italian
- * using flag icons
  */
 const LanguageSelector = ({
   currentLanguage,
@@ -74,6 +72,7 @@ const LanguageSelector = ({
 
   return (
     <div className="flex items-center space-x-3">
+      {/* Italian Button */}
       <button
         onClick={() => onChange("it")}
         className={`
@@ -81,8 +80,8 @@ const LanguageSelector = ({
           transition-all duration-200 overflow-hidden
           ${
             currentLanguage === "it"
-              ? "border-amber-500 dark:border-amber-600 ring-2 ring-amber-200 dark:ring-amber-900 scale-105"
-              : "border-gray-300 dark:border-gray-600 hover:border-amber-300 dark:hover:border-amber-700"
+              ? "border-red-500 dark:border-red-600 ring-2 ring-red-200 dark:ring-red-900 scale-105"
+              : "border-gray-300 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-700"
           }
         `}
         aria-label={t.switchToItalian}
@@ -91,9 +90,10 @@ const LanguageSelector = ({
         onKeyDown={(e) => handleKeyDown(e, "it")}
       >
         <ItalianFlagIcon />
-        <span className="text-xs font-medium hidden sm:inline">Italiano</span>
+        <span className="text-xs font-medium">IT</span>
       </button>
 
+      {/* English Button */}
       <button
         onClick={() => onChange("en")}
         className={`
@@ -101,8 +101,8 @@ const LanguageSelector = ({
           transition-all duration-200 overflow-hidden
           ${
             currentLanguage === "en"
-              ? "border-amber-500 dark:border-amber-600 ring-2 ring-amber-200 dark:ring-amber-900 scale-105"
-              : "border-gray-300 dark:border-gray-600 hover:border-amber-300 dark:hover:border-amber-700"
+              ? "border-red-500 dark:border-red-600 ring-2 ring-red-200 dark:ring-red-900 scale-105"
+              : "border-gray-300 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-700"
           }
         `}
         aria-label={t.switchToEnglish}
@@ -111,7 +111,7 @@ const LanguageSelector = ({
         onKeyDown={(e) => handleKeyDown(e, "en")}
       >
         <UKFlagIcon />
-        <span className="text-xs font-medium hidden sm:inline">English</span>
+        <span className="text-xs font-medium">EN</span>
       </button>
     </div>
   );

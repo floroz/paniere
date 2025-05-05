@@ -21,9 +21,9 @@ const RemainingCount = () => {
         {t.remaining}:
       </span>
       <BaseBadge
-        variant="amber"
+        variant="red"
         size="md"
-        className="text-xl font-bold bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-600 bg-clip-text text-transparent"
+        className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent"
       >
         {remainingNumbers.length}
       </BaseBadge>

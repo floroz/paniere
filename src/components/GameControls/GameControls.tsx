@@ -91,10 +91,9 @@ const GameControls = ({ onReset, onReturnToStartPage }: GameControlsProps) => {
           disabled={remainingNumbers.length === 0}
           variant="primary" // Keep variant for potential base styles, but override background
           size="lg"
-          // Apply amber gradient theme, adjust padding/height if needed
-          className="h-14 w-32 bg-gradient-to-br from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 dark:from-amber-600 dark:to-amber-800 dark:hover:from-amber-700 dark:hover:to-amber-900 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] px-6 flex items-center justify-center" // Added flex centering
+          className="h-14 w-32 bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 dark:from-red-700 dark:to-red-900 dark:hover:from-red-800 dark:hover:to-red-950 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] px-6 flex items-center justify-center" // Added flex centering
           aria-label={t.draw}
-          leftIcon={<FaPlus className="h-5 w-5" />} // Use react-icon
+          leftIcon={<FaPlus className="h-5 w-5" />}
         >
           {t.draw}
         </BaseButton>
@@ -108,9 +107,9 @@ const GameControls = ({ onReset, onReturnToStartPage }: GameControlsProps) => {
           disabled={!hasDrawnNumbers}
           variant="secondary"
           size="sm"
-          className={`flex justify-start items-center py-2 px-3 transition-all duration-200 ${hasDrawnNumbers ? "hover:bg-gray-200 dark:hover:bg-gray-600" : "opacity-60 cursor-not-allowed"}`}
+          className={`flex justify-start items-center py-2 px-3 transition-all duration-200 ${hasDrawnNumbers ? "hover:bg-red-100 dark:hover:bg-red-900/40" : "opacity-60 cursor-not-allowed"}`}
           aria-label={t.undoLastDraw}
-          leftIcon={<FaUndoAlt className="h-4 w-4" />} // Use react-icon
+          leftIcon={<FaUndoAlt className="h-4 w-4" />}
         >
           {t.undoLastDraw}
         </BaseButton>
@@ -122,7 +121,7 @@ const GameControls = ({ onReset, onReturnToStartPage }: GameControlsProps) => {
           size="sm"
           className="flex justify-start items-center py-2 px-3 hover:bg-red-200 dark:hover:bg-red-800/40 transition-all duration-200"
           aria-label={t.reset}
-          leftIcon={<FaSyncAlt className="h-4 w-4" />} // Use react-icon
+          leftIcon={<FaSyncAlt className="h-4 w-4" />}
         >
           {t.reset}
         </BaseButton>
@@ -133,9 +132,9 @@ const GameControls = ({ onReset, onReturnToStartPage }: GameControlsProps) => {
             onClick={returnConfirmation.open}
             variant="secondary"
             size="sm"
-            className="flex justify-start items-center py-2 px-3 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200"
+            className="flex justify-start items-center py-2 px-3 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all duration-200"
             aria-label={t.back}
-            leftIcon={<FaArrowLeft className="h-4 w-4" />} // Use react-icon
+            leftIcon={<FaArrowLeft className="h-4 w-4" />}
           >
             {t.back}
           </BaseButton>

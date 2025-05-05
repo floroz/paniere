@@ -3,7 +3,7 @@ import { HTMLAttributes, ReactNode } from "react";
 /**
  * Card variant types
  */
-type CardVariant = "default" | "primary" | "secondary" | "amber";
+type CardVariant = "default" | "primary" | "secondary" | "amber" | "red";
 
 /**
  * Card component props
@@ -42,6 +42,7 @@ const BaseCard = ({
       "bg-gray-50 border-gray-200 dark:bg-gray-800/50 dark:border-gray-700/30",
     amber:
       "bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-200/50 dark:from-amber-900/50 dark:to-amber-800/20 dark:border-amber-800/30",
+    red: "bg-gradient-to-br from-red-50 to-red-100/50 border-red-200/50 dark:from-red-900/50 dark:to-red-800/20 dark:border-red-800/30",
   };
 
   // Padding classes

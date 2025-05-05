@@ -58,13 +58,13 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-4xl max-h-[90vh] overflow-auto transform rounded-2xl bg-white p-6 shadow-2xl transition-all duration-500 dark:bg-gray-800 dark:text-white animate-fadeIn"
+        className="w-full max-w-4xl max-h-[90vh] overflow-auto transform rounded-2xl bg-orange-50 p-6 shadow-2xl transition-all duration-500 dark:bg-orange-950 dark:text-gray-100 animate-fadeIn"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative">
           <div className="absolute top-0 right-0 pt-4 pr-4">
             <button
-              className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+              className="rounded-full p-2 text-gray-500 hover:bg-red-100 hover:text-red-700 dark:text-gray-400 dark:hover:bg-red-900/40 dark:hover:text-red-300 transition-colors"
               onClick={onClose}
               aria-label={language === "en" ? "Close rules" : "Chiudi regole"}
               tabIndex={0}
@@ -87,10 +87,10 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
           </div>
         </div>
 
-        <div className="prose prose-amber prose-headings:font-serif prose-headings:text-amber-800 dark:prose-headings:text-amber-300 prose-h1:text-3xl prose-h2:text-2xl prose-h2:border-b prose-h2:border-amber-200 dark:prose-h2:border-amber-800/30 prose-h2:pb-2 prose-h2:mt-8 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-amber-600 dark:prose-a:text-amber-400 prose-strong:text-amber-700 dark:prose-strong:text-amber-300 prose-li:my-1 prose-ul:my-4 prose-ol:my-4 max-w-none dark:prose-invert pt-8 pr-10">
+        <div className="prose prose-red prose-headings:font-serif prose-headings:text-red-800 dark:prose-headings:text-red-300 prose-h1:text-3xl prose-h2:text-2xl prose-h2:border-b prose-h2:border-red-200 dark:prose-h2:border-red-800/30 prose-h2:pb-2 prose-h2:mt-8 prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-red-600 dark:prose-a:text-red-400 prose-strong:text-red-700 dark:prose-strong:text-red-300 prose-li:my-1 prose-ul:my-4 prose-ol:my-4 max-w-none dark:prose-invert pt-8 pr-10">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-500 border-t-transparent"></div>
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-red-500 border-t-transparent"></div>
             </div>
           ) : (
             <div className="py-2">
@@ -99,7 +99,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   h1: ({ children, ...props }) => (
                     <h1
                       {...props}
-                      className="text-3xl font-serif text-amber-800 dark:text-amber-300 font-bold mt-6 mb-4"
+                      className="text-3xl font-serif text-red-800 dark:text-red-300 font-bold mt-6 mb-4"
                     >
                       {children}
                     </h1>
@@ -107,7 +107,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   h2: ({ children, ...props }) => (
                     <h2
                       {...props}
-                      className="text-2xl font-serif text-amber-700 dark:text-amber-400 font-bold mt-8 mb-4 pb-2 border-b border-amber-200 dark:border-amber-800/30"
+                      className="text-2xl font-serif text-red-700 dark:text-red-400 font-bold mt-8 mb-4 pb-2 border-b border-red-200 dark:border-red-800/30"
                     >
                       {children}
                     </h2>
@@ -115,7 +115,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   h3: ({ children, ...props }) => (
                     <h3
                       {...props}
-                      className="text-xl font-serif text-amber-700 dark:text-amber-400 font-semibold mt-6 mb-3"
+                      className="text-xl font-serif text-red-700 dark:text-red-400 font-semibold mt-6 mb-3"
                     >
                       {children}
                     </h3>
@@ -149,7 +149,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   strong: ({ children, ...props }) => (
                     <strong
                       {...props}
-                      className="font-bold text-amber-700 dark:text-amber-300"
+                      className="font-bold text-red-700 dark:text-red-300"
                     >
                       {children}
                     </strong>
@@ -165,7 +165,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   a: ({ children, ...props }) => (
                     <a
                       {...props}
-                      className="text-amber-600 dark:text-amber-400 hover:underline"
+                      className="text-red-600 dark:text-red-400 hover:underline"
                     >
                       {children}
                     </a>
@@ -173,7 +173,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   blockquote: ({ children, ...props }) => (
                     <blockquote
                       {...props}
-                      className="border-l-4 border-amber-300 dark:border-amber-700 pl-4 py-1 my-4 italic text-gray-600 dark:text-gray-400"
+                      className="border-l-4 border-red-300 dark:border-red-700 pl-4 py-1 my-4 italic text-gray-600 dark:text-gray-400"
                     >
                       {children}
                     </blockquote>
@@ -181,7 +181,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   code: ({ children, ...props }) => (
                     <code
                       {...props}
-                      className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-amber-700 dark:text-amber-300 font-mono text-sm"
+                      className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-red-700 dark:text-red-300 font-mono text-sm"
                     >
                       {children}
                     </code>
@@ -197,7 +197,7 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
                   hr: ({ ...props }) => (
                     <hr
                       {...props}
-                      className="my-8 border-t border-amber-200 dark:border-amber-800/30"
+                      className="my-8 border-t border-red-200 dark:border-red-800/30"
                     />
                   ),
                 }}
@@ -208,9 +208,9 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
           )}
         </div>
 
-        <div className="flex justify-end pt-4 mt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end pt-4 mt-6 border-t border-orange-200 dark:border-orange-800">
           <button
-            className="px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-800/30 dark:hover:bg-amber-800/40 dark:text-amber-300 rounded-lg transition-colors"
+            className="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 dark:bg-red-900/30 dark:hover:bg-red-900/40 dark:text-red-300 rounded-lg transition-colors"
             onClick={onClose}
             tabIndex={0}
           >

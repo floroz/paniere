@@ -35,8 +35,8 @@ const NumberDisplay = ({
       <span
         className={`${
           isCurrent
-            ? "text-4xl md:text-5xl font-bold text-amber-800 dark:text-amber-200 leading-none"
-            : "text-base font-bold text-amber-700 dark:text-amber-300 min-w-[24px] text-right"
+            ? "text-4xl md:text-5xl font-bold text-red-800 dark:text-red-200 leading-none"
+            : "text-base font-bold text-red-700 dark:text-red-300 min-w-[24px] text-right"
         }`}
       >
         {number}
@@ -45,8 +45,8 @@ const NumberDisplay = ({
       <span
         className={`${
           isCurrent
-            ? "mt-1 text-sm text-amber-700 dark:text-amber-300 text-center w-full max-w-[150px] line-clamp-1"
-            : "text-xs text-amber-600 dark:text-amber-400 flex-1 truncate"
+            ? "mt-1 text-sm text-red-700 dark:text-red-300 text-center w-full max-w-[150px] line-clamp-1"
+            : "text-xs text-red-600 dark:text-red-400 flex-1 truncate"
         }`}
       >
         {neapolitanNames[number]}
