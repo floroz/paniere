@@ -1,5 +1,6 @@
 import ReactGA from "react-ga4";
-import { GameMode } from "../store/useGameStore";
+
+export type AnalyticsGameMode = "master" | "player";
 
 /**
  * Initializes GA4 using the Measurement ID from environment variables.
@@ -25,9 +26,9 @@ export const initializeGA = (): void => {
 
 /**
  * Tracks the start_game event when a user selects a mode and starts.
- * @param mode - The game mode selected ('master' or 'player').
+ * @param mode - The analytics game mode selected ('master' or 'player').
  */
-export const trackStartGame = (mode: GameMode): void => {
+export const trackStartGame = (mode: AnalyticsGameMode): void => {
   try {
     ReactGA.event("start_game", { mode });
   } catch (error) {
@@ -54,7 +55,7 @@ export const trackPageView = (path: string, title?: string): void => {
  * @param durationSeconds - The duration spent in the mode, in seconds.
  */
 export const trackModeTimeSpent = (
-  mode: GameMode,
+  mode: AnalyticsGameMode,
   durationSeconds: number,
 ): void => {
   // Only send the event if the duration is meaningful (e.g., more than 0 seconds)

@@ -6,6 +6,7 @@ import {
   trackPageView,
   trackModeTimeSpent,
   trackResetGame,
+  type AnalyticsGameMode,
 } from "./utils/analytics";
 import MobileFooter from "./components/MobileFooter/MobileFooter"; // Footer for Tabellone mode
 import MobilePlayerFooter from "./components/MobilePlayerFooter/MobilePlayerFooter"; // Footer for Player mode
@@ -24,7 +25,7 @@ function App() {
   const mobileFooterRef = useRef<HTMLDivElement>(null); // Ref for mobile footer (Tabellone)
   const mobilePlayerFooterRef = useRef<HTMLDivElement>(null); // Ref for mobile footer (Player)
   const desktopFooterRef = useRef<HTMLDivElement>(null); // Ref for desktop footer
-  const [footerHeight, setFooterHeight] = useState(0); // State for dynamic padding
+  // Removed footerHeight state
 
   // Game state - core properties needed in this component
   const drawnNumbers = useGameStore((state) => state.drawnNumbers);
@@ -55,42 +56,7 @@ function App() {
     // Don't automatically set a mode - let the user choose from the StartPage
   }, []);
 
-  // Effect to measure footer height for dynamic padding
-  useEffect(() => {
-    // Determine which footer is currently potentially visible
-    const currentFooterRef =
-      gameMode === "tabellone"
-        ? window.innerWidth < 768 // md breakpoint
-          ? mobileFooterRef.current
-          : desktopFooterRef.current // Assuming TabelloneFooter uses this ref
-        : gameMode === "player"
-          ? window.innerWidth < 768
-            ? mobilePlayerFooterRef.current
-            : desktopFooterRef.current // Assuming PlayerFooter uses this ref
-          : null;
-
-    if (currentFooterRef) {
-      // Use ResizeObserver for better accuracy if dimensions change
-      const resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          // Use const
-          // Check if the target is an HTMLElement before accessing offsetHeight
-          if (entry.target instanceof HTMLElement) {
-            setFooterHeight(entry.target.offsetHeight);
-          }
-        }
-      });
-      resizeObserver.observe(currentFooterRef);
-      // Initial measurement
-      setFooterHeight(currentFooterRef.offsetHeight);
-      // Cleanup observer on component unmount or ref change
-      return () => resizeObserver.disconnect();
-    } else {
-      // Reset height if no footer is visible (e.g., on StartPage)
-      setFooterHeight(0);
-    }
-    // Rerun when gameMode changes or potentially on resize (handled by ResizeObserver)
-  }, [gameMode]);
+  // Removed useEffect for footer height calculation
 
   /**
    * Check for prizes when drawn numbers change
@@ -176,8 +142,10 @@ function App() {
 
         {/* Removed grid layout */}
         <div className="relative container max-w-6xl sm:p-4">
-          {/* Apply dynamic padding using inline style, remove Tailwind class */}
-          <div style={{ paddingBottom: `${footerHeight}px` }}>
+          {/* Apply fixed bottom padding using Tailwind class */}
+          <div className="pb-24">
+            {" "}
+            {/* Added pb-24, removed inline style */}
             {/* Pass ref to Tabellone */}
             {gameMode === "tabellone" ? (
               <Tabellone ref={tabelloneRef} />
@@ -260,9 +228,9 @@ function useTrackPageView({
   modeStartTimeRef,
   previousModeRef,
 }: {
-  gameMode: string | null;
+  gameMode: GameMode | null;
   modeStartTimeRef: React.RefObject<number | null>;
-  previousModeRef: React.RefObject<typeof gameMode>;
+  previousModeRef: React.RefObject<GameMode | null>;
 }) {
   // Effect for Analytics: Page Views and Time Tracking
   useEffect(() => {
@@ -280,9 +248,9 @@ function useTrackPageView({
       const durationMs = Date.now() - modeStartTimeRef.current;
       const durationSeconds = Math.round(durationMs / 1000);
 
-      // Map the mode we are *exiting* to the analytics type
-      const exitedAnalyticsMode: GameMode =
-        previousMode === "tabellone" ? "tabellone" : "player";
+      // Map the mode we are *exiting* to the analytics type ('master' or 'player')
+      const exitedAnalyticsMode: AnalyticsGameMode = // Use aliased analytics type
+        previousMode === "tabellone" ? "master" : "player";
 
       trackModeTimeSpent(exitedAnalyticsMode, durationSeconds);
       modeStartTimeRef.current = null; // Reset timer

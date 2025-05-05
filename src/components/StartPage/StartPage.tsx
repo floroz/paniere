@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { GameMode, useGameStore } from "../../store/useGameStore";
+import { useGameStore } from "../../store/useGameStore";
 import { useLanguageStore } from "../../store/useLanguageStore";
 import { useTranslations } from "../../i18n/translations";
-import { trackStartGame } from "../../utils/analytics";
+import { trackStartGame, AnalyticsGameMode } from "../../utils/analytics";
 import LanguageSelector from "../../components/LanguageSelector";
 import RulesModal from "../RulesModal/RulesModal";
 import { TabelloneIcon, CartellaIcon } from "../icons/TombolaIcons";
@@ -41,8 +41,9 @@ const StartPage = ({ onStart }: StartPageProps) => {
   const handleStartGame = () => {
     if (!selectedMode) return;
 
-    const analyticsMode: GameMode =
-      selectedMode === "tabellone" ? "tabellone" : "player";
+    // Map 'tabellone' to 'master' for analytics
+    const analyticsMode: AnalyticsGameMode = // Use the correct AnalyticsMode type
+      selectedMode === "tabellone" ? "master" : "player";
     trackStartGame(analyticsMode); // Track the event
 
     // Set game mode in the store
