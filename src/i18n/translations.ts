@@ -25,7 +25,7 @@ type TranslationKeys = {
   drawn: string;
   notDrawn: string;
   gameDescription: string;
-  
+
   // Start Page
   startPage: string;
   selectMode: string;
@@ -46,10 +46,13 @@ type TranslationKeys = {
   returnConfirmation: string;
   unmarkConfirmation: (num: number) => string;
   progressLost: string;
-  
+
   // Player Mode
   noCartelleFound: string;
   stopPlaying: string;
+  scrollToNumber: string;
+  historyLast3: string;
+  goToCard: string;
 };
 
 type Translations = {
@@ -77,16 +80,18 @@ export const translations: Translations = {
     previousDraw: "Previous draw",
     remaining: "Remaining",
     reset: "Reset",
-    resetConfirmMessage: "Are you sure you want to reset the game? All drawn numbers will be cleared.",
+    resetConfirmMessage:
+      "Are you sure you want to reset the game? All drawn numbers will be cleared.",
     startGame: "Start Game",
     undoConfirmMessage: "Are you sure you want to undo the last drawn number?",
     undoLastDraw: "Undo last draw",
-    
+
     // Start Page
     back: "Back",
     cartelle: "Cartelle",
     confirmAction: "Confirm Action",
-    gameDescription: "A digital version of the traditional Neapolitan Tombola game. Draw numbers, mark your cartelle, and win prizes from ambo to tombola!",
+    gameDescription:
+      "A digital version of the traditional Neapolitan Tombola game. Draw numbers, mark your cartelle, and win prizes from ambo to tombola!",
     howManyCartelle: "How many Cartelle would you like?",
     learnToPlay: "Learn How to Play",
     playerDescription: "Select and play with your own Cartelle",
@@ -102,11 +107,16 @@ export const translations: Translations = {
     switchToItalian: "Switch to Italian",
     tabelloneDescription: "Draw numbers and manage the game",
     tabelloneMode: "Play as Game Master",
-    unmarkConfirmation: (num: number) => `Are you sure you want to unmark number ${num}?`,
-    
+    unmarkConfirmation: (num: number) =>
+      `Are you sure you want to unmark number ${num}?`,
+
     // Player Mode
-    noCartelleFound: "No cartelle found. Please return to the Start Page and select some cartelle.",
+    noCartelleFound:
+      "No cartelle found. Please return to the Start Page and select some cartelle.",
     stopPlaying: "Stop playing",
+    scrollToNumber: "Scroll to number",
+    historyLast3: "Last 3",
+    goToCard: "Go to card",
   },
   it: {
     // Core translations
@@ -124,15 +134,17 @@ export const translations: Translations = {
     remaining: "Rimanenti",
     confirm: "Conferma",
     cancel: "Annulla",
-    undoConfirmMessage: "Sei sicuro di voler annullare l'ultimo numero estratto?",
-    resetConfirmMessage: "Sei sicuro di voler azzerare il gioco? Tutti i numeri estratti saranno cancellati.",
+    undoConfirmMessage:
+      "Sei sicuro di voler annullare l'ultimo numero estratto?",
+    resetConfirmMessage:
+      "Sei sicuro di voler azzerare il gioco? Tutti i numeri estratti saranno cancellati.",
     noNumbersDrawn: "Nessun numero estratto",
     lastDrawnNumber: "Ultimo numero estratto",
     previousDraw: "Estrazione precedente",
     noPreviousDraws: "Nessuna estrazione precedente",
     drawn: "estratto",
     notDrawn: "non estratto",
-    
+
     // Start Page
     startPage: "Benvenuto a Paniere",
     selectMode: "Seleziona Modalità di Gioco",
@@ -140,7 +152,8 @@ export const translations: Translations = {
     playerMode: "Gioca come Giocatore",
     tabelloneDescription: "Estrai numeri e gestisci il gioco",
     playerDescription: "Seleziona e gioca con le tue Cartelle",
-    gameDescription: "Una versione digitale del tradizionale gioco della Tombola Napoletana. Estrai numeri, segna le tue cartelle e vinci premi dall'ambo alla tombola!",
+    gameDescription:
+      "Una versione digitale del tradizionale gioco della Tombola Napoletana. Estrai numeri, segna le tue cartelle e vinci premi dall'ambo alla tombola!",
     selectCartelle: "Seleziona Cartelle",
     howManyCartelle: "Quante Cartelle vorresti?",
     cartelle: "Cartelle",
@@ -152,12 +165,17 @@ export const translations: Translations = {
     returnToStartPage: "Torna alla pagina iniziale",
     confirmAction: "Conferma Azione",
     returnConfirmation: "Sei sicuro di voler terminare la partita corrente?",
-    unmarkConfirmation: (num: number) => `Sei sicuro di voler deselezionare il numero ${num}?`,
+    unmarkConfirmation: (num: number) =>
+      `Sei sicuro di voler deselezionare il numero ${num}?`,
     progressLost: "Tutti i progressi andranno persi.",
-    
+
     // Player Mode
-    noCartelleFound: "Nessuna cartella trovata. Torna alla pagina iniziale e seleziona alcune cartelle.",
+    noCartelleFound:
+      "Nessuna cartella trovata. Torna alla pagina iniziale e seleziona alcune cartelle.",
     stopPlaying: "Smetti di giocare",
+    scrollToNumber: "Vai al numero",
+    historyLast3: "Ultime 3",
+    goToCard: "Vai alla cartella",
   },
 };
 
