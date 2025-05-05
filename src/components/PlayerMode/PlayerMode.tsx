@@ -35,6 +35,8 @@ const PlayerMode = () => {
           </div>
         )}
       </div>
+      {/* Spacer for mobile view to avoid hiding part of the last card behind the footer */}
+      <div className="h-14 sm:hidden" />
     </div>
   );
 };

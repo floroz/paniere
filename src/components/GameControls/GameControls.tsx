@@ -1,6 +1,7 @@
 import { useGameStore } from "../../store/useGameStore";
 import { useLanguageStore } from "../../store/useLanguageStore";
 import { useTranslations } from "../../i18n/translations";
+import { trackUndoLastDraw } from "../../utils/analytics"; // Import analytics function
 import BaseButton from "../BaseButton";
 import { useConfirmation } from "../../hooks/useConfirmation";
 import BaseConfirmationDialog from "../BaseConfirmationDialog";
@@ -64,8 +65,13 @@ const GameControls = ({ onReset, onReturnToStartPage }: GameControlsProps) => {
   const hasDrawnNumbers = drawnNumbers.length > 0;
 
   // Use custom hooks for confirmation dialogs
-  const undoConfirmation = useConfirmation(undoLastDraw);
+  const undoConfirmation = useConfirmation(() => {
+    trackUndoLastDraw(); // Track the undo event
+    undoLastDraw(); // Call the original undo function
+  });
   const resetConfirmation = useConfirmation(() => {
+    // Note: Reset tracking is handled in App.tsx where resetGame is called directly
+    // No need to track here as well.
     resetGame();
     if (onReset) onReset();
   });

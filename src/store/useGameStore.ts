@@ -17,7 +17,7 @@ const EXPIRATION_TIME_MS = 48 * 60 * 60 * 1000;
 /**
  * Available game modes
  */
-type GameMode = "tabellone" | "player" | null;
+export type GameMode = "tabellone" | "player" | null;
 
 /**
  * Unified game state for both Tabellone and Player modes

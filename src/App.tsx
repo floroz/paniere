@@ -1,7 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from "react"; // Added useRef, useCallback
-import Tabellone from "./components/Tabellone"; // Re-added 'type' keyword
+import { useState, useEffect, useRef, useCallback } from "react";
+import Tabellone from "./components/Tabellone";
 import PlayerMode from "./components/PlayerMode/PlayerMode";
 import LastDrawsModal from "./components/LastDrawsModal/LastDrawsModal";
+import {
+  trackPageView,
+  trackModeTimeSpent,
+  trackResetGame,
+} from "./utils/analytics";
 import MobileFooter from "./components/MobileFooter/MobileFooter"; // Footer for Tabellone mode
 import MobilePlayerFooter from "./components/MobilePlayerFooter/MobilePlayerFooter"; // Footer for Player mode
 import TabelloneFooter from "./components/TabelloneFooter/TabelloneFooter";
@@ -9,7 +14,7 @@ import PlayerFooter from "./components/PlayerFooter/PlayerFooter";
 import StartPage from "./components/StartPage/StartPage";
 import Toast from "./components/Toast/Toast";
 import Confetti from "./components/Confetti/Confetti";
-import { useGameStore } from "./store/useGameStore";
+import { GameMode, useGameStore } from "./store/useGameStore";
 import { usePrizeStore } from "./store/usePrizeStore";
 import type { TabelloneHandle } from "./components/Tabellone/Tabellone";
 
@@ -37,6 +42,10 @@ function App() {
   const isToastVisible = usePrizeStore((state) => state.isToastVisible);
   const isConfettiActive = usePrizeStore((state) => state.isConfettiActive);
   const hideToast = usePrizeStore((state) => state.hideToast);
+
+  // Refs for analytics timing
+  const modeStartTimeRef = useRef<number | null>(null);
+  const previousModeRef = useRef<typeof gameMode>(null);
 
   /**
    * Initialize app on first load if no game mode is set
@@ -92,6 +101,12 @@ function App() {
     }
   }, [drawnNumbers, checkPrizes]);
 
+  useTrackPageView({
+    gameMode,
+    modeStartTimeRef,
+    previousModeRef,
+  });
+
   /**
    * Handle starting a game from the Start Page
    */
@@ -133,6 +148,7 @@ function App() {
    */
   const handleReset = () => {
     resetGame();
+    trackResetGame(); // Track reset event
     // Don't show the start game modal anymore - just reset the game
   };
 
@@ -238,3 +254,69 @@ function App() {
 }
 
 export default App;
+
+function useTrackPageView({
+  gameMode,
+  modeStartTimeRef,
+  previousModeRef,
+}: {
+  gameMode: string | null;
+  modeStartTimeRef: React.RefObject<number | null>;
+  previousModeRef: React.RefObject<typeof gameMode>;
+}) {
+  // Effect for Analytics: Page Views and Time Tracking
+  useEffect(() => {
+    const currentMode = gameMode; // 'tabellone', 'player', or null
+    const previousMode = previousModeRef.current;
+
+    // === Handle Mode Exit ===
+    // Check if we were previously in a trackable mode ('tabellone' or 'player')
+    // and if the mode has changed OR we are exiting the app/component (though less likely here)
+    if (
+      (previousMode === "tabellone" || previousMode === "player") &&
+      previousMode !== currentMode &&
+      modeStartTimeRef.current
+    ) {
+      const durationMs = Date.now() - modeStartTimeRef.current;
+      const durationSeconds = Math.round(durationMs / 1000);
+
+      // Map the mode we are *exiting* to the analytics type
+      const exitedAnalyticsMode: GameMode =
+        previousMode === "tabellone" ? "tabellone" : "player";
+
+      trackModeTimeSpent(exitedAnalyticsMode, durationSeconds);
+      modeStartTimeRef.current = null; // Reset timer
+    }
+
+    // === Handle Mode Enter ===
+    // Check if we are entering a trackable mode and it's different from the previous one
+    if (
+      (currentMode === "tabellone" || currentMode === "player") &&
+      currentMode !== previousMode
+    ) {
+      let virtualPath: string;
+      let pageTitle: string;
+      // Removed unused analyticsMode variable
+
+      if (currentMode === "tabellone") {
+        virtualPath = "/game-master";
+        pageTitle = "Game Master Mode";
+        // Removed unused assignment: analyticsMode = "master";
+      } else {
+        // currentMode === 'player'
+        virtualPath = "/player-mode";
+        pageTitle = "Player Mode";
+        // Removed unused assignment: analyticsMode = "player";
+      }
+
+      // Send simulated page view
+      trackPageView(virtualPath, pageTitle);
+
+      // Start timer for custom duration tracking
+      modeStartTimeRef.current = Date.now();
+    }
+
+    // Update previous mode ref for the next render cycle
+    previousModeRef.current = currentMode;
+  }, [gameMode, modeStartTimeRef, previousModeRef]);
+}
