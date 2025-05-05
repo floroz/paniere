@@ -75,26 +75,6 @@ const LanguageSelector = ({
   return (
     <div className="flex items-center space-x-3">
       <button
-        onClick={() => onChange("en")}
-        className={`
-          h-8 px-2 sm:px-3 flex items-center gap-2 border rounded
-          transition-all duration-200 overflow-hidden
-          ${
-            currentLanguage === "en"
-              ? "border-amber-500 dark:border-amber-600 ring-2 ring-amber-200 dark:ring-amber-900 scale-105"
-              : "border-gray-300 dark:border-gray-600 hover:border-amber-300 dark:hover:border-amber-700"
-          }
-        `}
-        aria-label={t.switchToEnglish}
-        aria-pressed={currentLanguage === "en"}
-        tabIndex={0}
-        onKeyDown={(e) => handleKeyDown(e, "en")}
-      >
-        <UKFlagIcon />
-        <span className="text-xs font-medium hidden sm:inline">English</span>
-      </button>
-
-      <button
         onClick={() => onChange("it")}
         className={`
           h-8 px-2 sm:px-3 flex items-center gap-2 border rounded
@@ -112,6 +92,26 @@ const LanguageSelector = ({
       >
         <ItalianFlagIcon />
         <span className="text-xs font-medium hidden sm:inline">Italiano</span>
+      </button>
+
+      <button
+        onClick={() => onChange("en")}
+        className={`
+          h-8 px-2 sm:px-3 flex items-center gap-2 border rounded
+          transition-all duration-200 overflow-hidden
+          ${
+            currentLanguage === "en"
+              ? "border-amber-500 dark:border-amber-600 ring-2 ring-amber-200 dark:ring-amber-900 scale-105"
+              : "border-gray-300 dark:border-gray-600 hover:border-amber-300 dark:hover:border-amber-700"
+          }
+        `}
+        aria-label={t.switchToEnglish}
+        aria-pressed={currentLanguage === "en"}
+        tabIndex={0}
+        onKeyDown={(e) => handleKeyDown(e, "en")}
+      >
+        <UKFlagIcon />
+        <span className="text-xs font-medium hidden sm:inline">English</span>
       </button>
     </div>
   );

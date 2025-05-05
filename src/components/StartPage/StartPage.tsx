@@ -61,7 +61,7 @@ const StartPage = ({ onStart }: StartPageProps) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-950 dark:via-gray-900 dark:to-amber-950 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-start pt-40 sm:justify-center sm:pt-4 p-4 md:p-8 bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-950 dark:via-gray-900 dark:to-amber-950 text-gray-900 dark:text-gray-100">
       {/* Language selector - placed first for better focus hierarchy */}
       <div className="absolute top-4 right-4 z-20">
         <LanguageSelector currentLanguage={language} onChange={setLanguage} />
@@ -122,7 +122,7 @@ const StartPage = ({ onStart }: StartPageProps) => {
 
         {/* Game mode selection */}
         <section className="w-full max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          <h2 className="col-span-full text-2xl font-bold mb-6 text-center bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-500 dark:to-amber-700 bg-clip-text text-transparent font-display">
+          <h2 className="col-span-full text-2xl font-bold mb-6 text-center bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-500 dark:to-amber-700 bg-clip-text text-transparent">
             {t.selectMode}
           </h2>
 

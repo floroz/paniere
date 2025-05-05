@@ -14,7 +14,7 @@ interface LanguageStateWithActions extends LanguageState {
 }
 
 const initialState: LanguageState = {
-  language: "en",
+  language: "it",
 };
 
 /**
