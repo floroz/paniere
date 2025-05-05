@@ -1,4 +1,4 @@
-import { useTranslations } from "../i18n/translations";
+import { useTranslations } from "../../i18n/translations";
 
 /**
  * Language selector component props
