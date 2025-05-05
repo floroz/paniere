@@ -251,7 +251,6 @@ const StartPage = ({ onStart }: StartPageProps) => {
           <button
             className={`
               group relative flex w-full max-w-xs items-center justify-center overflow-hidden rounded-xl
-              font-display
               py-5 text-xl font-bold text-white shadow-lg transition-all duration-300 
               hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2
               ${

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import Tabellone from "./components/Tabellone";
+import { useState, useEffect, useRef, useCallback } from "react"; // Added useRef, useCallback
+import Tabellone from "./components/Tabellone"; // Re-added 'type' keyword
 import PlayerMode from "./components/PlayerMode/PlayerMode";
 import LastDrawsModal from "./components/LastDrawsModal/LastDrawsModal";
 import MobileFooter from "./components/MobileFooter/MobileFooter";
@@ -10,26 +10,28 @@ import Toast from "./components/Toast/Toast";
 import Confetti from "./components/Confetti/Confetti";
 import { useGameStore } from "./store/useGameStore";
 import { usePrizeStore } from "./store/usePrizeStore";
+import type { TabelloneHandle } from "./components/Tabellone/Tabellone";
 
 function App() {
   const [isLastDrawsModalOpen, setIsLastDrawsModalOpen] = useState(false);
+  const tabelloneRef = useRef<TabelloneHandle>(null);
 
   // Game state - core properties needed in this component
-  const drawnNumbers = useGameStore(state => state.drawnNumbers);
-  const gameMode = useGameStore(state => state.gameMode);
-  const resetGame = useGameStore(state => state.resetGame);
-  const checkPrizes = useGameStore(state => state.checkPrizes);
-  const returnToStartPage = useGameStore(state => state.returnToStartPage);
-  
+  const drawnNumbers = useGameStore((state) => state.drawnNumbers);
+  const gameMode = useGameStore((state) => state.gameMode);
+  const resetGame = useGameStore((state) => state.resetGame);
+  const checkPrizes = useGameStore((state) => state.checkPrizes);
+  const returnToStartPage = useGameStore((state) => state.returnToStartPage);
+
   // These actions are used by the StartPage component, not directly here
   // But we need them for the handleGameStart function
-  const generateCartelle = useGameStore(state => state.generateCartelle);
-  
+  const generateCartelle = useGameStore((state) => state.generateCartelle);
+
   // Prize celebration state
-  const toastMessage = usePrizeStore(state => state.toastMessage);
-  const isToastVisible = usePrizeStore(state => state.isToastVisible);
-  const isConfettiActive = usePrizeStore(state => state.isConfettiActive);
-  const hideToast = usePrizeStore(state => state.hideToast);
+  const toastMessage = usePrizeStore((state) => state.toastMessage);
+  const isToastVisible = usePrizeStore((state) => state.isToastVisible);
+  const isConfettiActive = usePrizeStore((state) => state.isConfettiActive);
+  const hideToast = usePrizeStore((state) => state.hideToast);
 
   /**
    * Initialize app on first load if no game mode is set
@@ -47,22 +49,22 @@ function App() {
       checkPrizes(drawnNumbers);
     }
   }, [drawnNumbers, checkPrizes]);
-  
+
   /**
    * Handle starting a game from the Start Page
    */
   const handleGameStart = () => {
     // If we're in Tabellone mode, show the start game modal for language selection
-    if (gameMode === 'tabellone') {
+    if (gameMode === "tabellone") {
       // Generate standard 6 cartelle if they don't exist yet
       if (!drawnNumbers.length) {
         generateCartelle(6);
       }
-    } else if (gameMode === 'player') {
+    } else if (gameMode === "player") {
       // Player mode is ready to go - cartelle should already be generated from StartPage
     }
   };
-  
+
   /**
    * Handle returning to the start page
    */
@@ -70,15 +72,19 @@ function App() {
     returnToStartPage();
   };
 
-  /**
-   * Handle opening the last draws modal
-   */
-  const handleOpenLastDrawsModal = () => setIsLastDrawsModalOpen(true);
+  // Removed unused handleOpenLastDrawsModal
 
   /**
    * Handle closing the last draws modal
    */
   const handleCloseLastDrawsModal = () => setIsLastDrawsModalOpen(false);
+
+  /**
+   * Handle request to scroll Tabellone to a specific number (from MobileFooter)
+   */
+  const handleScrollRequest = useCallback((number: number) => {
+    tabelloneRef.current?.scrollToNumber(number);
+  }, []);
 
   /**
    * Handle resetting the game
@@ -96,7 +102,7 @@ function App() {
     if (gameMode === null) {
       return <StartPage onStart={handleGameStart} />;
     }
-    
+
     // Otherwise render the appropriate game mode
     return (
       <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-white to-amber-100 dark:from-gray-950 dark:via-gray-900 dark:to-amber-950 text-gray-900 dark:text-gray-100 overflow-hidden">
@@ -105,28 +111,37 @@ function App() {
           <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full bg-amber-200 opacity-20 dark:bg-amber-700 dark:opacity-10"></div>
           <div className="absolute top-1/4 -left-12 w-24 h-24 rounded-full bg-amber-300 opacity-10 dark:bg-amber-600 dark:opacity-5"></div>
           <div className="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-amber-100 opacity-30 dark:bg-amber-800 dark:opacity-10"></div>
-          
+
           {/* Subtle grid pattern */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTIgMmg1NnY1NkgyVjJ6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIi8+PC9nPjwvc3ZnPg==')] opacity-5 dark:opacity-[0.03]"></div>
         </div>
 
         <div className="relative container max-w-6xl h-screen grid grid-cols-1 grid-rows-[1fr_min-content] overflow-hidden p-4">
           <div className="row-start-1 row-end-2 col-span-full overflow-auto">
-            {gameMode === 'tabellone' ? <Tabellone /> : <PlayerMode />}
+            {/* Pass ref to Tabellone */}
+            {gameMode === "tabellone" ? (
+              <Tabellone ref={tabelloneRef} />
+            ) : (
+              <PlayerMode />
+            )}
           </div>
-          
-          {gameMode === 'tabellone' ? (
-            <TabelloneFooter onReset={handleReset} onReturnToStartPage={handleReturnToStartPage} />
+
+          {gameMode === "tabellone" ? (
+            <TabelloneFooter
+              onReset={handleReset}
+              onReturnToStartPage={handleReturnToStartPage}
+            />
           ) : (
             <PlayerFooter onReturnToStartPage={handleReturnToStartPage} />
           )}
         </div>
 
-        {gameMode === 'tabellone' && (
+        {gameMode === "tabellone" && (
           <MobileFooter
-            onOpenLastDraws={handleOpenLastDrawsModal}
+            // onOpenLastDraws prop removed
             onReset={handleReset}
             onReturnToStartPage={handleReturnToStartPage}
+            onScrollRequest={handleScrollRequest} // Pass down scroll handler
           />
         )}
       </div>
@@ -136,25 +151,21 @@ function App() {
   return (
     <>
       {renderContent()}
-      
-      <Toast 
+
+      <Toast
         message={toastMessage}
         isVisible={isToastVisible}
         onClose={hideToast}
         type="success"
         duration={4000}
       />
-      
-      <Confetti 
-        isActive={isConfettiActive}
-        duration={5000}
-      />
-      
+
+      <Confetti isActive={isConfettiActive} duration={5000} />
+
       <LastDrawsModal
         isOpen={isLastDrawsModalOpen}
         onClose={handleCloseLastDrawsModal}
       />
-      
     </>
   );
 }
