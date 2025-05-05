@@ -3,6 +3,7 @@ import { useGameStore } from "../../store/useGameStore";
 import { useLanguageStore } from "../../store/useLanguageStore";
 import { useTranslations } from "../../i18n/translations";
 import ConfirmationDialog from "../ConfirmationDialog";
+import ManualMarkInput from "../ManualMarkInput/ManualMarkInput";
 
 /**
  * Props for the PlayerFooter component
@@ -56,8 +57,13 @@ const PlayerFooter = ({ onReturnToStartPage }: PlayerFooterProps) => {
             />
           </div>
 
+          {/* Manual Mark Input */}
+          <div className="flex-grow flex items-center justify-center">
+            <ManualMarkInput inputWidthClass="w-24" />
+          </div>
+
           {/* Action buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {/* Undo button */}
             <button
               onClick={handleOpenUndoDialog}
