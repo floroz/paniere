@@ -117,7 +117,7 @@ const Casella = ({
 /**
  * Grid display of all 90 numbers. Exposes a method to scroll to a specific number on mobile.
  */
-const Tabellone = forwardRef<TabelloneHandle>((props, ref) => {
+const Tabellone = forwardRef<TabelloneHandle>((_, ref) => {
   // Wrap in forwardRef
   // Use the unified data model
   const drawnNumbers = useGameStore((state) => state.drawnNumbers);
@@ -323,7 +323,8 @@ const Tabellone = forwardRef<TabelloneHandle>((props, ref) => {
   }));
 
   return (
-    <div className="max-h-full w-full h-auto overflow-auto py-4">
+    // Removed max-h-full and overflow-auto to allow page scroll
+    <div className="w-full h-auto py-4">
       <div className="md:hidden">{renderMobileView()}</div>
       <div className="hidden md:block">{renderDesktopView()}</div>
     </div>
