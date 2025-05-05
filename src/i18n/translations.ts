@@ -56,10 +56,10 @@ type TranslationKeys = {
 };
 
 type Translations = {
-  [key in Language]: TranslationKeys;
+  readonly [key in Language]: TranslationKeys;
 };
 
-export const translations: Translations = {
+const translations: Translations = {
   en: {
     // Core translations
     cancel: "Cancel",

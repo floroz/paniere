@@ -6,7 +6,7 @@
 /**
  * Represents a position in the Tabellone
  */
-export type NumberPosition = {
+type NumberPosition = {
   cartellaId: number; // Which Cartella (1-6)
   row: number; // Which row (0-2)
   col: number; // Which column (0-4)
@@ -93,9 +93,6 @@ export const createNumberToPositionMap = (): Record<number, NumberPosition> => {
 
   return map;
 };
-
-// Create the number to position map once
-export const numberToPositionMap = createNumberToPositionMap();
 
 /**
  * Gets all numbers in a specific row of a Tabellone Cartella

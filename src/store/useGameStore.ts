@@ -15,20 +15,9 @@ const LOCAL_STORAGE_KEY = `tombola-game-v${STORAGE_VERSION}`; // Append version 
 const EXPIRATION_TIME_MS = 48 * 60 * 60 * 1000;
 
 /**
- * Map of prize types to their required counts
- */
-export const PRIZE_COUNTS: Record<PrizeType, number> = {
-  ambo: 2,
-  terno: 3,
-  quaterna: 4,
-  cinquina: 5,
-  tombola: 15,
-};
-
-/**
  * Available game modes
  */
-export type GameMode = "tabellone" | "player" | null;
+type GameMode = "tabellone" | "player" | null;
 
 /**
  * Unified game state for both Tabellone and Player modes
