@@ -15,7 +15,7 @@
 
 Paniere is a modern digital adaptation of the traditional Neapolitan Tombola (Tombola Napoletana) game (similar to Bingo), featuring:
 
-- **Two game modes**: Tabellone (Game Master) and Player mode
+- **Two game modes**: Game Master and Player mode
 - **Authentic gameplay**: True to traditional Neapolitan Tombola rules
 - **Responsive design**: Play on any device
 - **Multilingual support**: Available in English and Italian
@@ -23,7 +23,7 @@ Paniere is a modern digital adaptation of the traditional Neapolitan Tombola (To
 
 ## ✨ Features
 
-### Tabellone Mode (Game Master)
+### Game Master Mode
 
 - Draw random numbers from 1-90
 - Track drawn numbers on the Tabellone board
@@ -82,9 +82,9 @@ npm run build
 
 ## 🎮 How to Play
 
-### Tabellone Mode
+### Game Master Mode
 
-1. Select "Tabellone Mode" on the start screen
+1. Select "Game Master Mode" on the start screen
 2. Click "Draw" to randomly select numbers
 3. The system automatically tracks prizes
 4. Use "Undo" if needed to revert the last drawn number
@@ -103,15 +103,6 @@ npm run build
 - **Quaterna**: Four numbers in a single row (4/5 numbers)
 - **Cinquina**: All five numbers in a single row (5/5 numbers)
 - **Tombola**: All numbers on a cartella (15/15 numbers) - the grand prize!
-
-## 💻 Development
-
-### Code Structure
-
-- `src/components`: React components with folder-based organization
-- `src/store`: Zustand stores for state management
-- `src/utils`: Utility functions for game logic
-- `src/i18n`: Internationalization files
 
 ## 📄 License
 
