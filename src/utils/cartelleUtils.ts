@@ -107,7 +107,10 @@ export const getNumbersInCartellaRow = (
   const cartelle = createCartelle(); // Uses the Tabellone structure
   const cartella = cartelle.find((c) => c.id === cartellaId);
 
-  if (!cartella) return [];
+  // Return empty array if cartella not found OR rowIndex is out of bounds
+  if (!cartella || rowIndex < 0 || rowIndex >= cartella.numbers.length) {
+    return [];
+  }
 
   return cartella.numbers[rowIndex];
 };
