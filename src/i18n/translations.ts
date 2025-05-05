@@ -53,6 +53,7 @@ type TranslationKeys = {
   scrollToNumber: string;
   historyLast3: string;
   goToCard: string;
+  markNumber: string;
 };
 
 type Translations = {
@@ -117,6 +118,7 @@ const translations: Translations = {
     scrollToNumber: "Scroll to number",
     historyLast3: "Last 3",
     goToCard: "Go to card",
+    markNumber: "Mark",
   },
   it: {
     // Core translations
@@ -176,6 +178,7 @@ const translations: Translations = {
     scrollToNumber: "Vai al numero",
     historyLast3: "Ultime 3",
     goToCard: "Vai alla cartella",
+    markNumber: "Segna",
   },
 };
 

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useCallback, ChangeEvent, KeyboardEvent } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import { useLanguageStore } from "../../store/useLanguageStore";
 import { useTranslations } from "../../i18n/translations";
 import ConfirmationDialog from "../ConfirmationDialog";
 import BaseIconButton from "../BaseIconButton";
+import BaseButton from "../BaseButton";
 import { FaUndoAlt, FaHome } from "react-icons/fa";
 import LastDrawsModal from "../LastDrawsModal";
 
@@ -24,12 +25,14 @@ const MobilePlayerFooter = ({
   const language = useLanguageStore((state) => state.language);
   const t = useTranslations(language);
   const undoLastNumber = useGameStore((state) => state.undoLastNumber);
+  const markNumber = useGameStore((state) => state.markNumber);
   const drawnNumbers = useGameStore((state) => state.drawnNumbers); // Keep for disabling Undo button
 
   // State for confirmation dialogs and Paniere modal
   const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
   const [isUndoDialogOpen, setIsUndoDialogOpen] = useState(false);
   const [isPaniereModalOpen, setIsPaniereModalOpen] = useState(false);
+  const [manualNumberInput, setManualNumberInput] = useState("");
 
   const handleOpenReturnDialog = () => setIsReturnDialogOpen(true);
   const handleCloseReturnDialog = () => setIsReturnDialogOpen(false);
@@ -49,10 +52,33 @@ const MobilePlayerFooter = ({
     handleCloseUndoDialog();
   };
 
+  const handleManualMark = useCallback(() => {
+    const num = parseInt(manualNumberInput, 10);
+    if (!isNaN(num) && num >= 1 && num <= 90) {
+      markNumber(num);
+      setManualNumberInput(""); // Clear input after marking
+      // Optional: Add toast notification here if needed
+    } else {
+      // Optional: Add error toast notification here if needed
+      console.warn(
+        "Invalid number entered for manual marking:",
+        manualNumberInput,
+      );
+    }
+  }, [manualNumberInput, markNumber]);
+
+  // Handle Enter key in input field
+  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleManualMark();
+    }
+  };
+
   return (
     <>
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-orange-100 dark:bg-orange-900 backdrop-blur-sm border-t border-orange-200 dark:border-orange-800 shadow-lg px-3 py-2 z-40 flex items-center justify-between gap-2">
-        <div className="pr-3 flex-shrink-0">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-orange-100 dark:bg-orange-900 backdrop-blur-sm border-t border-orange-200 dark:border-orange-800 shadow-lg px-3 py-2 z-40 flex items-center justify-between gap-3">
+        {/* Paniere Image (Left) */}
+        <div className="flex-shrink-0">
           <img
             src="/images/paniere.png"
             alt=""
@@ -61,8 +87,38 @@ const MobilePlayerFooter = ({
           />
         </div>
 
-        {/* Group Undo and Home buttons on the right */}
-        <div className="flex items-center gap-2">
+        {/* Manual Mark Input & Button (Center) */}
+        <div className="flex-grow flex items-center justify-center gap-2">
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={2}
+            value={manualNumberInput}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setManualNumberInput(e.target.value)
+            }
+            onKeyDown={handleInputKeyDown}
+            placeholder={t.drawn}
+            aria-label="Enter number to mark"
+            className="w-24 h-11 px-2 py-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-center text-lg font-medium focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-600 dark:focus:border-red-600 transition duration-200"
+          />
+          <BaseButton
+            onClick={handleManualMark}
+            disabled={
+              !manualNumberInput ||
+              parseInt(manualNumberInput, 10) < 1 ||
+              parseInt(manualNumberInput, 10) > 90
+            }
+            size="sm" // Use sm size to better match input height
+            className="h-11 w-18 px-3 bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white rounded-lg shadow-sm active:scale-95 transition-all duration-200"
+          >
+            {t.markNumber}
+          </BaseButton>
+        </div>
+
+        {/* Action Buttons (Right) */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Undo Button */}
           <BaseIconButton
             onClick={handleOpenUndoDialog}
