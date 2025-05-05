@@ -29,9 +29,9 @@ This document details enhancements aimed at improving user understanding and onb
 *   **Technology:** Use the `react-joyride` library.
 *   **Trigger:** The tour for a specific mode should automatically start the very first time a user enters that mode after the feature is implemented.
 *   **Persistence:** Store completion status in `localStorage` to prevent the tour from showing again on subsequent visits to that mode.
-    *   **Keys:**
-        *   `paniere-tour-completed-tabellone: boolean`
-        *   `paniere-tour-completed-player: boolean`
+    *   **Keys (Versioned):** Use a version suffix to allow for future tour updates without conflicting with older completion flags. Example:
+        *   `paniere-tour-completed-tabellone_v1: boolean`
+        *   `paniere-tour-completed-player_v1: boolean`
 *   **User Controls:** Provide standard `react-joyride` controls:
     *   `Next`: Progress to the next step.
     *   `Back`: Return to the previous step.
@@ -72,6 +72,6 @@ This document details enhancements aimed at improving user understanding and onb
 
 *   Install `react-joyride`: `npm install react-joyride` or `yarn add react-joyride`.
 *   Create a wrapper component (e.g., `AppTour`) to manage `react-joyride` state (steps, run, stepIndex) and integrate it into `App.tsx` or mode-specific parent components.
-*   Use `useEffect` hooks within the mode components (`TabelloneMode`, `PlayerMode`) to check the `localStorage` flag and trigger the tour (`run: true`) if not completed.
+*   Use `useEffect` hooks within the mode components (`TabelloneMode`, `PlayerMode`) to check the versioned `localStorage` flag (e.g., `paniere-tour-completed-tabellone_v1`) and trigger the tour (`run: true`) if not completed.
 *   Define tour steps as an array of objects, specifying `target` (CSS selector), `content`, and potentially `placement`.
-*   Implement the `callback` function for `react-joyride` to handle events like tour completion (`status === 'finished'` or `status === 'skipped'`) and update the corresponding `localStorage` flag.
+*   Implement the `callback` function for `react-joyride` to handle events like tour completion (`status === 'finished'` or `status === 'skipped'`) and update the corresponding versioned `localStorage` flag.
