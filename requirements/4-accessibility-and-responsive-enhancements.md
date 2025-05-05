@@ -7,6 +7,7 @@ This specification outlines improvements to the Paniere application focusing on 
 ## 2. Keyboard Navigation Pattern
 
 ### Objective
+
 Implement a comprehensive keyboard navigation system that allows users to efficiently navigate and interact with cartelle using only keyboard controls.
 
 ### Implementation Details
@@ -56,6 +57,7 @@ Implement a comprehensive keyboard navigation system that allows users to effici
 ### 3.1 Cartelle Layout Optimization
 
 #### Mobile (< 640px)
+
 - Single column layout with vertically stacked cartelle
 - Larger touch targets for numbers (min 44×44px)
 - Full-width cartelle with optimized spacing
@@ -63,12 +65,14 @@ Implement a comprehensive keyboard navigation system that allows users to effici
 - Swipe gestures for navigating between cartelle
 
 #### Tablet (640px - 1024px)
+
 - Two cartelle per row in a grid layout
 - Medium-sized number cells
 - Compact but readable header
 - Optimized spacing between elements
 
 #### Desktop (> 1024px)
+
 - Up to three cartelle per row
 - Optional side panel for game information
 - Larger number display with subtle animations
@@ -112,38 +116,52 @@ Implement a comprehensive keyboard navigation system that allows users to effici
 
 ```tsx
 // CartellaNumerata component with keyboard navigation
-const CartellaNumerata = ({ cartella, cartellaId, markedNumbers, onMarkNumber }) => {
+const CartellaNumerata = ({
+  cartella,
+  cartellaId,
+  markedNumbers,
+  onMarkNumber,
+}) => {
   // Track focused cell position
   const [focusPosition, setFocusPosition] = useState({ row: 0, col: 0 });
-  
+
   // Find next valid cell with a number (skip empty cells)
   const findNextValidCell = (row, col, direction) => {
     // Implementation to find next cell with number based on direction
     // Returns { row, col } of next valid cell
   };
-  
+
   // Handle keyboard navigation
   const handleKeyDown = (e) => {
     switch (e.key) {
-      case 'ArrowRight':
-        setFocusPosition(findNextValidCell(focusPosition.row, focusPosition.col, 'right'));
+      case "ArrowRight":
+        setFocusPosition(
+          findNextValidCell(focusPosition.row, focusPosition.col, "right"),
+        );
         e.preventDefault();
         break;
-      case 'ArrowLeft':
-        setFocusPosition(findNextValidCell(focusPosition.row, focusPosition.col, 'left'));
+      case "ArrowLeft":
+        setFocusPosition(
+          findNextValidCell(focusPosition.row, focusPosition.col, "left"),
+        );
         e.preventDefault();
         break;
-      case 'ArrowDown':
-        setFocusPosition(findNextValidCell(focusPosition.row, focusPosition.col, 'down'));
+      case "ArrowDown":
+        setFocusPosition(
+          findNextValidCell(focusPosition.row, focusPosition.col, "down"),
+        );
         e.preventDefault();
         break;
-      case 'ArrowUp':
-        setFocusPosition(findNextValidCell(focusPosition.row, focusPosition.col, 'up'));
+      case "ArrowUp":
+        setFocusPosition(
+          findNextValidCell(focusPosition.row, focusPosition.col, "up"),
+        );
         e.preventDefault();
         break;
-      case 'Enter':
-      case ' ': // Space key
-        const currentNumber = cartella.numbers[focusPosition.row][focusPosition.col];
+      case "Enter":
+      case " ": // Space key
+        const currentNumber =
+          cartella.numbers[focusPosition.row][focusPosition.col];
         if (currentNumber > 0) {
           onMarkNumber(currentNumber);
           e.preventDefault();
@@ -151,10 +169,10 @@ const CartellaNumerata = ({ cartella, cartellaId, markedNumbers, onMarkNumber })
         break;
     }
   };
-  
+
   return (
-    <div 
-      className="cartella-container" 
+    <div
+      className="cartella-container"
       tabIndex={0}
       onKeyDown={handleKeyDown}
       aria-label={`Cartella ${cartellaId}`}
@@ -164,9 +182,10 @@ const CartellaNumerata = ({ cartella, cartellaId, markedNumbers, onMarkNumber })
         <div key={`row-${rowIdx}`} className="grid grid-cols-9 gap-1">
           {Array.from({ length: 9 }, (_, colIdx) => {
             const number = cartella.numbers[rowIdx][colIdx];
-            const isFocused = focusPosition.row === rowIdx && focusPosition.col === colIdx;
+            const isFocused =
+              focusPosition.row === rowIdx && focusPosition.col === colIdx;
             const isMarked = markedNumbers.includes(number);
-            
+
             return (
               <div
                 key={`cell-${rowIdx}-${colIdx}`}
@@ -174,13 +193,17 @@ const CartellaNumerata = ({ cartella, cartellaId, markedNumbers, onMarkNumber })
                   relative w-7 h-7 sm:w-9 sm:h-9 
                   overflow-hidden
                   rounded-md
-                  ${number > 0 ? 'shadow-sm' : ''}
-                  ${isMarked ? 'bg-amber-200 dark:bg-amber-700' : 'bg-white dark:bg-gray-800'}
-                  ${isFocused ? 'ring-2 ring-amber-500 dark:ring-amber-400' : ''}
+                  ${number > 0 ? "shadow-sm" : ""}
+                  ${isMarked ? "bg-amber-200 dark:bg-amber-700" : "bg-white dark:bg-gray-800"}
+                  ${isFocused ? "ring-2 ring-amber-500 dark:ring-amber-400" : ""}
                   flex items-center justify-center
                 `}
                 aria-pressed={isMarked}
-                aria-label={number > 0 ? `Number ${number}${isMarked ? ', marked' : ''}` : 'Empty cell'}
+                aria-label={
+                  number > 0
+                    ? `Number ${number}${isMarked ? ", marked" : ""}`
+                    : "Empty cell"
+                }
               >
                 {number !== 0 && <span>{number}</span>}
               </div>
@@ -199,7 +222,8 @@ const CartellaNumerata = ({ cartella, cartellaId, markedNumbers, onMarkNumber })
 // Responsive cartelle container
 const CartelleGrid = ({ cartelle, markedNumbers, onMarkNumber }) => {
   return (
-    <div className="
+    <div
+      className="
       grid 
       grid-cols-1 
       sm:grid-cols-2 
@@ -208,7 +232,8 @@ const CartelleGrid = ({ cartelle, markedNumbers, onMarkNumber }) => {
       w-full 
       max-w-6xl 
       mx-auto
-    ">
+    "
+    >
       {cartelle.map((cartella, index) => (
         <CartellaNumerata
           key={`cartella-${index}`}
@@ -228,18 +253,21 @@ const CartelleGrid = ({ cartelle, markedNumbers, onMarkNumber }) => {
 ### 5.1 WCAG 2.1 AA Compliance Checklist
 
 - **Perceivable**
+
   - Text alternatives for non-text content
   - Captions and alternatives for multimedia
   - Content can be presented in different ways
   - Make it easier for users to see and hear content
 
 - **Operable**
+
   - Functionality available from keyboard
   - Users have enough time to read and use content
   - Content does not cause seizures or physical reactions
   - Users can navigate, find content, and determine where they are
 
 - **Understandable**
+
   - Text is readable and understandable
   - Content appears and operates in predictable ways
   - Users are helped to avoid and correct mistakes
@@ -257,18 +285,21 @@ const CartelleGrid = ({ cartelle, markedNumbers, onMarkNumber }) => {
 ## 6. Implementation Phases
 
 ### Phase 1: Keyboard Navigation
+
 1. Implement focus management for cartelle
 2. Add arrow key navigation within cartelle
 3. Implement Enter/Space for selection
 4. Add keyboard shortcuts and help
 
 ### Phase 2: Responsive Design
+
 1. Optimize layouts for different screen sizes
 2. Implement adaptive typography
 3. Enhance touch controls for mobile
 4. Optimize performance for lower-end devices
 
 ### Phase 3: Accessibility Compliance
+
 1. Audit current implementation against WCAG 2.1 AA
 2. Fix identified issues
 3. Test with assistive technologies

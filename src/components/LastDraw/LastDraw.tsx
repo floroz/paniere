@@ -1,4 +1,4 @@
-import LastDrawDisplay from '../LastDrawDisplay';
+import LastDrawDisplay from "../LastDrawDisplay";
 
 /**
  * Displays the last drawn number and previous draws

@@ -77,4 +77,4 @@ This mode is for players:
 
 ---
 
-*Paniere is a digital adaptation of the traditional Tombola game, maintaining all the fun and excitement of the original format while adding helpful features like automatic prize detection and multiple game modes.*
+_Paniere is a digital adaptation of the traditional Tombola game, maintaining all the fun and excitement of the original format while adding helpful features like automatic prize detection and multiple game modes._

@@ -13,21 +13,21 @@ jobs:
     steps:
       - name: checkout code
         uses: actions/checkout@v4
-      
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '22.12'
-          cache: 'npm'
-      
+          node-version: "22.12"
+          cache: "npm"
+
       - name: install dependencies
         run: npm ci
-      
+
       - name: check formatting
         run: npm run format:check
-      
+
       - name: run linting
         run: npm run lint
-      
+
       - name: check types and build project
         run: npm run build

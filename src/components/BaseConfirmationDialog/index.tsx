@@ -1,1 +1,1 @@
-export { default } from './BaseConfirmationDialog';
+export { default } from "./BaseConfirmationDialog";

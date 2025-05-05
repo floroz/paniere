@@ -11,7 +11,6 @@
 
 - Visit [Paniere](https://paniere.netlify.app) in your browser
 
-
 ## 📖 Overview
 
 Paniere is a modern digital adaptation of the traditional Neapolitan Tombola (Tombola Napoletana) game (similar to Bingo), featuring:
@@ -25,6 +24,7 @@ Paniere is a modern digital adaptation of the traditional Neapolitan Tombola (To
 ## ✨ Features
 
 ### Tabellone Mode (Game Master)
+
 - Draw random numbers from 1-90
 - Track drawn numbers on the Tabellone board
 - Automatically detect and celebrate winning patterns
@@ -32,6 +32,7 @@ Paniere is a modern digital adaptation of the traditional Neapolitan Tombola (To
 - View history of previously drawn numbers
 
 ### Player Mode
+
 - Play with 1-10 randomly generated cartelle
 - Manually mark numbers as they're called
 - Authentic cartelle layout with proper number distribution
@@ -82,12 +83,14 @@ npm run build
 ## 🎮 How to Play
 
 ### Tabellone Mode
+
 1. Select "Tabellone Mode" on the start screen
 2. Click "Draw" to randomly select numbers
 3. The system automatically tracks prizes
 4. Use "Undo" if needed to revert the last drawn number
 
 ### Player Mode
+
 1. Select "Player Mode" on the start screen
 2. Choose how many cartelle you want to play with (1-10)
 3. As numbers are called out, mark them on your cartelle
@@ -104,6 +107,7 @@ npm run build
 ## 💻 Development
 
 ### Code Structure
+
 - `src/components`: React components with folder-based organization
 - `src/store`: Zustand stores for state management
 - `src/utils`: Utility functions for game logic

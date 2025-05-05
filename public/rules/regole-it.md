@@ -77,4 +77,4 @@ Questa modalità è per i giocatori:
 
 ---
 
-*Paniere è un adattamento digitale del tradizionale gioco della Tombola, mantenendo tutto il divertimento e l'entusiasmo del formato originale, aggiungendo funzionalità utili come il rilevamento automatico dei premi e diverse modalità di gioco.*
+_Paniere è un adattamento digitale del tradizionale gioco della Tombola, mantenendo tutto il divertimento e l'entusiasmo del formato originale, aggiungendo funzionalità utili come il rilevamento automatico dei premi e diverse modalità di gioco._

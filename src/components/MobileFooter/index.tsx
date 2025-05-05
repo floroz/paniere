@@ -1,1 +1,1 @@
-export { default } from './MobileFooter';
+export { default } from "./MobileFooter";

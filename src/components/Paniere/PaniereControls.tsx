@@ -1,4 +1,4 @@
-import GameControls from '../GameControls';
+import GameControls from "../GameControls";
 
 /**
  * Main game control panel that provides buttons to draw numbers,
@@ -13,8 +13,13 @@ interface PaniereControlsProps {
  * Redesigned game controls component optimized for visual appeal and space efficiency
  * Now uses the extracted GameControls component for better code organization
  */
-const PaniereControls = ({ onReset, onReturnToStartPage }: PaniereControlsProps) => {
-  return <GameControls onReset={onReset} onReturnToStartPage={onReturnToStartPage} />;
+const PaniereControls = ({
+  onReset,
+  onReturnToStartPage,
+}: PaniereControlsProps) => {
+  return (
+    <GameControls onReset={onReset} onReturnToStartPage={onReturnToStartPage} />
+  );
 };
 
 export default PaniereControls;

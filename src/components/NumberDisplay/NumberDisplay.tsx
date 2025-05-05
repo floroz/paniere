@@ -1,6 +1,6 @@
-import { useLanguageStore } from '../../store/useLanguageStore';
-import { useTranslations } from '../../i18n/translations';
-import { neapolitanNames } from '../../data/neapolitanNames';
+import { useLanguageStore } from "../../store/useLanguageStore";
+import { useTranslations } from "../../i18n/translations";
+import { neapolitanNames } from "../../data/neapolitanNames";
 
 /**
  * NumberDisplay component props
@@ -17,32 +17,37 @@ interface NumberDisplayProps {
 /**
  * Component to display a drawn number with its Neapolitan name
  */
-const NumberDisplay = ({ 
-  number, 
+const NumberDisplay = ({
+  number,
   isCurrent = false,
-  animationClass = ''
+  animationClass = "",
 }: NumberDisplayProps) => {
-  const language = useLanguageStore(state => state.language);
+  const language = useLanguageStore((state) => state.language);
   const t = useTranslations(language);
-  
+
   if (!number) return null;
-  
+
   return (
-    <div 
-      className={`flex ${isCurrent ? 'flex-col items-center justify-center' : 'items-center justify-between gap-2'} ${animationClass}`}
+    <div
+      className={`flex ${isCurrent ? "flex-col items-center justify-center" : "items-center justify-between gap-2"} ${animationClass}`}
       aria-label={`${t.lastDrawnNumber}: ${number}, ${neapolitanNames[number]}`}
     >
-      <span 
-        className={`${isCurrent 
-          ? 'text-4xl md:text-5xl font-bold text-amber-800 dark:text-amber-200 leading-none' 
-          : 'text-base font-bold text-amber-700 dark:text-amber-300 min-w-[24px] text-right'}`}
+      <span
+        className={`${
+          isCurrent
+            ? "text-4xl md:text-5xl font-bold text-amber-800 dark:text-amber-200 leading-none"
+            : "text-base font-bold text-amber-700 dark:text-amber-300 min-w-[24px] text-right"
+        }`}
       >
         {number}
       </span>
-      
-      <span className={`${isCurrent 
-        ? 'mt-1 text-sm text-amber-700 dark:text-amber-300 text-center w-full max-w-[150px] line-clamp-1' 
-        : 'text-xs text-amber-600 dark:text-amber-400 flex-1 truncate'}`}
+
+      <span
+        className={`${
+          isCurrent
+            ? "mt-1 text-sm text-amber-700 dark:text-amber-300 text-center w-full max-w-[150px] line-clamp-1"
+            : "text-xs text-amber-600 dark:text-amber-400 flex-1 truncate"
+        }`}
       >
         {neapolitanNames[number]}
       </span>

@@ -1,5 +1,5 @@
-import BaseDialog from '../BaseDialog';
-import BaseButton from '../BaseButton';
+import BaseDialog from "../BaseDialog";
+import BaseButton from "../BaseButton";
 
 /**
  * ConfirmationDialog component props
@@ -20,7 +20,7 @@ interface BaseConfirmationDialogProps {
   /** Cancel button text */
   cancelText?: string;
   /** Confirm button variant */
-  confirmVariant?: 'primary' | 'danger';
+  confirmVariant?: "primary" | "danger";
 }
 
 /**
@@ -32,26 +32,22 @@ const BaseConfirmationDialog = ({
   onConfirm,
   title,
   message,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
-  confirmVariant = 'primary'
+  confirmText = "Confirm",
+  cancelText = "Cancel",
+  confirmVariant = "primary",
 }: BaseConfirmationDialogProps) => {
   const handleConfirm = () => {
     onConfirm();
     onClose();
   };
-  
+
   const footer = (
     <div className="flex justify-end gap-3">
-      <BaseButton 
-        variant="ghost" 
-        onClick={onClose}
-        aria-label={cancelText}
-      >
+      <BaseButton variant="ghost" onClick={onClose} aria-label={cancelText}>
         {cancelText}
       </BaseButton>
-      <BaseButton 
-        variant={confirmVariant} 
+      <BaseButton
+        variant={confirmVariant}
         onClick={handleConfirm}
         aria-label={confirmText}
       >
@@ -59,17 +55,10 @@ const BaseConfirmationDialog = ({
       </BaseButton>
     </div>
   );
-  
+
   return (
-    <BaseDialog
-      isOpen={isOpen}
-      onClose={onClose}
-      title={title}
-      footer={footer}
-    >
-      <p className="text-gray-700 dark:text-gray-300">
-        {message}
-      </p>
+    <BaseDialog isOpen={isOpen} onClose={onClose} title={title} footer={footer}>
+      <p className="text-gray-700 dark:text-gray-300">{message}</p>
     </BaseDialog>
   );
 };

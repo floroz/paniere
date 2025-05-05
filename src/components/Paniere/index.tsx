@@ -1,1 +1,1 @@
-export { default } from './Paniere';
+export { default } from "./Paniere";

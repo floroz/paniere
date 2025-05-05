@@ -31,12 +31,14 @@ This specification outlines the expansion of the Paniere application to include 
 ## 3. Key New Features
 
 1. **Start Page**
+
    - Replaces modal for a more comprehensive introduction
    - Clear presentation of both game modes
    - Immediate language selection
    - Visual previews of each mode
 
 2. **Player Mode**
+
    - Selection of 1-10 cartelle
    - Random cartelle generated on first load (following Neapolitan Tombola constraints)
    - Same cartelle persisted until game reset or tombola win
@@ -46,6 +48,7 @@ This specification outlines the expansion of the Paniere application to include 
    - Visual celebration for wins (confetti, toast notifications)
 
 3. **Game Instructions**
+
    - Comprehensive instructions for both Player Mode and Tabellone Mode
    - Interactive tutorials showing how to play each mode
    - Instructions displayed on the Start Page before game begins
@@ -56,13 +59,14 @@ This specification outlines the expansion of the Paniere application to include 
    - Instructions available in all supported languages
 
 4. **Enhanced Session Management**
+
    - Unified state management approach across both modes
    - Persistent game state with shared prize detection logic
    - Simplified data model with shared core state
    - Options to reset current game or return to Start Page
    - Confirmation for destructive actions
 
-4. **Improved Navigation**
+5. **Improved Navigation**
    - Compact header with mode indicator to maximize game space
    - Quick access to settings
    - Help/info button for contextual guidance
@@ -136,6 +140,7 @@ This specification outlines the expansion of the Paniere application to include 
 ### Game Mode Headers
 
 **Tabellone Mode Header**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ PANIERE - TABELLONE                                ⚙️ ⓘ │
@@ -143,6 +148,7 @@ This specification outlines the expansion of the Paniere application to include 
 ```
 
 **Player Mode Header**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ PANIERE - CARTELLE (3)                            ⚙️ ⓘ │
@@ -257,25 +263,26 @@ This specification outlines the expansion of the Paniere application to include 
 // Simplified Game State
 interface GameState {
   // Common properties
-  language: 'en' | 'it';
-  theme: 'light' | 'dark';
-  gameMode: 'tabellone' | 'player' | null; // null when on Start Page
-        // Shared game state (for both modes)
+  language: "en" | "it";
+  theme: "light" | "dark";
+  gameMode: "tabellone" | "player" | null; // null when on Start Page
+  // Shared game state (for both modes)
   cartelle: CartellaData[]; // Includes both tabellone cartelle and player cartelle
-  drawnNumbers: number[];   // In tabellone mode: numbers drawn; in player mode: marked numbers
+  drawnNumbers: number[]; // In tabellone mode: numbers drawn; in player mode: marked numbers
   prizes: Record<PrizeType, boolean>; // Shared prize tracking for both modes
-  lastWinState?: { // State to track the last prize win for proper undo functionality
+  lastWinState?: {
+    // State to track the last prize win for proper undo functionality
     prizes: Record<PrizeType, boolean>;
     winningSequences: WinningSequence[];
-  }
+  };
 }
 
 // Simplified Local Storage Structure
 interface StoredGameData {
-  gameMode: 'tabellone' | 'player';
+  gameMode: "tabellone" | "player";
   lastUpdated: number; // timestamp
-  language: 'en' | 'it';
-  theme: 'light' | 'dark';
+  language: "en" | "it";
+  theme: "light" | "dark";
   cartelle: CartellaData[];
   drawnNumbers: number[];
   prizes: Record<PrizeType, boolean>;
@@ -311,15 +318,15 @@ interface StoredGameData {
 // Add to game store
 interface GameStateWithActions extends GameState {
   // Mode management actions
-  setGameMode: (mode: 'tabellone' | 'player') => void;
-  
+  setGameMode: (mode: "tabellone" | "player") => void;
+
   // Shared actions (work in both modes with different UIs)
-  generateCartelle: (count: number) => void;  // Shared actions (work in both modes with different UIs)
-  toggleNumber: (number: number) => void;   // Draw in tabellone mode, mark in player mode
-  unmarkNumber: (number: number) => void;   // Unmark a number in player mode (with confirmation)
-  undoLastNumber: () => void;               // Undo last action in either mode
-  checkPrizes: () => void;                   // Same prize detection logic for both modes
-  
+  generateCartelle: (count: number) => void; // Shared actions (work in both modes with different UIs)
+  toggleNumber: (number: number) => void; // Draw in tabellone mode, mark in player mode
+  unmarkNumber: (number: number) => void; // Unmark a number in player mode (with confirmation)
+  undoLastNumber: () => void; // Undo last action in either mode
+  checkPrizes: () => void; // Same prize detection logic for both modes
+
   // Session management actions
   resetCurrentGame: () => void;
   returnToStartPage: () => void;
@@ -338,9 +345,9 @@ const StartPage = () => {
   const [cartelleCount, setCartelleCount] = useState(1);
   const { language, setLanguage } = useLanguageStore();
   const { setGameMode, setCartelleCount, generateCartelle } = useGameStore();
-  
+
   // Handlers for mode selection, cartelle counting, etc.
-  
+
   return (
     // UI as shown in designs
   );
@@ -357,14 +364,14 @@ interface CartellaNumerataProps {
   onMarkNumber: (number: number) => void;
 }
 
-const CartellaNumerata = ({ 
-  cartellaData, 
+const CartellaNumerata = ({
+  cartellaData,
   cartellaId,
   markedNumbers,
-  onMarkNumber 
+  onMarkNumber
 }: CartellaNumerataProps) => {
   // Logic for rendering and interaction
-  
+
   return (
     <div className="cartella-container">
       <div className="cartella-header">CARTELLA {cartellaId}</div>
@@ -373,9 +380,9 @@ const CartellaNumerata = ({
           <div key={`row-${rowIndex}`} className="cartella-row">
             {row.map((number, colIndex) => {
               const isMarked = markedNumbers.includes(number);
-              
+
               return (
-                <div 
+                <div
                   key={`cell-${rowIndex}-${colIndex}`}
                   className={`cartella-cell ${isMarked ? 'marked' : ''}`}
                   onClick={() => onMarkNumber(number)}
@@ -407,20 +414,20 @@ const saveGameState = (state: GameState) => {
     theme: state.theme,
     cartelle: state.cartelle,
     drawnNumbers: state.drawnNumbers,
-    prizes: state.prizes
+    prizes: state.prizes,
   };
-  
+
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storedData));
 };
 
 const loadGameState = (): StoredGameData | null => {
   const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (!savedData) return null;
-  
+
   try {
     return JSON.parse(savedData) as StoredGameData;
   } catch (e) {
-    console.error('Failed to parse saved game data:', e);
+    console.error("Failed to parse saved game data:", e);
     return null;
   }
 };
@@ -433,16 +440,19 @@ const clearGameState = () => {
 ## 7. Responsive Design Considerations
 
 ### Mobile (< 640px)
+
 - Start Page: Mode cards stack vertically
 - Player Mode: Single column of cartelle with scrolling
 - Settings: Full screen overlay
 
 ### Tablet (640px - 1024px)
+
 - Start Page: Mode cards side by side
 - Player Mode: 2 cartelle per row
 - Settings: Modal dialog
 
 ### Desktop (> 1024px)
+
 - Start Page: Mode cards side by side with larger visuals
 - Player Mode: Up to 3 cartelle per row
 - Settings: Modal dialog
@@ -463,7 +473,7 @@ Extend current translations to include new UI elements:
 const translations = {
   en: {
     // Existing translations
-    
+
     // New translations
     startPage: "Welcome to Paniere",
     tabelloneMode: "Tabellone Mode",
@@ -483,16 +493,17 @@ const translations = {
     unmarkConfirmation: "Are you sure you want to unmark number {number}?",
     progressLost: "All progress will be lost.",
     confirm: "Confirm",
-    cancel: "Cancel"
+    cancel: "Cancel",
     // ... more translations
   },
   it: {
     // Italian equivalents
-  }
+  },
 };
 ```
 
 ## 10. Implementation Phases
+
 # Paniere App - Feature Expansion Specification
 
 ## 1. Overview
@@ -526,12 +537,14 @@ This specification outlines the expansion of the Paniere application to include 
 ## 3. Key New Features
 
 1. **Start Page**
+
    - Replaces modal for a more comprehensive introduction
    - Clear presentation of both game modes
    - Immediate language selection
    - Visual previews of each mode
 
 2. **Player Mode**
+
    - Selection of 1-10 cartelle
    - Random cartelle generated on first load (following Neapolitan Tombola constraints)
    - Same cartelle persisted until game reset or tombola win
@@ -541,6 +554,7 @@ This specification outlines the expansion of the Paniere application to include 
    - Visual celebration for wins (confetti, toast notifications)
 
 3. **Game Instructions**
+
    - Comprehensive instructions for both Player Mode and Tabellone Mode
    - Interactive tutorials showing how to play each mode
    - Instructions displayed on the Start Page before game begins
@@ -551,13 +565,14 @@ This specification outlines the expansion of the Paniere application to include 
    - Instructions available in all supported languages
 
 4. **Enhanced Session Management**
+
    - Unified state management approach across both modes
    - Persistent game state with shared prize detection logic
    - Simplified data model with shared core state
    - Options to reset current game or return to Start Page
    - Confirmation for destructive actions
 
-4. **Improved Navigation**
+5. **Improved Navigation**
    - Compact header with mode indicator to maximize game space
    - Quick access to settings
    - Help/info button for contextual guidance
@@ -631,6 +646,7 @@ This specification outlines the expansion of the Paniere application to include 
 ### Game Mode Headers
 
 **Tabellone Mode Header**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ PANIERE - TABELLONE                                ⚙️ ⓘ │
@@ -638,6 +654,7 @@ This specification outlines the expansion of the Paniere application to include 
 ```
 
 **Player Mode Header**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ PANIERE - CARTELLE (3)                            ⚙️ ⓘ │
@@ -752,25 +769,26 @@ This specification outlines the expansion of the Paniere application to include 
 // Simplified Game State
 interface GameState {
   // Common properties
-  language: 'en' | 'it';
-  theme: 'light' | 'dark';
-  gameMode: 'tabellone' | 'player' | null; // null when on Start Page
-        // Shared game state (for both modes)
+  language: "en" | "it";
+  theme: "light" | "dark";
+  gameMode: "tabellone" | "player" | null; // null when on Start Page
+  // Shared game state (for both modes)
   cartelle: CartellaData[]; // Includes both tabellone cartelle and player cartelle
-  drawnNumbers: number[];   // In tabellone mode: numbers drawn; in player mode: marked numbers
+  drawnNumbers: number[]; // In tabellone mode: numbers drawn; in player mode: marked numbers
   prizes: Record<PrizeType, boolean>; // Shared prize tracking for both modes
-  lastWinState?: { // State to track the last prize win for proper undo functionality
+  lastWinState?: {
+    // State to track the last prize win for proper undo functionality
     prizes: Record<PrizeType, boolean>;
     winningSequences: WinningSequence[];
-  }
+  };
 }
 
 // Simplified Local Storage Structure
 interface StoredGameData {
-  gameMode: 'tabellone' | 'player';
+  gameMode: "tabellone" | "player";
   lastUpdated: number; // timestamp
-  language: 'en' | 'it';
-  theme: 'light' | 'dark';
+  language: "en" | "it";
+  theme: "light" | "dark";
   cartelle: CartellaData[];
   drawnNumbers: number[];
   prizes: Record<PrizeType, boolean>;
@@ -806,15 +824,15 @@ interface StoredGameData {
 // Add to game store
 interface GameStateWithActions extends GameState {
   // Mode management actions
-  setGameMode: (mode: 'tabellone' | 'player') => void;
-  
+  setGameMode: (mode: "tabellone" | "player") => void;
+
   // Shared actions (work in both modes with different UIs)
-  generateCartelle: (count: number) => void;  // Shared actions (work in both modes with different UIs)
-  toggleNumber: (number: number) => void;   // Draw in tabellone mode, mark in player mode
-  unmarkNumber: (number: number) => void;   // Unmark a number in player mode (with confirmation)
-  undoLastNumber: () => void;               // Undo last action in either mode
-  checkPrizes: () => void;                   // Same prize detection logic for both modes
-  
+  generateCartelle: (count: number) => void; // Shared actions (work in both modes with different UIs)
+  toggleNumber: (number: number) => void; // Draw in tabellone mode, mark in player mode
+  unmarkNumber: (number: number) => void; // Unmark a number in player mode (with confirmation)
+  undoLastNumber: () => void; // Undo last action in either mode
+  checkPrizes: () => void; // Same prize detection logic for both modes
+
   // Session management actions
   resetCurrentGame: () => void;
   returnToStartPage: () => void;
@@ -833,9 +851,9 @@ const StartPage = () => {
   const [cartelleCount, setCartelleCount] = useState(1);
   const { language, setLanguage } = useLanguageStore();
   const { setGameMode, setCartelleCount, generateCartelle } = useGameStore();
-  
+
   // Handlers for mode selection, cartelle counting, etc.
-  
+
   return (
     // UI as shown in designs
   );
@@ -852,14 +870,14 @@ interface CartellaNumerataProps {
   onMarkNumber: (number: number) => void;
 }
 
-const CartellaNumerata = ({ 
-  cartellaData, 
+const CartellaNumerata = ({
+  cartellaData,
   cartellaId,
   markedNumbers,
-  onMarkNumber 
+  onMarkNumber
 }: CartellaNumerataProps) => {
   // Logic for rendering and interaction
-  
+
   return (
     <div className="cartella-container">
       <div className="cartella-header">CARTELLA {cartellaId}</div>
@@ -868,9 +886,9 @@ const CartellaNumerata = ({
           <div key={`row-${rowIndex}`} className="cartella-row">
             {row.map((number, colIndex) => {
               const isMarked = markedNumbers.includes(number);
-              
+
               return (
-                <div 
+                <div
                   key={`cell-${rowIndex}-${colIndex}`}
                   className={`cartella-cell ${isMarked ? 'marked' : ''}`}
                   onClick={() => onMarkNumber(number)}
@@ -902,20 +920,20 @@ const saveGameState = (state: GameState) => {
     theme: state.theme,
     cartelle: state.cartelle,
     drawnNumbers: state.drawnNumbers,
-    prizes: state.prizes
+    prizes: state.prizes,
   };
-  
+
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storedData));
 };
 
 const loadGameState = (): StoredGameData | null => {
   const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (!savedData) return null;
-  
+
   try {
     return JSON.parse(savedData) as StoredGameData;
   } catch (e) {
-    console.error('Failed to parse saved game data:', e);
+    console.error("Failed to parse saved game data:", e);
     return null;
   }
 };
@@ -928,16 +946,19 @@ const clearGameState = () => {
 ## 7. Responsive Design Considerations
 
 ### Mobile (< 640px)
+
 - Start Page: Mode cards stack vertically
 - Player Mode: Single column of cartelle with scrolling
 - Settings: Full screen overlay
 
 ### Tablet (640px - 1024px)
+
 - Start Page: Mode cards side by side
 - Player Mode: 2 cartelle per row
 - Settings: Modal dialog
 
 ### Desktop (> 1024px)
+
 - Start Page: Mode cards side by side with larger visuals
 - Player Mode: Up to 3 cartelle per row
 - Settings: Modal dialog
@@ -958,7 +979,7 @@ Extend current translations to include new UI elements:
 const translations = {
   en: {
     // Existing translations
-    
+
     // New translations
     startPage: "Welcome to Paniere",
     tabelloneMode: "Tabellone Mode",
@@ -978,29 +999,32 @@ const translations = {
     unmarkConfirmation: "Are you sure you want to unmark number {number}?",
     progressLost: "All progress will be lost.",
     confirm: "Confirm",
-    cancel: "Cancel"
+    cancel: "Cancel",
     // ... more translations
   },
   it: {
     // Italian equivalents
-  }
+  },
 };
 ```
 
 ## 10. Implementation Phases
 
 ### Phase 1: Core Refactoring
+
 1. Refactor existing state management to use unified data model
 2. Abstract prize detection logic to work with both modes
 3. Implement common utilities for cartelle generation/management
 
 ### Phase 2: Start Page & Mode Selection
+
 1. Create Start Page component with language selection
 2. Implement mode selection logic
 3. Create cartelle count selection for Player Mode
 4. Establish session persistence with unified data model
 
 ### Phase 3: Player Mode Implementation
+
 1. Develop CartellaNumerata component (reusing Casella logic)
 2. Implement interactive number marking
 3. Add confirmation dialog when unmarking numbers
@@ -1008,18 +1032,21 @@ const translations = {
 5. Ensure cartelle persistence between sessions
 
 ### Phase 4: Navigation & Settings
+
 1. Design compact header with consistent navigation
 2. Implement session management controls
 3. Add confirmation dialogs
 4. Apply internationalization to all new UI elements
 
 ### Phase 5: Polish & Testing
+
 1. Responsive design refinements
 2. Accessibility validation
 3. Cross-browser testing
 4. Performance optimization
 
 ### Phase 6: Bug Fixes
+
 1. Fix prize invalidation on undo - when undoing a draw that triggered a prize, the prize should be removed
 2. Address any other issues discovered during testing
 
@@ -1044,17 +1071,20 @@ const translations = {
 - Reuse cartelle generation logic from utility functions
 
 ### Phase 1: Core Refactoring
+
 1. Refactor existing state management to use unified data model
 2. Abstract prize detection logic to work with both modes
 3. Implement common utilities for cartelle generation/management
 
 ### Phase 2: Start Page & Mode Selection
+
 1. Create Start Page component with language selection
 2. Implement mode selection logic
 3. Create cartelle count selection for Player Mode
 4. Establish session persistence with unified data model
 
 ### Phase 3: Player Mode Implementation
+
 1. Develop CartellaNumerata component (reusing Casella logic)
 2. Implement interactive number marking
 3. Add confirmation dialog when unmarking numbers
@@ -1062,18 +1092,21 @@ const translations = {
 5. Ensure cartelle persistence between sessions
 
 ### Phase 4: Navigation & Settings
+
 1. Design compact header with consistent navigation
 2. Implement session management controls
 3. Add confirmation dialogs
 4. Apply internationalization to all new UI elements
 
 ### Phase 5: Polish & Testing
+
 1. Responsive design refinements
 2. Accessibility validation
 3. Cross-browser testing
 4. Performance optimization
 
 ### Phase 6: Bug Fixes
+
 1. Fix prize invalidation on undo - when undoing a draw that triggered a prize, the prize should be removed
 2. Address any other issues discovered during testing
 

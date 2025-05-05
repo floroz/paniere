@@ -1,9 +1,9 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from "react";
 
 /**
  * Card variant types
  */
-type CardVariant = 'default' | 'primary' | 'secondary' | 'amber';
+type CardVariant = "default" | "primary" | "secondary" | "amber";
 
 /**
  * Card component props
@@ -24,34 +24,37 @@ interface BaseCardProps extends HTMLAttributes<HTMLDivElement> {
  */
 const BaseCard = ({
   children,
-  variant = 'default',
+  variant = "default",
   title,
   padding = true,
-  className = '',
+  className = "",
   ...props
 }: BaseCardProps) => {
   // Base classes for all cards
-  const baseClasses = 'rounded-xl shadow-sm border overflow-hidden';
-  
+  const baseClasses = "rounded-xl shadow-sm border overflow-hidden";
+
   // Variant-specific classes
   const variantClasses = {
-    default: 'bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700',
-    primary: 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800/30',
-    secondary: 'bg-gray-50 border-gray-200 dark:bg-gray-800/50 dark:border-gray-700/30',
-    amber: 'bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-200/50 dark:from-amber-900/50 dark:to-amber-800/20 dark:border-amber-800/30'
+    default: "bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700",
+    primary:
+      "bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800/30",
+    secondary:
+      "bg-gray-50 border-gray-200 dark:bg-gray-800/50 dark:border-gray-700/30",
+    amber:
+      "bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-200/50 dark:from-amber-900/50 dark:to-amber-800/20 dark:border-amber-800/30",
   };
-  
+
   // Padding classes
-  const paddingClasses = padding ? 'p-3' : '';
-  
+  const paddingClasses = padding ? "p-3" : "";
+
   // Combine all classes
   const cardClasses = [
     baseClasses,
     variantClasses[variant],
     paddingClasses,
-    className
-  ].join(' ');
-  
+    className,
+  ].join(" ");
+
   return (
     <div className={cardClasses} {...props}>
       {title && (

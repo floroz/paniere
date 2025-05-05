@@ -16,21 +16,24 @@ const Footer = ({ onReset, onReturnToStartPage }: FooterProps) => {
       <div className="w-full flex items-center">
         {/* Paniere image (desktop only) */}
         <div className="pr-3 flex-shrink-0">
-          <img 
-            src="/images/paniere.png" 
-            alt="" 
-            className="h-16 w-16 object-contain" 
-            aria-hidden="true" 
+          <img
+            src="/images/paniere.png"
+            alt=""
+            className="h-16 w-16 object-contain"
+            aria-hidden="true"
           />
         </div>
-        
+
         {/* Main footer content */}
         <div className="flex-grow grid grid-cols-5 gap-3 h-full">
           <div className="col-span-3 h-full">
             <LastDraw />
           </div>
           <div className="col-span-2 h-full">
-            <PaniereControls onReset={onReset} onReturnToStartPage={onReturnToStartPage} />
+            <PaniereControls
+              onReset={onReset}
+              onReturnToStartPage={onReturnToStartPage}
+            />
           </div>
         </div>
       </div>

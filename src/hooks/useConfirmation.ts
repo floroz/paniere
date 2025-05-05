@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useDialog } from './useDialog';
+import { useCallback } from "react";
+import { useDialog } from "./useDialog";
 
 /**
  * Custom hook for confirmation dialog functionality
@@ -19,6 +19,6 @@ export const useConfirmation = (onConfirm?: () => void) => {
     isOpen,
     open,
     close,
-    confirm: handleConfirm
+    confirm: handleConfirm,
   };
 };

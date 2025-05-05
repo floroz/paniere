@@ -91,5 +91,5 @@ export const neapolitanNames: Record<number, string> = {
   87: "'E Perucchie",
   88: "'E Casecavalle",
   89: "'A Vecchia",
-  90: "'A Paura"
+  90: "'A Paura",
 };

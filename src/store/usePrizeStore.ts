@@ -1,6 +1,6 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-export type PrizeType = 'ambo' | 'terno' | 'quaterna' | 'cinquina' | 'tombola';
+export type PrizeType = "ambo" | "terno" | "quaterna" | "cinquina" | "tombola";
 
 interface WinningSequence {
   cartellaId: number;
@@ -33,63 +33,76 @@ interface PrizeStateWithActions extends PrizeState {
 
 const initialState: PrizeState = {
   winningSequences: [],
-  toastMessage: '',
+  toastMessage: "",
   isToastVisible: false,
   isConfettiActive: false,
-  lastPrizeWon: null
+  lastPrizeWon: null,
 };
 
 export const usePrizeStore = create<PrizeStateWithActions>()((set) => ({
   ...initialState,
-  
-  addWinningSequence: (sequence) => set((state) => ({
-    winningSequences: [...state.winningSequences, sequence]
-  })),
-  
-  clearWinningSequences: () => set({
-    winningSequences: []
-  }),
-  
-  showToast: (message) => set({
-    toastMessage: message,
-    isToastVisible: true
-  }),
-  
-  hideToast: () => set({
-    isToastVisible: false
-  }),
-  
-  showConfetti: () => set({
-    isConfettiActive: true
-  }),
-  
-  hideConfetti: () => set({
-    isConfettiActive: false
-  }),
-  
-  setLastPrizeWon: (prize) => set({
-    lastPrizeWon: prize
-  })
+
+  addWinningSequence: (sequence) =>
+    set((state) => ({
+      winningSequences: [...state.winningSequences, sequence],
+    })),
+
+  clearWinningSequences: () =>
+    set({
+      winningSequences: [],
+    }),
+
+  showToast: (message) =>
+    set({
+      toastMessage: message,
+      isToastVisible: true,
+    }),
+
+  hideToast: () =>
+    set({
+      isToastVisible: false,
+    }),
+
+  showConfetti: () =>
+    set({
+      isConfettiActive: true,
+    }),
+
+  hideConfetti: () =>
+    set({
+      isConfettiActive: false,
+    }),
+
+  setLastPrizeWon: (prize) =>
+    set({
+      lastPrizeWon: prize,
+    }),
 }));
 
 // Helper to translate prize types to Italian
-export const getPrizeName = (prize: PrizeType, language: 'en' | 'it'): string => {
-  const prizeNames: {en: Record<PrizeType, string>, it: Record<PrizeType, string>} = {
+export const getPrizeName = (
+  prize: PrizeType,
+  language: "en" | "it",
+): string => {
+  const prizeNames: {
+    en: Record<PrizeType, string>;
+    it: Record<PrizeType, string>;
+  } = {
     en: {
-      ambo: 'Ambo',
-      terno: 'Terno',
-      quaterna: 'Quaterna',
-      cinquina: 'Cinquina',
-      tombola: 'Tombola'
+      ambo: "Ambo",
+      terno: "Terno",
+      quaterna: "Quaterna",
+      cinquina: "Cinquina",
+      tombola: "Tombola",
     },
     it: {
-      ambo: 'Ambo',
-      terno: 'Terno',
-      quaterna: 'Quaterna',
-      cinquina: 'Cinquina',
-      tombola: 'Tombola'
-    }
+      ambo: "Ambo",
+      terno: "Terno",
+      quaterna: "Quaterna",
+      cinquina: "Cinquina",
+      tombola: "Tombola",
+    },
   };
-  
+
   return prizeNames[language][prize];
 };

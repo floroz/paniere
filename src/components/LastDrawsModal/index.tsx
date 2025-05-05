@@ -1,1 +1,1 @@
-export { default } from './LastDrawsModal';
+export { default } from "./LastDrawsModal";

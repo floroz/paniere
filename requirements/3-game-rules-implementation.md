@@ -1,11 +1,13 @@
 # Game Rules Implementation Plan
 
 ## Overview
+
 To help users understand how to play Tombola, we'll implement a comprehensive rules system that provides instructions in both English and Italian based on the user's selected language.
 
 ## Implementation Plan
 
 1. **Rules Content**
+
    - Create markdown files for both languages:
      - `/public/rules/rules-en.md` for English
      - `/public/rules/regole-it.md` for Italian
@@ -17,6 +19,7 @@ To help users understand how to play Tombola, we'll implement a comprehensive ru
      - Specific instructions for both Tabellone and Player modes
 
 2. **RulesModal Component**
+
    - Create a new modal component for displaying rules
    - Fetch and render the appropriate markdown file based on language
    - Include a loading state while fetching content
@@ -24,12 +27,14 @@ To help users understand how to play Tombola, we'll implement a comprehensive ru
    - Allow closing via button, ESC key, or clicking outside
 
 3. **Start Page Integration**
+
    - Add a "Learn How to Play" button below the app description
    - Style the button to be noticeable but not distracting
    - Open the RulesModal when clicked
    - Automatically display rules in the user's selected language
 
 4. **Technical Implementation**
+
    - Use ReactMarkdown to render the markdown content
    - Implement proper styling for the markdown content
    - Ensure the modal is responsive and works on all device sizes
@@ -47,7 +52,7 @@ To help users understand how to play Tombola, we'll implement a comprehensive ru
 // RulesModal.tsx
 import { useEffect, useState } from "react";
 import { useLanguageStore } from "../../store/useLanguageStore";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
 
 interface RulesModalProps {
   isOpen: boolean;
@@ -56,28 +61,29 @@ interface RulesModalProps {
 
 const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
   const { language } = useLanguageStore();
-  const [rules, setRules] = useState<string>('');
+  const [rules, setRules] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  
+
   // Load the appropriate rules file based on language
   useEffect(() => {
     if (!isOpen) return;
-    
+
     setIsLoading(true);
-    const rulesPath = language === 'it' ? '/rules/regole-it.md' : '/rules/rules-en.md';
-    
+    const rulesPath =
+      language === "it" ? "/rules/regole-it.md" : "/rules/rules-en.md";
+
     fetch(rulesPath)
-      .then(response => response.text())
-      .then(text => {
+      .then((response) => response.text())
+      .then((text) => {
         setRules(text);
         setIsLoading(false);
       })
-      .catch(error => {
-        console.error('Failed to load rules:', error);
+      .catch((error) => {
+        console.error("Failed to load rules:", error);
         setIsLoading(false);
       });
   }, [isOpen, language]);
-  
+
   // Handle ESC key press for closing modal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -93,35 +99,46 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300"
       role="dialog"
       aria-modal="true"
       aria-labelledby="rules-modal-title"
       onClick={onClose}
     >
-      <div 
+      <div
         className="w-full max-w-4xl max-h-[90vh] overflow-auto transform rounded-2xl bg-white p-6 shadow-2xl transition-all duration-500 dark:bg-gray-800 dark:text-white animate-fadeIn"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 flex items-center justify-between bg-white dark:bg-gray-800 pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 
+          <h2
             id="rules-modal-title"
             className="text-2xl font-bold text-gray-900 dark:text-white"
           >
-            {language === 'en' ? 'Tombola Rules' : 'Regole della Tombola'}
+            {language === "en" ? "Tombola Rules" : "Regole della Tombola"}
           </h2>
           <button
             className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             onClick={onClose}
-            aria-label={language === 'en' ? 'Close rules' : 'Chiudi regole'}
+            aria-label={language === "en" ? "Close rules" : "Chiudi regole"}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
-        
+
         <div className="prose prose-amber max-w-none dark:prose-invert">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
@@ -131,13 +148,13 @@ const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
             <ReactMarkdown>{rules}</ReactMarkdown>
           )}
         </div>
-        
+
         <div className="sticky bottom-0 flex justify-end pt-4 mt-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
           <button
             className="px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-800/30 dark:hover:bg-amber-800/40 dark:text-amber-300 rounded-lg transition-colors"
             onClick={onClose}
           >
-            {language === 'en' ? 'Close' : 'Chiudi'}
+            {language === "en" ? "Close" : "Chiudi"}
           </button>
         </div>
       </div>

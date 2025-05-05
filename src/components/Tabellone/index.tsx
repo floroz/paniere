@@ -1,1 +1,1 @@
-export { default } from './Tabellone';
+export { default } from "./Tabellone";

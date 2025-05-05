@@ -31,6 +31,6 @@ export const useLanguageStore = create<LanguageStateWithActions>()(
     }),
     {
       name: LOCAL_STORAGE_KEY,
-    }
-  )
+    },
+  ),
 );
