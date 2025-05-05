@@ -164,7 +164,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
   /**
    * Get the appropriate style for a cell based on its state
    */
-  const getCellStyle = (number: number, isDrawn: boolean) => {
+  const getCellStyle = (isDrawn: boolean) => {
     // No special style needed for empty cells here anymore, handled below
     if (isDrawn) {
       return "bg-gradient-to-br from-amber-300 to-amber-500 dark:from-amber-600 dark:to-amber-800 text-white dark:text-white scale-95 shadow-md";
@@ -217,7 +217,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
                       overflow-hidden group
                       rounded-md shadow-sm transition-all duration-300
                       border border-black/10 dark:border-white/10
-                      ${getCellStyle(number, drawnNumbers.includes(number))}
+                      ${getCellStyle(drawnNumbers.includes(number))}
                       ${number === 0 ? "bg-gray-100/50 dark:bg-gray-800/30" : ""}
                       flex flex-col items-center justify-center
                       ${isActive ? "ring-2 ring-amber-500 ring-offset-1" : ""}

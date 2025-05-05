@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "prepare": "husky && husky install",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "tc": "tsc -b --noEmit"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,html}": [
