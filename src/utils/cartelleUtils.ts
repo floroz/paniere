@@ -264,18 +264,34 @@ function createSingleCartellaGrid(): number[][] | null {
 export const generateRandomCartelle = (count: number): CartellaData[] => {
   const validCount = Math.min(Math.max(1, count), 10);
   const allGeneratedCartelle: CartellaData[] = [];
+  let generationAttempts = 0;
+  const MAX_TOTAL_ATTEMPTS = validCount * MAX_GRID_ATTEMPTS * 2; // Safety break
 
   for (let cartellaId = 1; cartellaId <= validCount; cartellaId++) {
-    const grid = createSingleCartellaGrid();
+    let grid: number[][] | null = null;
+    while (grid === null && generationAttempts < MAX_TOTAL_ATTEMPTS) {
+      grid = createSingleCartellaGrid();
+      generationAttempts++;
+      if (grid === null) {
+        // Optional: Add a small delay or log if retrying frequently
+        // console.warn(`Retrying grid generation for cartella ${cartellaId}...`);
+      }
+    }
+
+    if (grid === null) {
+      // This should ideally not happen if createSingleCartellaGrid is robust,
+      // but it's a safeguard against infinite loops.
+      console.error(
+        `Failed to generate cartella ${cartellaId} after many attempts. Returning potentially incomplete set.`,
+      );
+      break; // Stop trying to generate more cartelle
+    }
+
     allGeneratedCartelle.push({
       id: cartellaId,
       startRow: 0, // Not relevant for player mode
       startCol: 0, // Not relevant for player mode
-      numbers:
-        grid ??
-        Array(3)
-          .fill(0)
-          .map(() => Array(9).fill(0)), // Use generated or empty grid
+      numbers: grid, // Assign the successfully generated grid
     });
   }
   return allGeneratedCartelle;
