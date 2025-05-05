@@ -34,7 +34,7 @@ const Casella = ({
 
   const getBackgroundStyle = () => {
     if (isLatestDrawn) {
-      return "bg-gradient-to-br from-red-400 to-red-600 dark:from-red-600 dark:to-red-800 ring-4 ring-red-400 dark:ring-red-600 ring-opacity-50 dark:ring-opacity-50 animate-pulse";
+      return "bg-gradient-to-br from-amber-400 to-amber-600 dark:from-amber-500 dark:to-amber-700 ring-4 ring-amber-400 dark:ring-amber-500 ring-opacity-50 dark:ring-opacity-50 animate-pulse";
     }
 
     if (isWinningNumber) {
@@ -42,9 +42,9 @@ const Casella = ({
     }
 
     if (isDrawn) {
-      return "bg-gradient-to-br from-red-100 to-red-300 dark:from-red-700 dark:to-red-900";
+      return "bg-gradient-to-br from-amber-100 to-amber-300 dark:from-amber-700 dark:to-amber-900";
     }
-    return "bg-white hover:bg-red-50 dark:bg-gray-800 dark:hover:bg-gray-700";
+    return "bg-white hover:bg-amber-50 dark:bg-gray-800 dark:hover:bg-gray-700";
   };
 
   return (
@@ -78,9 +78,9 @@ const Casella = ({
         className={`text-xl sm:text-2xl font-bold transition-colors duration-300
           ${
             isLatestDrawn
-              ? "text-white dark:text-white"
+              ? "text-white dark:text-white" // Keep white for latest drawn
               : isDrawn
-                ? "text-red-800 dark:text-red-200"
+                ? "text-amber-800 dark:text-amber-200" // Change drawn text to amber
                 : "text-gray-800 dark:text-gray-200"
           }
         `}
@@ -95,9 +95,9 @@ const Casella = ({
           ${
             // Updated text colors
             isLatestDrawn
-              ? "text-white dark:text-white"
+              ? "text-white dark:text-white" // Keep white for latest drawn
               : isDrawn
-                ? "text-red-700 dark:text-red-300"
+                ? "text-amber-700 dark:text-amber-300" // Change drawn name text to amber
                 : "text-gray-600 dark:text-gray-400"
           }
         `}
@@ -124,7 +124,6 @@ const Tabellone = forwardRef<TabelloneHandle>((_, ref) => {
 
   // Get winning sequences from the prize store for highlighting
   const winningSequences = usePrizeStore((state) => state.winningSequences);
-
   // Create a set of all numbers that are part of a winning sequence for efficient lookups
   const winningNumbers = useMemo(() => {
     const numbers = new Set<number>();

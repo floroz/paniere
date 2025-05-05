@@ -166,11 +166,11 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
    */
   const getCellStyle = (isDrawn: boolean) => {
     if (isDrawn) {
-      // Use red gradient for drawn
-      return "bg-gradient-to-br from-red-300 to-red-500 dark:from-red-600 dark:to-red-800 text-white dark:text-white scale-95 shadow-md";
+      // Changed to amber gradient for drawn
+      return "bg-gradient-to-br from-amber-300 to-amber-500 dark:from-amber-600 dark:to-amber-800 text-white dark:text-white scale-95 shadow-md";
     }
-    // Use red hover for default state
-    return "bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-gray-700 hover:scale-95";
+    // Changed hover to amber
+    return "bg-white dark:bg-gray-800 hover:bg-amber-50 dark:hover:bg-gray-700 hover:scale-95";
   };
 
   return (
@@ -220,7 +220,7 @@ const CartellaNumerata = ({ cartella }: CartellaNumerataProps) => {
                       ${getCellStyle(drawnNumbers.includes(number))}
                       ${number === 0 ? "bg-gray-100/50 dark:bg-gray-800/30" : ""}
                       flex flex-col items-center justify-center
-                      ${isActive ? "ring-2 ring-red-500 ring-offset-1" : ""} 
+                      ${isActive ? "ring-2 ring-amber-500 ring-offset-1" : ""} {/* Changed ring color to amber */}
                     `}
                     // Allow click handling even on empty cells if needed in future, but action depends on number > 0
                     onClick={() => handleNumberClick(number)}

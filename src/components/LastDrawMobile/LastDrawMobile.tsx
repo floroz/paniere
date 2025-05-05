@@ -4,18 +4,18 @@ import { useLanguageStore } from "../../store/useLanguageStore";
 import { useTranslations } from "../../i18n/translations";
 import { neapolitanNames } from "../../data/neapolitanNames";
 import BaseIconButton from "../BaseIconButton"; // Correct: default import
-import { FaHistory, FaMapMarkerAlt } from "react-icons/fa"; // Import icons
+import { FaMapMarkerAlt } from "react-icons/fa"; // Removed FaHistory
 
 type LastDrawMobileProps = {
-  onShowLast3Click: () => void;
+  // Removed onShowLast3Click prop
   onScrollToNumberClick: (number: number) => void;
 };
 
 /**
- * Component for the mobile footer's top row, displaying last draw info and actions.
+ * Component for the mobile footer's top row, displaying last draw info and scroll action.
  */
 export const LastDrawMobile = ({
-  onShowLast3Click,
+  // Removed onShowLast3Click prop
   onScrollToNumberClick,
 }: LastDrawMobileProps) => {
   const drawnNumbers = useGameStore((state) => state.drawnNumbers);
@@ -60,17 +60,8 @@ export const LastDrawMobile = ({
       </div>
 
       {/* Action Icons with Labels */}
+      {/* Removed History Button */}
       <div className="flex items-center gap-1 flex-shrink-0">
-        {/* History Button */}
-        <BaseIconButton
-          onClick={onShowLast3Click}
-          aria-label={t.historyLast3} // Use new key
-          label={t.historyLast3} // Use new key
-          disabled={drawnNumbers.length === 0}
-          className="h-11 px-2 py-1 text-xs flex items-center justify-center" // Use h-11 (44px) and flex centering
-          size="sm" // Keep size sm for text/icon scaling
-          icon={<FaHistory className="h-4 w-4" />} // Use react-icon
-        />
         {/* Locate/Scroll Button */}
         <BaseIconButton
           onClick={handleScrollClick}
