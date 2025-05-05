@@ -116,10 +116,10 @@ function App() {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTIgMmg1NnY1NkgyVjJ6IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsPSIjMDAwIi8+PC9nPjwvc3ZnPg==')] opacity-5 dark:opacity-[0.03]"></div>
         </div>
 
-        {/* Removed h-screen and overflow-hidden from container */}
-        <div className="relative container max-w-6xl grid grid-cols-1 grid-rows-[1fr_min-content] p-4">
-          {/* Removed overflow-auto from content area */}
-          <div className="row-start-1 row-end-2 col-span-full">
+        {/* Removed grid layout, added padding for fixed footer */}
+        <div className="relative container max-w-6xl p-4">
+          {/* Added pb-28 for footer height */}
+          <div className="pb-28">
             {/* Pass ref to Tabellone */}
             {gameMode === "tabellone" ? (
               <Tabellone ref={tabelloneRef} />
@@ -127,24 +127,26 @@ function App() {
               <PlayerMode />
             )}
           </div>
+        </div>
 
-          {gameMode === "tabellone" ? (
+        {/* Render footers outside the main container div, conditionally */}
+        {gameMode === "tabellone" && (
+          <>
             <TabelloneFooter
               onReset={handleReset}
               onReturnToStartPage={handleReturnToStartPage}
             />
-          ) : (
-            <PlayerFooter onReturnToStartPage={handleReturnToStartPage} />
-          )}
-        </div>
-
-        {gameMode === "tabellone" && (
-          <MobileFooter
-            // onOpenLastDraws prop removed
-            onReset={handleReset}
-            onReturnToStartPage={handleReturnToStartPage}
-            onScrollRequest={handleScrollRequest} // Pass down scroll handler
-          />
+            <MobileFooter
+              onReset={handleReset}
+              onReturnToStartPage={handleReturnToStartPage}
+              onScrollRequest={handleScrollRequest}
+            />
+          </>
+        )}
+        {gameMode === "player" && (
+          <PlayerFooter onReturnToStartPage={handleReturnToStartPage} />
+          // Note: Player mode currently doesn't have a specific mobile footer in this structure
+          // If needed, a similar conditional rendering for a mobile player footer would go here.
         )}
       </div>
     );

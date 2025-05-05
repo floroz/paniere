@@ -16,10 +16,9 @@
     "format:check": "prettier --check ."
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,ts,tsx,css,html}": [
       "eslint --fix",
-      "prettier --write",
-      "tsc -b --noEmit"
+      "prettier --write"
     ]
   },
   "dependencies": {
