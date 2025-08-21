@@ -56,6 +56,7 @@ A monetization strategy for Paniere's multiplayer mode that capitalizes on seaso
    - Simple 6-character game codes
    - One-click join from WhatsApp/SMS links
    - Clear "Only the organizer needs to pay" messaging
+   - Players remain completely anonymous
 
 2. **Organizer Value Proposition**
    - "Bring your family together this Christmas"
@@ -73,18 +74,22 @@ A monetization strategy for Paniere's multiplayer mode that capitalizes on seaso
 
 1. **Discovery**: SEO, social media, word-of-mouth
 2. **Trial Experience**:
-   - User plays single-player vs computer
+   - User plays single-player vs computer (no auth required)
    - Experiences full game mechanics
-   - Clear messaging: "Play with family? Upgrade to multiplayer!"
-3. **Conversion Moment**:
-   - After single-player game: "Ready to play with family?"
-   - Or when clicking "Create Multiplayer Game"
-   - Show clear value: "You pay once, whole family plays free"
-4. **Smooth Continuation**:
-   - End of multiplayer game: "Continue the fun!" button
-   - Pre-loaded payment method (if saved)
-   - One-click purchase for next game
-   - Auto-start new game with same players
+   - Clear messaging: "Play with family? Create your first multiplayer game free!"
+3. **Authentication Moment**:
+   - Click "Create Multiplayer Game"
+   - Sign up/in screen: "Sign in with Google" prominent, email option below
+   - Value prop: "Your first game is FREE! Only hosts need accounts."
+4. **First Game Experience**:
+   - Immediate game creation after auth
+   - Share link with family (they join without accounts)
+   - Full multiplayer experience
+5. **Seamless Payment Conversion**:
+   - During game ending: "That was fun! 🎉"
+   - Inline prompt: "Keep playing - 10 games for €6.99"
+   - One-click purchase if card saved
+   - Auto-create next game with same players on success
 
 ### Single-Player AI Design
 
@@ -167,11 +172,13 @@ interface MultiplayerAccess {
 
 ### Security Considerations
 
-- **Master Authentication**: Email required for multiplayer (magic link)
-- **Account-based limits**: Prevent trial abuse via user tracking
-- **No IP-based limits**: Avoid VPN workarounds
+- **Master Authentication**: Required upfront (Google OAuth or email/password)
+- **Free Trial Tracking**: One free game per authenticated account
+- **Account-based limits**: Tied to user ID, not IP or device
+- **No anonymous abuse**: Can't create games without authentication
 - **Game expiration**: 24 hours for security
-- **Payment verification**: Server-side validation only
+- **Payment verification**: Server-side validation with Stripe webhooks
+- **Fraud prevention**: Clerk provides built-in security features
 
 ### Analytics Requirements
 

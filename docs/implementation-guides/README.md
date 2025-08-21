@@ -1,29 +1,141 @@
-# Implementation Guides
+# Implementation Guides Overview
 
-This folder contains step-by-step implementation guides for one-time setup tasks that won't need to be consulted after completion.
+This directory contains step-by-step implementation guides for building Paniere's multiplayer functionality. Each guide is broken into manageable phases with checklists to track progress.
 
-## Available Guides
+## Implementation Order
 
-- **[Monorepo Implementation Guide](./monorepo-implementation-guide.md)** - Complete guide for transforming Paniere from a single React app into a TypeScript monorepo structure
+Follow these guides in sequence:
 
-## Purpose
+1. **[Monorepo Implementation Guide](./monorepo-implementation-guide.md)** ✅
+   - Status: Completed
+   - Sets up the foundational monorepo structure
 
-These guides are designed for:
+2. **[Multiplayer Implementation Guide (Revised)](./multiplayer-implementation-guide-revised.md)** 🚧
+   - Status: In Progress
+   - Broken into 8 phases for manageable implementation
 
-- **One-time setup/migration tasks**
-- **Step-by-step implementation processes**
-- **Historical reference of how the project was structured**
+## Master Progress Tracker
 
-Once the implementation is complete, these guides serve as historical documentation but aren't needed for day-to-day development.
+### ✅ Completed
 
-## For Ongoing Development
+- [x] Monorepo structure setup
+- [x] TypeScript configuration
+- [x] Shared types package
+- [x] Basic frontend deployed to Netlify
 
-For day-to-day development workflows and patterns, refer to:
+### 🚧 Current Phase: Phase 0 - Local Development Environment
 
-- [Development Workflow Guide](../development-workflow.md)
-- [Current Architecture](../current-architecture.md)
-- [ADR Documentation](../adr/)
+- [ ] Docker setup for Redis and PostgreSQL
+- [ ] Development scripts
+- [ ] Environment configuration
 
-## Checklist Status
+### 📋 Upcoming Phases
 
-All guides in this folder should have their checklists marked as completed (✅) to indicate the implementation has been finished.
+#### Phase 1: Basic WebSocket Setup (2 days)
+
+- [ ] Socket.io server setup
+- [ ] Socket.io client implementation
+- [ ] Basic connection testing
+
+#### Phase 2: Authentication Integration (2 days)
+
+- [ ] Clerk setup
+- [ ] Frontend auth components
+- [ ] Backend auth middleware
+
+#### Phase 3: Redis Session Management (1 day)
+
+- [ ] Redis client setup
+- [ ] Session manager implementation
+- [ ] Session persistence testing
+
+#### Phase 4: Core Game Logic (3 days)
+
+- [ ] Game state management
+- [ ] Game creation/joining
+- [ ] Number drawing logic
+
+#### Phase 5: WebSocket Game Events (2 days)
+
+- [ ] Typed Socket.io setup
+- [ ] Event handlers
+- [ ] Real-time game updates
+
+#### Phase 6: Payment Integration (2 days)
+
+- [ ] Stripe setup
+- [ ] Payment flow
+- [ ] Subscription management
+
+#### Phase 7: Frontend Game UI (3 days)
+
+- [ ] Game lobby
+- [ ] Cartelle display
+- [ ] Responsive design
+
+### 🎯 Milestones
+
+1. **Local Multiplayer Working** (After Phase 5)
+   - Two browsers can play together locally
+   - Basic game functionality complete
+
+2. **Monetization Ready** (After Phase 6)
+   - Payment flow integrated
+   - Free trial + paid games working
+
+3. **Production Ready** (After Phase 7)
+   - Full UI/UX implemented
+   - Deployed to Railway/Netlify
+   - Ready for beta testing
+
+## Time Estimates
+
+- **Total Implementation Time**: ~15 days
+- **MVP Ready**: ~10 days (up to Phase 5)
+- **Production Ready**: ~15 days (all phases)
+
+## Key Decisions Made
+
+1. **Frontend Hosting**: Staying with Netlify (already deployed)
+2. **Backend Hosting**: Railway for MVP ($25/month)
+3. **Authentication**: Clerk (generous free tier)
+4. **Payments**: Stripe
+5. **Real-time**: Socket.io with Redis adapter
+
+## Important Notes
+
+### Authentication Strategy Change
+
+The original ADR suggested guest-only auth, but the monetization strategy requires:
+
+- Guest access for players (no friction)
+- Email auth for hosts (payment tracking)
+- Using Clerk for simplified implementation
+
+### Cost Considerations
+
+- **Monthly Infrastructure**: ~$25 (Railway)
+- **Per Transaction**: 2.9% + $0.30 (Stripe)
+- **Break-even**: ~12 paid games/month
+
+### Development Tips
+
+1. Always run `npm run docker:up` before starting development
+2. Use the checklists in each guide to track progress
+3. Test with multiple browsers for multiplayer features
+4. Keep Redis GUI open (RedisInsight) for debugging
+
+## Getting Help
+
+- **Socket.io Issues**: Check connection logs in browser console
+- **Redis Issues**: Use `docker logs paniere_redis`
+- **Auth Issues**: Check Clerk dashboard and logs
+- **Payment Issues**: Use Stripe test mode and webhook CLI
+
+## Next Steps After Implementation
+
+1. Beta testing with real families
+2. Performance optimization
+3. Analytics implementation
+4. Marketing website updates
+5. Launch preparation for Christmas 2024
