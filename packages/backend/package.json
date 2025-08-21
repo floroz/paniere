@@ -1,0 +1,21 @@
+{
+  "name": "@paniere/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -b",
+    "start": "node dist/server.js",
+    "type-check": "tsc -b --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@paniere/shared": "workspace:*",
+    "fastify": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "tsx": "^4.19.2"
+  }
+}
