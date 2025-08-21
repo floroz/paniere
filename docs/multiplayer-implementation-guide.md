@@ -1301,7 +1301,6 @@ CMD ["npm", "start", "--workspace=backend"]
    ```
 
 2. **Socket.io Connection Failed**
-
    - Check CORS settings in backend
    - Verify environment variables
    - Check browser network tab for errors
@@ -1321,7 +1320,6 @@ CMD ["npm", "start", "--workspace=backend"]
 ### Development Tips
 
 1. **Use Browser Developer Tools**
-
    - Network tab for WebSocket connections
    - Console for error messages
    - Application tab for localStorage

@@ -1,45 +1,23 @@
 {
-  "name": "@floroz/paniere",
+  "name": "@floroz/paniere-monorepo",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
-  "author": "Daniele Tortora",
-  "license": "MIT",
-  "description": "An interactive Paniere (Tombola) game",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
+    "dev": "pnpm run --recursive --parallel dev",
+    "dev:frontend": "pnpm run --filter @paniere/frontend dev",
+    "dev:backend": "pnpm run --filter @paniere/backend dev",
+    "build": "pnpm run --filter @paniere/shared build && pnpm run --filter @paniere/frontend build",
+    "lint": "pnpm run --recursive lint",
+    "type-check": "pnpm run --recursive type-check",
+    "test": "pnpm run --recursive test",
+    "clean": "pnpm run --recursive clean && rm -rf node_modules",
     "prepare": "husky && husky install",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "tc": "tsc -b --noEmit",
-    "test": "vitest run"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,css,html}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.1.5",
-    "react": "^19.0.0",
-    "react-confetti": "^6.4.0",
-    "react-dom": "^19.0.0",
-    "react-ga4": "^2.1.0",
-    "react-icons": "^5.5.0",
-    "react-joyride": "^3.0.0-7",
-    "react-markdown": "^10.1.0",
-    "tailwindcss": "^4.1.5",
-    "zustand": "^5.0.4"
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@types/node": "^22.12.0",
     "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
@@ -48,12 +26,19 @@
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.26.1",
-    "vite": "^6.3.1",
-    "vitest": "^3.1.2"
+    "typescript-eslint": "^8.26.1"
   },
   "engines": {
     "node": ">=22.12.0",
-    "npm": ">=10"
+    "pnpm": ">=9"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,html,md,json,yaml,yml}": [
+      "prettier --write"
+    ]
   }
 }
