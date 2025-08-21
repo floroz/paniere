@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides step-by-step instructions for implementing the multiplayer architecture for Paniere. This assumes you have already set up the monorepo structure as described in the [Monorepo Implementation Guide](./monorepo-implementation-guide.md).
+This guide provides step-by-step instructions for implementing the multiplayer architecture for Paniere. This assumes you have already set up the monorepo structure as described in the [Monorepo Implementation Guide](./implementation-guides/monorepo-implementation-guide.md).
 
 ## Prerequisites
 
@@ -1356,5 +1356,5 @@ After completing this implementation:
 ## Related Documentation
 
 - [ADR 6: Multiplayer Architecture Design](./adr/006-multiplayer-architecture-design.md)
-- [Monorepo Implementation Guide](./monorepo-implementation-guide.md)
+- [Monorepo Implementation Guide](./implementation-guides/monorepo-implementation-guide.md)
 - [ADR 2: Monorepo Architecture and Tooling](./adr/002-monorepo-architecture-and-tooling.md)

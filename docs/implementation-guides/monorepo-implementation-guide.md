@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides step-by-step instructions for transforming Paniere from a single React app into a TypeScript monorepo structure. This implements the decisions made in [ADR 2: Monorepo Architecture and Tooling](./adr/002-monorepo-architecture-and-tooling.md).
+This guide provides step-by-step instructions for transforming Paniere from a single React app into a TypeScript monorepo structure. This implements the decisions made in [ADR 2: Monorepo Architecture and Tooling](../adr/002-monorepo-architecture-and-tooling.md).
 
 **Prerequisites**: Familiarity with pnpm, TypeScript, and React.
 
@@ -408,7 +408,7 @@ export * from "./validation/schemas";
 
 ## Phase 3: Basic Backend Setup (Day 3-4)
 
-> **Note**: For complete multiplayer backend implementation, see [Multiplayer Implementation Guide](./multiplayer-implementation-guide.md). This section covers basic backend package setup.
+> **Note**: For complete multiplayer backend implementation, see [Multiplayer Implementation Guide](../multiplayer-implementation-guide.md). This section covers basic backend package setup.
 
 ### 3.1 Create Backend Package Structure
 
@@ -736,7 +736,7 @@ console.log("Type sharing works!", { testGameState, testPlayer });
 
 After completing the monorepo migration:
 
-1. **Multiplayer Implementation**: Follow [Multiplayer Implementation Guide](./multiplayer-implementation-guide.md)
+1. **Multiplayer Implementation**: Follow [Multiplayer Implementation Guide](../multiplayer-implementation-guide.md)
 2. **Enhanced Type Safety**: Add more shared utilities and validation
 3. **Development Tooling**: Consider adding Turborepo for better build caching
 4. **Testing Strategy**: Set up cross-package testing
@@ -744,7 +744,7 @@ After completing the monorepo migration:
 
 ## Related Documentation
 
-- [ADR 2: Monorepo Architecture and Tooling](./adr/002-monorepo-architecture-and-tooling.md) - Strategic decisions
-- [Multiplayer Implementation Guide](./multiplayer-implementation-guide.md) - Full multiplayer backend setup
+- [ADR 2: Monorepo Architecture and Tooling](../adr/002-monorepo-architecture-and-tooling.md) - Strategic decisions
+- [Multiplayer Implementation Guide](../multiplayer-implementation-guide.md) - Full multiplayer backend setup
 - [pnpm Workspaces Documentation](https://pnpm.io/workspaces)
 - [pnpm CLI Reference](https://pnpm.io/cli/run)

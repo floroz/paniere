@@ -41,70 +41,62 @@ Paniere brings the classic Neapolitan Tombola (similar to Bingo) to your browser
 - Tombola Celebration: A visual confetti celebration when you hit Tombola!
 - Undo your last mark if you make a mistake.
 
-## 🛠️ Technologies
+## 🛠️ Architecture
 
-- **Framework**: React 19 with TypeScript
-- **Styling**: Tailwind CSS (Utility-first CSS framework)
-- **State Management**: Zustand (Simple, fast state management)
-- **Analytics**: React GA4 (Google Analytics integration)
-- **Build Tool**: Vite (Next-generation frontend tooling)
+Paniere is built as a **TypeScript monorepo** with the following structure:
 
-## 🚀 Getting Started
+- **Frontend**: React 19 + TypeScript + Tailwind CSS + Zustand
+- **Backend**: Fastify + TypeScript (for future multiplayer features)
+- **Shared**: Common types and utilities shared between packages
+- **Build Tools**: Vite (frontend) + pnpm workspaces (monorepo management)
+- **Deployment**: Netlify (frontend) + CI/CD with GitHub Actions
 
-### Prerequisites
+## 🚀 Quick Start
 
-- Node.js (Check `.nvmrc` for the recommended version, typically v18+)
-- npm or yarn
+### For Players
 
-### Installation
+Just visit **[paniere.netlify.app](https://paniere.netlify.app)** and start playing! No installation required.
+
+### For Developers
 
 ```bash
-# 1. Clone the repository
+# Clone and setup
 git clone https://github.com/floroz/paniere.git
 cd paniere
+pnpm install
 
-# 2. Install dependencies
-npm install
+# Start development
+pnpm run dev  # Starts both frontend and backend
 ```
 
-### Running Locally
-
-```bash
-# Start the development server
-npm run dev
-```
-
-Open your browser and navigate to `http://localhost:5173` (or the port specified in the console).
-
-### Building for Production
-
-```bash
-# Create an optimized production build in the 'dist' folder
-npm run build
-# or
-yarn build
-```
+📚 **For detailed development workflows, see [Development Workflow Guide](./docs/development-workflow.md)**
 
 ## 🎮 How to Play
 
-1.  **Visit the App**: Go to [paniere.netlify.app](https://paniere.netlify.app) or run it locally.
-2.  **Select Language**: Choose English or Italian using the flag buttons.
+1.  **Visit the App**: Go to **[paniere.netlify.app](https://paniere.netlify.app)**
+2.  **Select Language**: Choose English or Italian using the flag buttons
 3.  **Choose Mode**:
-    - **Game Master**: Select this to run the Tabellone and draw numbers. Click "Draw" to get started.
-    - **Player**: Select this, choose the number of cartelle (1-10), and click "Start Game".
+    - **Game Master**: Run the Tabellone and draw numbers. Click "Draw" to get started
+    - **Player**: Choose number of cartelle (1-10) and click "Start Game"
 4.  **Play!**:
-    - **Game Master**: Keep clicking "Draw". Use "Undo" or "Reset" as needed.
-    - **Player**: As numbers are announced (by a real-life game master or the app in Game Master mode), mark them on your cards by clicking/tapping or using the manual input field in the footer. Watch for automatic prize highlights!
+    - **Game Master**: Keep clicking "Draw". Use "Undo" or "Reset" as needed
+    - **Player**: Mark called numbers by clicking/tapping or using the manual input field. Watch for automatic prize highlights!
 
 ## 🏆 Prizes (Premi)
 
 The game automatically detects these winning combinations on your cartelle:
 
-- **Ambo**: Two numbers in a single row.
-- **Terno**: Three numbers in a single row.
-- **Quaterna**: Four numbers in a single row.
-- **Cinquina**: All five numbers in a single row.
+- **Ambo**: Two numbers in a single row
+- **Terno**: Three numbers in a single row
+- **Quaterna**: Four numbers in a single row
+- **Cinquina**: All five numbers in a single row
 - **Tombola**: All 15 numbers on a single cartella – the grand prize!
+
+## 📚 Documentation
+
+- **[Development Workflow Guide](./docs/development-workflow.md)** - Day-to-day development patterns
+- **[Current Architecture](./docs/current-architecture.md)** - System overview and design decisions
+- **[Implementation Guides](./docs/implementation-guides/)** - One-time setup guides (monorepo migration, etc.)
 
 ## 📄 License
 
