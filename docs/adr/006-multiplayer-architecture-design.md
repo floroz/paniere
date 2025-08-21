@@ -38,19 +38,16 @@ The Paniere Tombola game requires multiplayer capabilities to support real-time 
 #### Real-time Communication
 
 1. **WebSocket with Socket.io** ✅
-
    - **Pros**: Purpose-built for real-time games, automatic reconnection, room management, battle-tested
    - **Cons**: Slightly higher overhead than native WebSocket
    - **Assessment**: Ideal for multiplayer games
 
 2. **Server-Sent Events (SSE)**
-
    - **Pros**: Simple setup, browser native, automatic reconnection
    - **Cons**: Unidirectional only, insufficient for interactive games
    - **Assessment**: Not suitable for bidirectional communication
 
 3. **Native WebSocket**
-
    - **Pros**: Lowest overhead, browser native
    - **Cons**: No automatic reconnection, no room management, requires manual implementation
    - **Assessment**: Too low-level for rapid development
@@ -63,13 +60,11 @@ The Paniere Tombola game requires multiplayer capabilities to support real-time 
 #### Backend Hosting
 
 1. **Fly.io** ✅
-
    - **Pros**: Excellent for real-time apps, global edge locations, WebSocket optimized, auto-scaling
    - **Cons**: Smaller company, less mature ecosystem
    - **Assessment**: Excellent choice for real-time applications
 
 2. **Railway** (MVP Alternative)
-
    - **Pros**: Simple deployment, integrated databases, WebSocket support
    - **Cons**: Less geographic distribution, limited scaling options
    - **Assessment**: Good for MVP, migrate to Fly.io for production
@@ -82,7 +77,6 @@ The Paniere Tombola game requires multiplayer capabilities to support real-time 
 #### State Management
 
 1. **Redis** ✅
-
    - **Pros**: Fast in-memory storage, pub/sub for scaling, excellent for sessions
    - **Cons**: Additional service dependency
    - **Assessment**: Essential for game state and horizontal scaling
