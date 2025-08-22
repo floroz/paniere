@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/images/paniere.png" alt="Paniere Logo" width="150" />
+  <img src="/packages/frontend/public/images/paniere.png" alt="Paniere Logo" width="150" />
   <h1 style="text-align: center; font-style: italic; margin-top: 0.5rem; margin-bottom: 0.5rem; font-family: serif; font-weight: bold; color: #C53030;">Paniere</h1>
   <p><em>A digital version of the traditional Neapolitan Tombola game with a retro twist!</em></p>
   <p>
